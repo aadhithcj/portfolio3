@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef } from "react";
 import DotGrid from "@/components/fx/DotGrid";
 import TechText from "@/components/fx/TechText";
 import TextType from "@/components/fx/TextType";
@@ -6,8 +7,13 @@ import DecryptedText from "@/components/fx/DecryptedText";
 import { useTheme } from "@/hooks/use-theme";
 import { profile } from "@/lib/portfolio";
 import { ThemeToggle } from "@/components/ThemeToggle";
-
 import { SiteHeader } from "@/components/SiteHeader";
+import {
+  InteractivePinkPlanet,
+  DraggableSticker,
+  HoverReactiveShape,
+  MoodStamp,
+} from "@/components/fx/HomeShapes";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -77,6 +83,7 @@ const nav = [
 function Index() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const heroRef = useRef<HTMLDivElement>(null);
 
   const triggerScreenPulse = (e: React.MouseEvent) => {
     window.dispatchEvent(
@@ -92,23 +99,23 @@ function Index() {
       <div className="pointer-events-none fixed inset-0 z-0 opacity-80 transition-opacity duration-500">
         <DotGrid
           baseColor={isDark ? "#0A3545" : "#2E2D34"}
-          activeColor={isDark ? "#22C55E" : "#FF3C38"}
+          activeColor={isDark ? "#22C55E" : "#84cc16"}
           shape="circle"
-          dotSize={isDark ? 4.5 : 3.8}
+          dotSize={isDark ? 4.5 : 3.4}
           gap={18}
           proximity={150}
-          strength={1.3}
+          strength={1.2}
           bounce={0.65}
           tension={0.4}
           returnDuration={0.8}
-          shockRadius={340}
-          shockStrength={6.0}
-          swell={0.9}
+          shockRadius={320}
+          shockStrength={5.2}
+          swell={0.8}
           stretch={0.5}
-          glow={isDark ? 0.6 : 0.4}
+          glow={isDark ? 0.6 : 0.12}
           fade={0.15}
           intro
-          opacity={isDark ? 0.85 : 0.45}
+          opacity={isDark ? 0.85 : 0.22}
           mouseInteraction
           clickShock
         />
@@ -120,8 +127,11 @@ function Index() {
       {/* Main Content & Bottom Navigation Container */}
       <div className="page-enter relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between px-4 sm:px-6 pt-2 sm:pt-3 pb-6 sm:pb-8 lg:pb-10">
         {/* Hero Section (Centered Layout with enhanced presence) */}
-        <div className="relative my-auto py-2 sm:py-4 flex flex-col items-center justify-center text-center">
-          {/* Left Playful Element: The Interactive Screen Pulse Square (matching reference blue box) */}
+        <div
+          ref={heroRef}
+          className="relative my-auto py-2 sm:py-4 flex flex-col items-center justify-center text-center w-full"
+        >
+          {/* Left Playful Element: The Interactive Screen Pulse Square (DO NOT TOUCH - matching reference blue box) */}
           <div className="hidden lg:flex absolute left-0 xl:left-4 top-1/2 -translate-y-1/2 z-20 items-center">
             <button
               type="button"
@@ -137,13 +147,17 @@ function Index() {
             </button>
           </div>
 
-          {/* Right Playful Elements: Pink circle and small black dot from reference */}
-          <div className="hidden lg:flex absolute right-0 xl:right-4 top-1/2 -translate-y-1/2 z-20 items-center select-none pointer-events-none">
-            <div className="relative">
-              <div className="size-12 xl:size-14 rounded-full border-2 border-border bg-[#CE4760] shadow-[4px_4px_0px_0px_var(--border)]" />
-              <div className="absolute -top-3 -left-2.5 size-3.5 rounded-full border-2 border-border bg-foreground" />
-            </div>
-          </div>
+          {/* Right Playful Element: Interactive Planet (Existing shape made interactive) */}
+          <InteractivePinkPlanet />
+
+          {/* New Shape 1: Hover-Only Reactive Prism ("one only react on hover") */}
+          <HoverReactiveShape />
+
+          {/* New Shape 2: Draggable Tactile Sticker ("one can be moved around") */}
+          <DraggableSticker containerRef={heroRef} />
+
+          {/* New Shape 3: Mechanical Status Stamper ("etc.") */}
+          <MoodStamp />
 
 
           <div className="w-full max-w-4xl flex flex-col items-center text-center">
