@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { useTheme } from "@/hooks/use-theme";
 import DecryptedText from "@/components/fx/DecryptedText";
-import TextType from "@/components/fx/TextType";
-import BorderGlow from "@/components/fx/BorderGlow";
-import { Terminal, Cpu, Cloud, Layers, ArrowUpRight } from "lucide-react";
+import { Layers, Cloud, Cpu, ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/skills")({
   head: () => ({
@@ -31,22 +29,29 @@ export const Route = createFileRoute("/skills")({
   component: SkillsPage,
 });
 
+interface AppliedProject {
+  initials: string;
+  name: string;
+  slug: string;
+  stack: string;
+  badgeBg: string;
+  skills: string[];
+}
+
 interface SkillCategory {
   id: string;
   number: string;
   name: string;
+  subtitle: string;
+  count: string;
+  markerColor: string;
+  accentBg: string;
+  iconType: "prompt" | "layers" | "cloud" | "cpu";
   description: string;
-  icon: typeof Terminal;
-  color: string;
-  bulletColor: string;
-  glowColors: string[];
-  skills: Array<{ name: string; note: string }>;
-  project?: {
-    name: string;
-    slug: string;
-    description: string;
-    stack: string[];
-  };
+  chips: string[];
+  stickyNote: string[];
+  codeSnippet: React.ReactNode;
+  projects: AppliedProject[];
 }
 
 const categories: SkillCategory[] = [
@@ -54,195 +59,270 @@ const categories: SkillCategory[] = [
     id: "languages",
     number: "01",
     name: "Languages & Foundations",
-    description: "Programming fundamentals, problem-solving, and core syntax.",
-    icon: Terminal,
-    color: "bg-[#FF7700] text-black",
-    bulletColor: "text-[#FF7700]",
-    glowColors: ["#FF7700", "#FF3C38", "#F1BE05"],
-    skills: [
+    subtitle: "PROGRAMMING FUNDAMENTALS, DATA STRUCTURES & MORE ↗",
+    count: "12+",
+    markerColor: "bg-[#FF7700] text-black",
+    accentBg: "bg-[#FF7700]",
+    iconType: "prompt",
+    description:
+      "Programming fundamentals, problem-solving, data structures, algorithms, and low-level concepts that form the base of everything I build.",
+    chips: ["Python", "Java", "C", "SQL", "DSA", "OOP"],
+    stickyNote: ["IDEAS", "CODE", "INTO", "PRODUCTS"],
+    codeSnippet: (
+      <div>
+        <span className="text-[#9649CB] dark:text-[#C084FC]">def </span>
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">build</span>():
+        {"\n"}  ideas = [
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"solve"</span>,{" "}
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"build"</span>,{" "}
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"learn"</span>]
+        {"\n"}  <span className="text-[#CE4760] dark:text-[#F87171]">return </span>
+        <span className="text-[#22C55E] dark:text-[#4ADE80]">"always curious"</span>
+      </div>
+    ),
+    projects: [
       {
-        name: "Python",
-        note: "Data structures, automation scripts & backend service logic",
+        initials: "IN",
+        name: "Inventory System",
+        slug: "inventory",
+        stack: "PYTHON, SQL, DSA",
+        badgeBg: "bg-[#F1BE05]",
+        skills: ["Python", "SQL", "DSA", "OOP", "C"],
       },
       {
-        name: "Java",
-        note: "Object-oriented programming, data structures & algorithms",
+        initials: "DE",
+        name: "DevOpsHub",
+        slug: "devopshub",
+        stack: "PYTHON, SQL",
+        badgeBg: "bg-[#FF7700]",
+        skills: ["Python", "SQL", "OOP", "DSA"],
       },
       {
-        name: "C",
-        note: "Systems programming, memory management & pointer fundamentals",
-      },
-      {
-        name: "SQL",
-        note: "Relational queries, database schemas, filtering & data extraction",
+        initials: "RE",
+        name: "RETINA",
+        slug: "retina",
+        stack: "PYTHON, OOP",
+        badgeBg: "bg-[#9649CB] text-white",
+        skills: ["Python", "Java", "OOP", "DSA", "C"],
       },
     ],
-    project: {
-      name: "Inventory System",
-      slug: "inventory",
-      description:
-        "Desktop stock and billing application with SQLite database.",
-      stack: ["Python", "PyQt6", "SQLite"],
-    },
   },
   {
-    id: "fullstack",
+    id: "web",
     number: "02",
     name: "Web & Full-Stack",
+    subtitle: "FRONTEND, BACKEND, APIS & DATABASES ↗",
+    count: "10+",
+    markerColor: "bg-[#F1BE05] text-black",
+    accentBg: "bg-[#F1BE05]",
+    iconType: "layers",
     description:
-      "Frontend development, backend services, and database-driven applications.",
-    icon: Layers,
-    color: "bg-[#F1BE05] text-black",
-    bulletColor: "text-[#F1BE05]",
-    glowColors: ["#F1BE05", "#FF7700", "#FF3C38"],
-    skills: [
+      "Component hierarchy, reactive state management, asynchronous workflows, and robust relational schemas engineered for scale.",
+    chips: [
+      "React",
+      "TypeScript",
+      "Flask",
+      "PostgreSQL",
+      "REST APIs",
+      "Tailwind CSS",
+      "Supabase",
+    ],
+    stickyNote: ["CLEAN", "STACK", "MODERN", "WEB"],
+    codeSnippet: (
+      <div>
+        <span className="text-[#9649CB] dark:text-[#C084FC]">const </span>
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">stack</span> = &#123;
+        {"\n"}  frontend: [
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"React"</span>,{" "}
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"TypeScript"</span>],
+        {"\n"}  backend: [
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"Flask"</span>,{" "}
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"Postgres"</span>],
+        {"\n"}  <span className="text-[#CE4760] dark:text-[#F87171]">build</span>: () =&gt;{" "}
+        <span className="text-[#22C55E] dark:text-[#4ADE80]">"production ready"</span>
+        {"\n"}&#125;;
+      </div>
+    ),
+    projects: [
       {
-        name: "React",
-        note: "Component hierarchy, client state & modern UI development",
+        initials: "CV",
+        name: "CV Management",
+        slug: "cv-sorting",
+        stack: "REACT, SUPABASE",
+        badgeBg: "bg-[#F1BE05]",
+        skills: [
+          "React",
+          "TypeScript",
+          "PostgreSQL",
+          "Supabase",
+          "REST APIs",
+          "Tailwind CSS",
+        ],
       },
       {
-        name: "TypeScript & JavaScript",
-        note: "Typed application logic, async workflows & modern ESNext",
+        initials: "DE",
+        name: "DevOpsHub",
+        slug: "devopshub",
+        stack: "FLASK, POSTGRES",
+        badgeBg: "bg-[#FF7700]",
+        skills: ["React", "Flask", "PostgreSQL", "REST APIs", "Tailwind CSS"],
       },
       {
-        name: "HTML & CSS",
-        note: "Semantic document structure, responsive layouts & custom styling",
-      },
-      {
-        name: "Tailwind CSS",
-        note: "Utility-first design systems, responsive variants & dark mode",
-      },
-      {
-        name: "Flask",
-        note: "RESTful API endpoints, request routing & backend services",
-      },
-      {
-        name: "REST APIs",
-        note: "JSON contracts, HTTP status protocols & endpoint authentication",
-      },
-      {
-        name: "PostgreSQL & SQLite",
-        note: "Relational schemas, ACID transactions & indexed queries",
-      },
-      {
-        name: "Supabase",
-        note: "PostgreSQL database hosting, authentication & web data storage",
+        initials: "RO",
+        name: "Roots",
+        slug: "crop-recommendation",
+        stack: "REACT, TS, FLASK",
+        badgeBg: "bg-[#22C55E] text-white",
+        skills: ["React", "TypeScript", "Flask", "REST APIs", "Tailwind CSS"],
       },
     ],
-    project: {
-      name: "CV Management System",
-      slug: "cv-sorting",
-      description:
-        "Web interface and database-backed resume screening platform.",
-      stack: ["React", "TypeScript", "Supabase"],
-    },
   },
   {
     id: "devops",
     number: "03",
     name: "DevOps & Infrastructure",
+    subtitle: "DEPLOYMENT, CI/CD, CLOUD & SYSTEMS ↗",
+    count: "8+",
+    markerColor: "bg-[#42BFDD] text-black",
+    accentBg: "bg-[#42BFDD]",
+    iconType: "cloud",
     description:
-      "Containerization, CI/CD, deployment, and operational tooling.",
-    icon: Cloud,
-    color: "bg-[#42BFDD] text-black",
-    bulletColor: "text-[#42BFDD]",
-    glowColors: ["#42BFDD", "#2E2D34", "#42BFDD"],
-    skills: [
+      "Automated CI/CD pipelines, multi-container orchestration, Linux process supervision, and reliable cloud compute instances.",
+    chips: [
+      "Docker",
+      "GitHub Actions",
+      "Linux",
+      "AWS EC2",
+      "pytest",
+      "CI/CD",
+      "Git",
+    ],
+    stickyNote: ["BUILD", "TEST", "SHIP", "SCALE"],
+    codeSnippet: (
+      <div>
+        <span className="text-muted-foreground">$ </span>
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">docker compose </span>up -d
+        {"\n"}<span className="text-[#22C55E]">✓ </span>backend : container healthy
+        {"\n"}<span className="text-[#22C55E]">✓ </span>postgres: listening on 5432
+        {"\n"}<span className="text-[#22C55E]">✓ </span>actions : tests passed (0 errors)
+      </div>
+    ),
+    projects: [
       {
-        name: "Docker & Docker Compose",
-        note: "Multi-container services, reproducibility & image optimization",
+        initials: "DE",
+        name: "DevOpsHub",
+        slug: "devopshub",
+        stack: "DOCKER, AWS EC2",
+        badgeBg: "bg-[#42BFDD]",
+        skills: [
+          "Docker",
+          "GitHub Actions",
+          "Linux",
+          "AWS EC2",
+          "pytest",
+          "CI/CD",
+          "Git",
+        ],
       },
       {
-        name: "GitHub Actions",
-        note: "Automated CI test runners, build pipelines & deployment",
+        initials: "CV",
+        name: "CV Management",
+        slug: "cv-sorting",
+        stack: "CI/CD, SECRETS",
+        badgeBg: "bg-[#F1BE05]",
+        skills: ["GitHub Actions", "Linux", "CI/CD", "Git"],
       },
       {
-        name: "Linux & Bash",
-        note: "Command-line administration, process control & shell automation",
-      },
-      {
-        name: "AWS EC2",
-        note: "Cloud virtual compute instances, network access & deployment",
-      },
-      {
-        name: "pytest",
-        note: "Automated test suites, unit testing & backend API validation",
-      },
-      {
-        name: "Git",
-        note: "Version control, branch protection, pull requests & team workflows",
+        initials: "IN",
+        name: "Inventory System",
+        slug: "inventory",
+        stack: "SQLITE, REPO PACKAGING",
+        badgeBg: "bg-[#FF7700]",
+        skills: ["Linux", "Git", "pytest"],
       },
     ],
-    project: {
-      name: "DevOpsHub",
-      slug: "devopshub",
-      description:
-        "Containerized backend, database, CI/CD, and cloud deployment.",
-      stack: ["Docker", "GitHub Actions", "Linux", "AWS EC2"],
-    },
   },
   {
     id: "mobile-ai",
     number: "04",
     name: "Mobile, AI & Computer Vision",
+    subtitle: "ANDROID, MACHINE LEARNING & VISION ↗",
+    count: "10+",
+    markerColor: "bg-[#9649CB] text-white",
+    accentBg: "bg-[#9649CB]",
+    iconType: "cpu",
     description:
-      "Native Android development, on-device inference, and computer vision.",
-    icon: Cpu,
-    color: "bg-[#9649CB] text-white",
-    bulletColor: "text-[#9649CB]",
-    glowColors: ["#9649CB", "#FF3C38", "#42BFDD"],
-    skills: [
+      "Native Android applications, real-time computer vision frame pipelines, edge inference models, and scikit-learn predictive classifiers.",
+    chips: [
+      "Kotlin",
+      "Jetpack Compose",
+      "OpenCV",
+      "TensorFlow Lite",
+      "YOLO",
+      "ML Kit",
+      "Scikit-learn",
+    ],
+    stickyNote: ["EDGE", "MODELS", "REAL", "TIME"],
+    codeSnippet: (
+      <div>
+        <span className="text-[#9649CB] dark:text-[#C084FC]">val </span>retina ={" "}
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">VisionPipeline</span>()
+        {"\n"}retina.<span className="text-[#FF7700] dark:text-[#FB923C]">detect</span>(frame) &#123; obj =&gt;
+        {"\n"}  tts.<span className="text-[#CE4760] dark:text-[#F87171]">speak</span>(obj.label, obj.distance)
+        {"\n"}&#125;
+      </div>
+    ),
+    projects: [
       {
-        name: "Kotlin & Android Studio",
-        note: "Modern native Android development, coroutines & Jetpack libraries",
+        initials: "RE",
+        name: "RETINA",
+        slug: "retina",
+        stack: "KOTLIN, OPENCV, TF",
+        badgeBg: "bg-[#9649CB] text-white",
+        skills: [
+          "Kotlin",
+          "Jetpack Compose",
+          "OpenCV",
+          "TensorFlow Lite",
+          "YOLO",
+          "ML Kit",
+        ],
       },
       {
-        name: "Jetpack Compose",
-        note: "Declarative UI architecture, reactive state & Material design",
+        initials: "RO",
+        name: "Roots",
+        slug: "crop-recommendation",
+        stack: "SCIKIT-LEARN, RANDOM FOREST",
+        badgeBg: "bg-[#22C55E] text-white",
+        skills: ["Scikit-learn", "AI/ML"],
       },
       {
-        name: "CameraX",
-        note: "High-throughput live camera streaming & frame analysis pipelines",
-      },
-      {
-        name: "OpenCV",
-        note: "Computer vision preprocessing, color filtering & contour analysis",
-      },
-      {
-        name: "TensorFlow Lite",
-        note: "Quantised neural network execution on mobile edge devices",
-      },
-      {
-        name: "YOLO & EfficientDet",
-        note: "Real-time bounding box object detection & anchor mapping",
-      },
-      {
-        name: "Google ML Kit",
-        note: "On-device optical character recognition & text recognition",
-      },
-      {
-        name: "MiDaS",
-        note: "Monocular depth estimation neural network for spatial awareness",
+        initials: "CV",
+        name: "CV Management",
+        slug: "cv-sorting",
+        stack: "RANKING, OCR",
+        badgeBg: "bg-[#F1BE05]",
+        skills: ["ML Kit", "OCR", "Scikit-learn", "Scoring Algorithms"],
       },
     ],
-    project: {
-      name: "RETINA",
-      slug: "retina",
-      description: "AI-powered assistive system for visually impaired users.",
-      stack: ["Kotlin", "Jetpack Compose", "TensorFlow Lite", "OpenCV"],
-    },
   },
 ];
 
 function SkillsPage() {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const [active, setActive] = useState<number>(0);
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+
+  const activeCat = (categories[active] ?? categories[0])!;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground overflow-x-clip">
       <SiteHeader />
-      <main className="page-enter mx-auto max-w-5xl px-5 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
-        <header>
+
+      {/* Main Container matching projects page dimensions, padding & split grid */}
+      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative w-full min-w-0">
+        {/* Left Column: Heading and Editorial Skill Index */}
+        <div className="flex flex-col relative w-full min-w-0">
+          {/* Eyebrow Label */}
           <p className="label-mono">
             <DecryptedText
               text="# TOOLBOX // TECH STACK"
@@ -253,158 +333,338 @@ function SkillsPage() {
             />
           </p>
 
-          <h1 className="mt-4 break-words font-display text-5xl leading-[1.05] sm:text-7xl md:text-8xl">
+          {/* Heading - exact matching scale as Projects */}
+          <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl tracking-tight text-foreground">
             Systems, Stack &{" "}
             <em className="italic text-lime not-italic font-normal">Tools</em>.
           </h1>
 
-          {/* Constant two-line container matching final state size */}
-          <div className="mt-6 max-w-2xl h-[3.25rem] sm:h-[3.5rem]">
-            <TextType
-              text="A focused breakdown of the languages, frameworks, infrastructure platforms, and computer vision tools I use in my work."
-              typingSpeed={14}
-              loop={false}
-              showCursor={true}
-              cursorCharacter="|"
-              className="block w-full font-mono text-sm leading-relaxed text-foreground/90 sm:text-base"
-            />
+          {/* Subtitle - matching text size and mono styling as Projects */}
+          <p className="mt-4 text-base sm:text-lg text-muted-foreground font-mono max-w-xl">
+            A focused breakdown of the languages, frameworks, infrastructure platforms, and computer vision tools I use in my work.
+          </p>
+
+          {/* Floating Playful Accent Top-Right (languages / logic / problem solving / foundations) */}
+          <div className="hidden sm:flex absolute right-4 top-2 select-none pointer-events-none items-center gap-3">
+            <div className="text-right font-mono text-[9px] uppercase font-bold text-muted-foreground/80 leading-tight">
+              LANGUAGES<br />
+              LOGIC<br />
+              PROBLEM SOLVING<br />
+              FOUNDATIONS
+            </div>
+            <svg
+              className="size-7 text-muted-foreground/60 -rotate-12"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+            <div className="size-11 xl:size-12 border-2 border-border bg-[#42BFDD] shadow-[3px_3px_0px_0px_var(--border)] -rotate-6" />
           </div>
-        </header>
 
-        {/* Categories Grid (Balanced 2x2) */}
-        <div className="mt-16 grid gap-6 md:grid-cols-2">
-          {categories.map((cat) => {
-            const Icon = cat.icon;
-            return (
-              <BorderGlow
-                key={cat.id}
-                edgeSensitivity={4}
-                glowColor={isDark ? "95 100 68" : "0 70 50"}
-                backgroundColor="var(--surface)"
-                borderRadius={15}
-                glowRadius={22}
-                glowIntensity={1}
-                coneSpread={8}
-                colors={
-                  isDark
-                    ? cat.glowColors
-                    : ["#dc2626", "#ea580c", "#ff5500"]
-                }
-                className="flex flex-col justify-between border-2 border-border bg-card p-6 shadow-[3px_3px_0px_0px_var(--border)] backdrop-blur-md transition-shadow hover:shadow-[5px_5px_0px_0px_var(--border)]"
-              >
-                <div>
-                  <div className="flex items-center justify-between border-b-2 border-border pb-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`grid size-10 place-items-center rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] ${cat.color}`}
-                      >
-                        <Icon className="size-5" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <h2 className="font-display text-2xl text-foreground">
-                          {cat.name}
-                        </h2>
-                        <p className="font-mono text-xs text-muted-foreground">
-                          {cat.description}
-                        </p>
-                      </div>
-                    </div>
-                    <span className="font-mono text-xs font-bold text-foreground">
-                      {cat.number}
-                    </span>
-                  </div>
+          {/* Numbered Editorial Skill List - matching padding & height of Projects */}
+          <div className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0" role="list">
+            {categories.map((cat, i) => {
+              const isSelected = active === i;
 
-                  <ul
-                    className="mt-4 divide-y divide-border/60"
-                    aria-label={`${cat.name} skills list`}
+              return (
+                <div key={cat.id} role="listitem" className="relative w-full min-w-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActive(i);
+                      setHoveredSkill(null);
+                    }}
+                    onMouseEnter={() => setActive(i)}
+                    onFocus={() => setActive(i)}
+                    data-crosshair-target
+                    className={`w-full min-w-0 overflow-hidden text-left transition-all duration-150 flex items-center justify-between py-3.5 sm:py-5 px-3 sm:px-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
+                      isSelected
+                        ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] my-1 -translate-y-0.5 z-10"
+                        : "border-b border-border/40 hover:bg-[#F1BE05]/10 dark:hover:bg-[#F1BE05]/15 hover:border-border/60 hover:-translate-y-0.5 text-foreground"
+                    }`}
                   >
-                    {cat.skills.map((s) => (
-                      <li key={s.name} className="py-2.5 first:pt-1 last:pb-1">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`text-xs ${cat.bulletColor} font-bold`}
-                            aria-hidden="true"
-                          >
-                            ■
-                          </span>
-                          <span className="font-mono text-sm font-medium text-foreground">
-                            {s.name}
-                          </span>
-                        </div>
-                        <p className="mt-0.5 pl-4 font-mono text-xs text-muted-foreground">
-                          {s.note}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                    <div className="flex items-center gap-3 sm:gap-5 min-w-0 flex-1 overflow-hidden">
+                      {/* Category Number */}
+                      <span
+                        className={`font-mono text-xs sm:text-sm font-bold transition-colors shrink-0 ${
+                          isSelected ? "text-black" : "text-lime"
+                        }`}
+                      >
+                        {cat.number}
+                      </span>
 
-                {/* Compact project evidence reference */}
-                {cat.project && (
-                  <div className="mt-6 border-t border-line/60 pt-4">
-                    <div className="flex items-center justify-between pb-2">
-                      <span className="label-mono text-[10px] text-lime">
-                        # APPLIED IN PROJECT
-                      </span>
-                      <span className="font-mono text-[10px] text-muted-foreground/70">
-                        EVIDENCE
-                      </span>
-                    </div>
-                    <Link
-                      to="/projects/$slug"
-                      params={{ slug: cat.project.slug }}
-                      data-crosshair-target
-                      aria-label={`View ${cat.project.name} case study`}
-                      className="group block rounded-lg border border-line/70 bg-background/50 p-3.5 transition-all duration-200 hover:border-lime/60 hover:bg-surface/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2"
-                    >
-                      <div className="flex items-baseline justify-between gap-2">
-                        <span className="font-display text-lg text-foreground group-hover:text-lime transition-colors">
-                          {cat.project.name}
-                        </span>
-                        <span className="font-mono text-xs text-muted-foreground group-hover:text-lime transition-colors">
-                          Case study <span aria-hidden="true">↗</span>
-                        </span>
-                      </div>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        {cat.project.description}
-                      </p>
-                      <div className="mt-2.5 flex flex-wrap gap-1.5">
-                        {cat.project.stack.map((tech) => (
-                          <span
-                            key={tech}
-                            className="rounded-full border border-line/60 bg-surface px-2 py-0.5 font-mono text-[10px] text-foreground/80"
-                          >
-                            {tech}
+                      {/* Square Icon Badge */}
+                      <div
+                        className={`size-9 sm:size-11 grid place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] shrink-0 transition-transform ${cat.markerColor}`}
+                      >
+                        {cat.iconType === "prompt" && (
+                          <span className="font-mono font-black text-xs sm:text-sm tracking-tighter">
+                            &gt;_
                           </span>
-                        ))}
+                        )}
+                        {cat.iconType === "layers" && (
+                          <Layers className="size-4 sm:size-5" />
+                        )}
+                        {cat.iconType === "cloud" && (
+                          <Cloud className="size-4 sm:size-5" />
+                        )}
+                        {cat.iconType === "cpu" && (
+                          <Cpu className="size-4 sm:size-5" />
+                        )}
+                      </div>
+
+                      {/* Title & Subtitle */}
+                      <div className="min-w-0 flex-1 overflow-hidden">
+                        <span
+                          className={`block font-display text-xl sm:text-3xl md:text-[34px] leading-tight transition-all truncate ${
+                            isSelected
+                              ? "font-bold text-black"
+                              : "font-normal hover:translate-x-1 hover:text-foreground"
+                          }`}
+                        >
+                          {cat.name}
+                        </span>
+                        <p
+                          className={`font-mono text-[9px] sm:text-[10.5px] font-bold uppercase tracking-wider mt-0.5 sm:mt-1 truncate block ${
+                            isSelected
+                              ? "text-black/80"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          {cat.subtitle}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right Count */}
+                    <div className="flex items-center gap-2 sm:gap-3 shrink-0 pl-2">
+                      <span
+                        className={`font-mono text-xs sm:text-base font-black transition-colors ${
+                          isSelected ? "text-black font-bold" : "text-muted-foreground"
+                        }`}
+                      >
+                        {cat.count}
+                      </span>
+                      {isSelected && (
+                        <span className="hidden sm:inline font-mono text-xs font-bold text-black">
+                          ●
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Floating Playful Accent Bottom-Left */}
+          <div className="mt-10 hidden sm:flex items-center gap-4 select-none">
+            <div className="relative">
+              {/* Dot matrix grid */}
+              <div className="grid grid-cols-4 gap-1.5 opacity-30">
+                {Array.from({ length: 16 }).map((_, idx) => (
+                  <span
+                    key={idx}
+                    className="size-1 rounded-full bg-foreground"
+                  />
+                ))}
+              </div>
+              <div className="absolute top-1 left-1 size-7 rounded-full border-2 border-border bg-[#FF3C38] shadow-[2.5px_2.5px_0px_0px_var(--border)]" />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs text-muted-foreground">↖</span>
+              <span className="font-mono text-[9px] uppercase font-bold text-muted-foreground tracking-widest leading-tight">
+                SELECT<br />
+                EXPLORE<br />
+                LEARN<br />
+                BUILD
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Substantial Neo-Brutalist Inspector Card matching Projects Preview */}
+        <aside
+          className="w-full min-w-0 max-w-full overflow-hidden sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-4 sm:p-7 shadow-[5px_5px_0px_0px_var(--border)] sm:shadow-[8px_8px_0px_0px_var(--border)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--border)] relative"
+          aria-live="polite"
+        >
+          {/* Panel Top Header Bar */}
+          <div className="flex items-center justify-between border-b-2 border-border/80 pb-3 mb-5">
+            <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
+              SKILL GROUP / {activeCat.number}
+            </span>
+            <span className="size-2.5 rounded-full bg-[#FF3C38] animate-pulse" />
+          </div>
+
+          {/* Visual Mockup Frame - full height matching Projects Preview */}
+          <div className="group/frame border-2 border-border bg-surface-secondary/70 p-3 sm:p-6 relative overflow-hidden flex items-center justify-center min-h-[220px] sm:min-h-[290px] select-none transition-colors duration-200 hover:border-foreground/80 w-full min-w-0 max-w-full">
+            {/* Subtle dot matrix background */}
+            <div
+              className="absolute inset-0 opacity-15 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "radial-gradient(currentColor 1.5px, transparent 1.5px)",
+                backgroundSize: "16px 16px",
+              }}
+            />
+
+            {/* Tilted Back Accent Card */}
+            <div
+              className={`absolute w-[220px] sm:w-[330px] h-[110px] sm:h-[160px] border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] -rotate-3 -translate-x-2 sm:-translate-x-4 -translate-y-2 transition-colors duration-200 ${activeCat.accentBg}`}
+            />
+
+            {/* Front Editor Window */}
+            <div className="relative z-10 w-full max-w-[240px] sm:max-w-[340px] border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--border)] p-3 sm:p-4">
+              {/* Window Controls */}
+              <div className="flex items-center gap-1.5 pb-2 border-b border-border/50">
+                <span className="size-2.5 rounded-full bg-[#FF3C38] border border-border/40" />
+                <span className="size-2.5 rounded-full bg-[#F1BE05] border border-border/40" />
+                <span className="size-2.5 rounded-full bg-[#22C55E] border border-border/40" />
+              </div>
+
+              {/* Code snippet with syntax colors */}
+              <pre className="mt-2.5 font-mono text-[11px] sm:text-[13px] leading-relaxed text-foreground overflow-x-auto">
+                <code>{activeCat.codeSnippet}</code>
+              </pre>
+            </div>
+
+            {/* Tilted Yellow Sticky Note on Right with 3 Sketch Lines */}
+            <div className="hidden sm:flex absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 z-20 items-center gap-1.5 sm:gap-2 pointer-events-none">
+              <div className="flex flex-col gap-1 items-end opacity-70">
+                <span className="w-2.5 sm:w-3 h-0.5 bg-foreground -rotate-12" />
+                <span className="w-2 sm:w-2.5 h-0.5 bg-foreground -rotate-12" />
+                <span className="w-1.5 sm:w-2 h-0.5 bg-foreground -rotate-12" />
+              </div>
+
+              <div className="border-2 border-border bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--border)] rotate-3 p-1.5 sm:p-2 text-center font-mono font-black text-[9px] sm:text-[11px] uppercase leading-tight tracking-wider">
+                {activeCat.stickyNote.map((line) => (
+                  <div key={line}>{line}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Category Details Below Mockup */}
+          <div className="mt-6 flex flex-col">
+            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground">
+              {activeCat.name}
+            </h2>
+            <p className="mt-2 font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              {activeCat.description}
+            </p>
+
+            {/* Tech Chips with Interactive Project Highlight on Hover */}
+            <div className="mt-4 flex flex-wrap gap-2">
+              {activeCat.chips.map((chip) => {
+                const isHovered =
+                  hoveredSkill?.toLowerCase() === chip.toLowerCase();
+
+                return (
+                  <button
+                    key={chip}
+                    type="button"
+                    onMouseEnter={() => setHoveredSkill(chip)}
+                    onMouseLeave={() => setHoveredSkill(null)}
+                    onClick={() =>
+                      setHoveredSkill(hoveredSkill === chip ? null : chip)
+                    }
+                    className={`border-2 border-border px-3 py-1 font-mono text-xs font-bold transition-all duration-150 cursor-pointer select-none ${
+                      isHovered
+                        ? "bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--border)] -translate-y-0.5 scale-105 z-10"
+                        : "bg-card text-foreground shadow-[2px_2px_0px_0px_var(--border)] hover:bg-[#F1BE05] hover:text-black hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--border)]"
+                    }`}
+                    title={`Hover to highlight projects using ${chip}`}
+                  >
+                    {chip}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Bottom Evidence Strip: APPLIED IN PROJECTS */}
+            <div className="mt-6 pt-4 border-t-2 border-border">
+              <div className="flex items-center justify-between pb-2.5">
+                <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground flex items-center gap-2">
+                  <span>APPLIED IN PROJECTS</span>
+                  {hoveredSkill && (
+                    <span className="text-[10px] font-bold text-black bg-[#F1BE05] px-1.5 py-0.5 border border-border shadow-[1px_1px_0px_0px_var(--border)]">
+                      USING: {hoveredSkill.toUpperCase()}
+                    </span>
+                  )}
+                </span>
+                <Link
+                  to="/projects"
+                  data-crosshair-target
+                  className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors"
+                >
+                  <span>VIEW ALL</span>
+                  <ArrowUpRight className="size-3.5" />
+                </Link>
+              </div>
+
+              {/* Project Cards Row - Illuminating matching projects on skill hover */}
+              <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {activeCat.projects.map((proj) => {
+                  const isMatching = hoveredSkill
+                    ? proj.skills.some(
+                        (s) =>
+                          s.toLowerCase() === hoveredSkill.toLowerCase() ||
+                          hoveredSkill.toLowerCase().includes(s.toLowerCase()) ||
+                          s.toLowerCase().includes(hoveredSkill.toLowerCase())
+                      )
+                    : false;
+
+                  return (
+                    <Link
+                      key={proj.slug}
+                      to="/projects/$slug"
+                      params={{ slug: proj.slug }}
+                      data-crosshair-target
+                      className={`border-2 border-border p-2.5 transition-all duration-150 flex items-center gap-2.5 group/proj relative ${
+                        hoveredSkill
+                          ? isMatching
+                            ? "bg-[#F1BE05]/20 shadow-[4px_4px_0px_0px_var(--border)] -translate-y-1 border-foreground ring-1 ring-[#F1BE05]"
+                            : "bg-card opacity-35 grayscale-[50%] scale-[0.98]"
+                          : "bg-card hover:bg-surface-secondary/90 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--border)]"
+                      }`}
+                    >
+                      {/* Two-letter badge */}
+                      <div
+                        className={`size-9 sm:size-10 grid place-items-center border-2 border-border font-mono text-xs sm:text-sm font-black text-black shrink-0 shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-transform ${
+                          isMatching ? "scale-105 shadow-[2.5px_2.5px_0px_0px_var(--border)]" : ""
+                        } group-hover/proj:scale-105 ${proj.badgeBg}`}
+                      >
+                        {proj.initials}
+                      </div>
+                      <div className="min-w-0">
+                        <h3
+                          className={`font-display text-xs sm:text-sm leading-tight truncate transition-colors ${
+                            isMatching
+                              ? "font-black text-foreground underline decoration-[#F1BE05] decoration-2"
+                              : "font-bold text-foreground group-hover/proj:text-lime"
+                          }`}
+                        >
+                          {proj.name}
+                        </h3>
+                        <p className="font-mono text-[9.5px] text-muted-foreground uppercase truncate mt-0.5">
+                          {proj.stack}
+                        </p>
                       </div>
                     </Link>
-                  </div>
-                )}
-              </BorderGlow>
-            );
-          })}
-        </div>
-
-        {/* Applied Engineering Link */}
-        <div className="mt-16 flex flex-col justify-between gap-4 rounded-xl border border-line bg-surface/70 p-6 backdrop-blur-md sm:flex-row sm:items-center">
-          <div>
-            <h2 className="font-display text-2xl text-foreground">
-              See these skills in action
-            </h2>
-            <p className="font-mono text-xs text-muted-foreground">
-              Explore the projects where these technologies come together.
-            </p>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-          <Link
-            to="/projects"
-            data-crosshair-target
-            className="inline-flex items-center gap-2 rounded-lg border border-lime bg-lime px-4 py-2 font-mono text-xs font-medium text-black transition-all hover:bg-lime/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 sm:text-sm"
-          >
-            <span>Explore Projects</span>
-            <ArrowUpRight className="size-4" aria-hidden="true" />
-          </Link>
-        </div>
+        </aside>
       </main>
     </div>
   );

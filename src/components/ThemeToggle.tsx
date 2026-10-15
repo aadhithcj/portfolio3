@@ -93,9 +93,9 @@ export function ThemeToggle({
     showToast(targetMode, 1400);
   };
 
-  // Fixed wrapper positioned in top right below title bar across all viewports
+  // Fixed wrapper positioned in top right below title bar on desktop viewports
   const wrapperClass = fixed
-    ? "fixed top-12 sm:top-14 right-4 sm:right-6 md:right-8 z-40 flex items-center justify-center pointer-events-auto"
+    ? "hidden md:flex fixed top-14 right-6 md:right-8 z-40 items-center justify-center pointer-events-auto"
     : `relative flex items-center justify-center ${className}`.trim();
 
   const isCompact = !fixed;

@@ -162,7 +162,7 @@ function About() {
                   <span className="font-mono text-xs font-bold text-muted-foreground">
                     01 //
                   </span>
-                  <h3 className="font-display text-xl text-foreground group-hover:text-lime transition-colors">
+                  <h3 className="font-display text-xl text-foreground font-bold group-hover:text-black dark:group-hover:text-white transition-colors">
                     Featured Projects
                   </h3>
                 </div>
@@ -193,7 +193,7 @@ function About() {
                   <span className="font-mono text-xs font-bold text-muted-foreground">
                     02 //
                   </span>
-                  <h3 className="font-display text-xl text-foreground group-hover:text-lime transition-colors">
+                  <h3 className="font-display text-xl text-foreground font-bold group-hover:text-black dark:group-hover:text-white transition-colors">
                     Technical Stack
                   </h3>
                 </div>
@@ -232,7 +232,7 @@ function About() {
                   <span className="font-mono text-xs font-bold text-muted-foreground">
                     03 //
                   </span>
-                  <h3 className="font-display text-xl text-foreground group-hover:text-lime transition-colors">
+                  <h3 className="font-display text-xl text-foreground font-bold group-hover:text-black dark:group-hover:text-white transition-colors">
                     Timeline & Milestones
                   </h3>
                   {/* Small animated timeline badge */}
@@ -254,8 +254,8 @@ function About() {
           </Link>
         </div>
 
-        {/* Section 2: Dedicated Neo-Brutalist Résumé Callout */}
-        <div className="mt-8 border-2 border-border shadow-[5px_5px_0px_0px_var(--border)] bg-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative overflow-hidden">
+        {/* Section 2: Dedicated Neo-Brutalist Resume Callout with popup hover */}
+        <div className="mt-8 border-2 border-border shadow-[5px_5px_0px_0px_var(--border)] bg-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative overflow-hidden transition-all duration-150 hover:-translate-y-1 hover:shadow-[7px_7px_0px_0px_var(--border)] hover:border-[#F1BE05] group">
           {/* Subtle decorative corner accent */}
           <div className="absolute top-0 right-0 bg-[#F1BE05] text-black font-mono text-[9px] font-black uppercase px-2 py-0.5 border-b-2 border-l-2 border-border">
             PDF // CURRICULUM VITAE
@@ -288,17 +288,8 @@ function About() {
           </a>
         </div>
 
-        {/* Section 3: Divider with marker */}
-        <div className="my-14 sm:my-16 flex items-center gap-4 select-none">
-          <div className="h-0.5 flex-1 bg-border/40" />
-          <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-muted-foreground px-3 py-1 border border-border/40 bg-surface-secondary">
-            // BEYOND THE TERMINAL
-          </span>
-          <div className="h-0.5 flex-1 bg-border/40" />
-        </div>
-
-        {/* Section 4: Beyond Code (Collection of Interests) */}
-        <div className="flex items-center justify-between mb-4">
+        {/* Section 3: Beyond Code (Collection of Interests) */}
+        <div className="mt-10 sm:mt-12 flex items-center justify-between mb-4">
           <h2 className="label-mono">
             <DecryptedText
               text="## beyond code // personal archive"
@@ -308,9 +299,6 @@ function About() {
               encryptedClassName="text-lime"
             />
           </h2>
-          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest hidden sm:inline">
-            [4 PASSIONS]
-          </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 border-t-2 border-border pt-4">

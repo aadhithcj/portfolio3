@@ -11,6 +11,7 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { ThemeProvider, useTheme } from "@/hooks/use-theme";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Toaster } from "@/components/ui/sonner";
 import Crosshair from "@/components/fx/Crosshair";
 
 import appCss from "../styles.css?url";
@@ -219,6 +220,7 @@ function RootComponent() {
       <QueryClientProvider client={queryClient}>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <Toaster position="top-right" />
         <ThemeToggle fixed />
         <RootCrosshair />
       </QueryClientProvider>
