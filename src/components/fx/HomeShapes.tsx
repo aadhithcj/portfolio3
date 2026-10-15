@@ -1,39 +1,58 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 
+export const PLANET_COLORS = [
+  "#CE4760", // Crimson pink (original)
+  "#FF7700", // Vibrant orange
+  "#F1BE05", // Brand gold
+  "#22C55E", // Emerald green
+  "#42BFDD", // Cyan
+  "#9649CB", // Purple
+];
+
 /**
  * Shape 1: Interactive Planet & Satellite
- * (Existing right playful shape made interactive)
  * - Click to cycle colors and trigger orbital rotation
+ * - Dispatches a pulse shockwave across the dot grid in the new color!
  * - Displays a whimsical comic sound effect popup
  * - Tactile squish-and-pop physics
  */
-export function InteractivePinkPlanet() {
+export function InteractivePinkPlanet({
+  activeColorIdx,
+  onColorChange,
+}: {
+  activeColorIdx: number;
+  onColorChange: (newIdx: number) => void;
+}) {
   const [bopCount, setBopCount] = useState(0);
-  const [activeColorIdx, setActiveColorIdx] = useState(0);
   const [speech, setSpeech] = useState<string | null>(null);
-
-  const colors = [
-    "#CE4760", // Crimson pink (original)
-    "#FF7700", // Vibrant orange
-    "#F1BE05", // Brand gold
-    "#22C55E", // Emerald green
-    "#42BFDD", // Cyan
-    "#9649CB", // Purple
-  ];
 
   const bopPhrases = ["BOOP!", "POP! ✦", "NICE!", "WHEEE!", "BOING!", "ZOOM!"];
 
-  const handleBop = () => {
+  const handleBop = (e: React.MouseEvent<HTMLButtonElement>) => {
     const nextBop = bopCount + 1;
     setBopCount(nextBop);
-    setActiveColorIdx((prev) => (prev + 1) % colors.length);
+    const nextColorIdx = (activeColorIdx + 1) % PLANET_COLORS.length;
+    onColorChange(nextColorIdx);
+
     const phrase = bopPhrases[nextBop % bopPhrases.length] ?? "BOOP!";
     setSpeech(phrase);
     setTimeout(() => {
       setSpeech((current) => (current === phrase ? null : current));
     }, 1200);
+
+    // Trigger full-screen dot grid pulse shockwave originating from this ball
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    window.dispatchEvent(
+      new CustomEvent("dotgrid:bigpulse", {
+        detail: { x: cx, y: cy, speed: 3200 },
+      })
+    );
   };
+
+  const currentColor = PLANET_COLORS[activeColorIdx % PLANET_COLORS.length] ?? PLANET_COLORS[0]!;
 
   return (
     <div className="hidden lg:flex absolute right-0 xl:right-4 top-1/2 -translate-y-1/2 z-20 items-center">
@@ -53,13 +72,13 @@ export function InteractivePinkPlanet() {
         <motion.button
           type="button"
           onClick={handleBop}
-          aria-label="Interactive bop planet. Click to cycle color and rotate satellite."
+          aria-label="Interactive color-changing planet. Click to cycle color and pulse grid."
           data-crosshair-target
           className="relative block size-12 xl:size-14 rounded-full border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground transition-shadow"
-          style={{ backgroundColor: colors[activeColorIdx] }}
+          style={{ backgroundColor: currentColor }}
           whileHover={{ scale: 1.1, rotate: 12 }}
           whileTap={{ scale: 0.86, rotate: -15 }}
-          title="Click to boop!"
+          title="Click to boop & pulse grid!"
         >
           {/* Orbiting Moon dot */}
           <motion.div
@@ -77,15 +96,15 @@ export function InteractivePinkPlanet() {
 
 /**
  * Shape 2: Draggable Neo-Brutalist Sticker
- * ("one can be moved around")
- * - Can be dragged across the hero section
- * - Physics elastic spring, tilt while dragging
+ * ("draggable across the whole homescreen")
+ * - Can be dragged anywhere across the whole page
+ * - Elastic spring physics, tilts and scales up with high z-index
  * - Changes text to "WHEEE! ✦" when dragging
  */
 export function DraggableSticker({
   containerRef,
 }: {
-  containerRef?: React.RefObject<HTMLDivElement | null>;
+  containerRef?: React.RefObject<HTMLElement | null>;
 }) {
   const [isDragging, setIsDragging] = useState(false);
 
@@ -93,12 +112,13 @@ export function DraggableSticker({
     <motion.div
       drag
       dragConstraints={containerRef ?? false}
-      dragElastic={0.12}
-      whileDrag={{ scale: 1.1, rotate: 6, zIndex: 50 }}
+      dragElastic={0.08}
+      dragMomentum={false}
+      whileDrag={{ scale: 1.15, rotate: 6, zIndex: 100 }}
       whileHover={{ scale: 1.05 }}
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => setIsDragging(false)}
-      className="hidden md:flex absolute top-4 sm:top-6 right-6 xl:right-24 z-20 select-none cursor-grab active:cursor-grabbing"
+      className="hidden md:flex absolute top-4 sm:top-6 right-6 xl:right-24 z-30 select-none cursor-grab active:cursor-grabbing"
       initial={{ rotate: -5 }}
     >
       <div className="flex items-center gap-1.5 border-2 border-border bg-[#F1BE05] text-black px-3 py-1 font-mono text-xs font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] active:shadow-[2px_2px_0px_0px_var(--border)] transition-shadow">
@@ -153,56 +173,6 @@ export function HoverReactiveShape() {
       >
         PEEK-A-BOO! 👀
       </motion.div>
-    </div>
-  );
-}
-
-/**
- * Shape 4: Mechanical Status Stamper
- * ("etc.")
- * - Clickable tactile mechanical badge
- * - Cycles developer moods and statuses with bouncy icon springs
- * - Accessible keyboard trigger
- */
-export function MoodStamp() {
-  const [moodIndex, setMoodIndex] = useState(0);
-
-  const moods = [
-    { label: "STATUS: CRAFTING", icon: "✨", bg: "bg-[#22C55E]", text: "text-black" },
-    { label: "STATUS: CAFFEINATED", icon: "☕", bg: "bg-[#FF7700]", text: "text-black" },
-    { label: "STATUS: SHIPPING", icon: "🚀", bg: "bg-[#42BFDD]", text: "text-black" },
-    { label: "STATUS: OPTIMIZED", icon: "⚡", bg: "bg-[#F1BE05]", text: "text-black" },
-    { label: "STATUS: VIBING", icon: "👾", bg: "bg-[#CE4760]", text: "text-white" },
-  ];
-
-  const current = moods[moodIndex % moods.length] ?? moods[0]!;
-
-  const cycleMood = () => {
-    setMoodIndex((prev) => prev + 1);
-  };
-
-  return (
-    <div className="hidden lg:flex absolute bottom-1 xl:bottom-3 right-6 xl:right-24 z-20 items-center">
-      <motion.button
-        type="button"
-        onClick={cycleMood}
-        data-crosshair-target
-        aria-label={`Cycle status stamp. Current: ${current.label}`}
-        whileTap={{ scale: 0.92, y: 2 }}
-        className={`flex items-center gap-2 border-2 border-border ${current.bg} ${current.text} px-3 py-1 font-mono text-[11px] font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:shadow-[6px_6px_0px_0px_var(--border)] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_var(--border)] cursor-pointer transition-all select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground`}
-        title="Click to stamp new status"
-      >
-        <motion.span
-          key={moodIndex}
-          initial={{ rotate: -90, scale: 0.5 }}
-          animate={{ rotate: 0, scale: 1 }}
-          transition={{ type: "spring", stiffness: 350, damping: 15 }}
-          className="text-xs"
-        >
-          {current.icon}
-        </motion.span>
-        <span>{current.label}</span>
-      </motion.button>
     </div>
   );
 }

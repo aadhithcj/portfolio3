@@ -20,8 +20,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
-    // Check localStorage; default to light theme if unset
-    const saved = localStorage.getItem("portfolio-theme") as Theme | null;
+    // Always default to light mode on fresh load
+    const saved = sessionStorage.getItem("portfolio-theme") as Theme | null;
     const isDark = saved === "dark";
     const activeTheme: Theme = isDark ? "dark" : "light";
     setThemeState(activeTheme);
@@ -30,10 +30,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } else {
       document.documentElement.classList.remove("dark");
     }
+    // Clean up any legacy localStorage dark setting so reloads/fresh loads start in light mode
+    if (localStorage.getItem("portfolio-theme") === "dark") {
+      localStorage.removeItem("portfolio-theme");
+    }
   }, []);
 
   const setTheme = (nextTheme: Theme) => {
     setThemeState(nextTheme);
+    sessionStorage.setItem("portfolio-theme", nextTheme);
     localStorage.setItem("portfolio-theme", nextTheme);
     if (nextTheme === "dark") {
       document.documentElement.classList.add("dark");

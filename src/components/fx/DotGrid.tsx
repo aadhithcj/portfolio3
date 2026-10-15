@@ -85,7 +85,8 @@ void main() {
     vec2 edge = min(vPoint, uResolution - vPoint) / (uFade * 0.4 * min(uResolution.x, uResolution.y));
     fade = smootherstep01(edge.x) * smootherstep01(edge.y);
   }
-  alpha *= uOpacity * fade;
+  float energyOpacity = mix(uOpacity, min(1.0, uOpacity * 3.5 + 0.3), clamp(vEnergy * 1.5, 0.0, 1.0));
+  alpha *= energyOpacity * fade;
   outColor = vec4(color * alpha, alpha);
 }
 `;

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import DotGrid from "@/components/fx/DotGrid";
 import TechText from "@/components/fx/TechText";
 import TextType from "@/components/fx/TextType";
@@ -12,7 +12,7 @@ import {
   InteractivePinkPlanet,
   DraggableSticker,
   HoverReactiveShape,
-  MoodStamp,
+  PLANET_COLORS,
 } from "@/components/fx/HomeShapes";
 
 export const Route = createFileRoute("/")({
@@ -83,7 +83,10 @@ const nav = [
 function Index() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const heroRef = useRef<HTMLDivElement>(null);
+  const [planetColorIdx, setPlanetColorIdx] = useState(0);
+  const currentAccent =
+    PLANET_COLORS[planetColorIdx % PLANET_COLORS.length] ?? "#CE4760";
+  const mainRef = useRef<HTMLElement>(null);
 
   const triggerScreenPulse = (e: React.MouseEvent) => {
     window.dispatchEvent(
@@ -94,25 +97,28 @@ function Index() {
   };
 
   return (
-    <main className="relative min-h-screen lg:h-screen lg:max-h-screen overflow-x-hidden overflow-y-auto bg-background flex flex-col justify-between">
-      {/* Interactive WebGL2 DotGrid Background with High-Visibility Light/Dark Pulse Colors */}
+    <main
+      ref={mainRef}
+      className="relative min-h-screen lg:h-screen lg:max-h-screen overflow-x-hidden overflow-y-auto bg-background flex flex-col justify-between"
+    >
+      {/* Interactive WebGL2 DotGrid Background with High-Visibility Accent Colors synced to interactive ball */}
       <div className="pointer-events-none fixed inset-0 z-0 opacity-80 transition-opacity duration-500">
         <DotGrid
           baseColor={isDark ? "#0A3545" : "#2E2D34"}
-          activeColor={isDark ? "#22C55E" : "#84cc16"}
+          activeColor={currentAccent}
           shape="circle"
-          dotSize={isDark ? 4.5 : 3.4}
+          dotSize={isDark ? 4.5 : 3.6}
           gap={18}
           proximity={150}
           strength={1.2}
           bounce={0.65}
           tension={0.4}
           returnDuration={0.8}
-          shockRadius={320}
-          shockStrength={5.2}
-          swell={0.8}
+          shockRadius={330}
+          shockStrength={5.6}
+          swell={0.88}
           stretch={0.5}
-          glow={isDark ? 0.6 : 0.12}
+          glow={0.8}
           fade={0.15}
           intro
           opacity={isDark ? 0.85 : 0.22}
@@ -127,10 +133,7 @@ function Index() {
       {/* Main Content & Bottom Navigation Container */}
       <div className="page-enter relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between px-4 sm:px-6 pt-2 sm:pt-3 pb-6 sm:pb-8 lg:pb-10">
         {/* Hero Section (Centered Layout with enhanced presence) */}
-        <div
-          ref={heroRef}
-          className="relative my-auto py-2 sm:py-4 flex flex-col items-center justify-center text-center w-full"
-        >
+        <div className="relative my-auto py-2 sm:py-4 flex flex-col items-center justify-center text-center w-full">
           {/* Left Playful Element: The Interactive Screen Pulse Square (DO NOT TOUCH - matching reference blue box) */}
           <div className="hidden lg:flex absolute left-0 xl:left-4 top-1/2 -translate-y-1/2 z-20 items-center">
             <button
@@ -147,36 +150,27 @@ function Index() {
             </button>
           </div>
 
-          {/* Right Playful Element: Interactive Planet (Existing shape made interactive) */}
-          <InteractivePinkPlanet />
+          {/* Right Playful Element: Interactive Planet (Changes color & syncs dot grid accent) */}
+          <InteractivePinkPlanet
+            activeColorIdx={planetColorIdx}
+            onColorChange={setPlanetColorIdx}
+          />
 
           {/* New Shape 1: Hover-Only Reactive Prism ("one only react on hover") */}
           <HoverReactiveShape />
 
-          {/* New Shape 2: Draggable Tactile Sticker ("one can be moved around") */}
-          <DraggableSticker containerRef={heroRef} />
-
-          {/* New Shape 3: Mechanical Status Stamper ("etc.") */}
-          <MoodStamp />
-
+          {/* New Shape 2: Draggable Tactile Sticker ("draggable across the whole homescreen") */}
+          <DraggableSticker containerRef={mainRef} />
 
           <div className="w-full max-w-4xl flex flex-col items-center text-center">
-            {/* Top row: SYSTEM STATUS: ONLINE pill (and mobile pulse square) */}
-            <div className="-mt-2 sm:-mt-3 md:-mt-4 mb-4 sm:mb-5 md:mb-6 flex items-center justify-center gap-3">
-              <div className="inline-flex items-center gap-2.5 border-2 border-border bg-card px-4 py-1.5 shadow-[3px_3px_0px_0px_var(--border)] label-mono">
-                <span className="size-2 rounded-full bg-status-green animate-pulse" />
-                <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground">
-                  SYSTEM STATUS: ONLINE
-                </span>
-              </div>
-
-              {/* Mobile Pulse Trigger Button */}
+            {/* Mobile Pulse Trigger Button (only visible on mobile where desktop left square is hidden) */}
+            <div className="lg:hidden -mt-2 mb-3 flex items-center justify-center">
               <button
                 type="button"
                 data-crosshair-target
                 aria-label="Trigger screen-wide pulse"
                 onClick={triggerScreenPulse}
-                className="lg:hidden grid size-9 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                className="grid size-9 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
                 title="Click to pulse dot grid"
               >
                 <span className="text-base font-display">◆</span>
