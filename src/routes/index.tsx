@@ -87,7 +87,7 @@ function Index() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-background flex flex-col justify-between">
+    <main className="relative min-h-screen lg:h-screen lg:max-h-screen overflow-x-hidden overflow-y-auto bg-background flex flex-col justify-between">
       {/* Interactive WebGL2 DotGrid Background with High-Visibility Light/Dark Pulse Colors */}
       <div className="pointer-events-none fixed inset-0 z-0 opacity-80 transition-opacity duration-500">
         <DotGrid
@@ -118,44 +118,65 @@ function Index() {
       <SiteHeader isHome />
 
       {/* Main Content & Bottom Navigation Container */}
-      <div className="page-enter relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between px-6 py-6 sm:py-8">
-        {/* Hero Section (Restored to exact layout from Screenshot 1) */}
-        <div className="my-auto py-6 sm:py-8">
-          <div className="w-full max-w-4xl">
-            {/* Top row with subhead pill and pulse diamond trigger button */}
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-2 border border-border/40 bg-card/85 backdrop-blur-sm px-3 sm:px-3.5 py-1.5 shadow-xs">
-                <span className="font-mono text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  # SOFTWARE ENGINEER
-                </span>
-                <span className="text-muted-foreground/60">•</span>
-                <span className="inline-block size-2 rounded-full bg-status-green animate-pulse" />
-                <span className="font-mono text-xs sm:text-sm font-semibold uppercase tracking-wider text-foreground">
-                  AVAILABLE TO WORK
+      <div className="page-enter relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between px-4 sm:px-6 pt-2 sm:pt-3 pb-6 sm:pb-8 lg:pb-10">
+        {/* Hero Section (Centered Layout with enhanced presence) */}
+        <div className="relative my-auto py-2 sm:py-4 flex flex-col items-center justify-center text-center">
+          {/* Left Playful Element: The Interactive Screen Pulse Square (matching reference blue box) */}
+          <div className="hidden lg:flex absolute left-0 xl:left-4 top-1/2 -translate-y-1/2 z-20 items-center">
+            <button
+              type="button"
+              data-crosshair-target
+              aria-label="Trigger screen-wide pulse"
+              onClick={triggerScreenPulse}
+              className="group relative size-12 xl:size-14 grid place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
+              title="Click to pulse dot grid"
+            >
+              <span className="font-display text-2xl xl:text-3xl transition-transform duration-300 group-hover:scale-125 group-hover:rotate-45">
+                ◆
+              </span>
+            </button>
+          </div>
+
+          {/* Right Playful Elements: Pink circle and small black dot from reference */}
+          <div className="hidden lg:flex absolute right-0 xl:right-4 top-1/2 -translate-y-1/2 z-20 items-center select-none pointer-events-none">
+            <div className="relative">
+              <div className="size-12 xl:size-14 rounded-full border-2 border-border bg-[#CE4760] shadow-[4px_4px_0px_0px_var(--border)]" />
+              <div className="absolute -top-3 -left-2.5 size-3.5 rounded-full border-2 border-border bg-foreground" />
+            </div>
+          </div>
+
+
+          <div className="w-full max-w-4xl flex flex-col items-center text-center">
+            {/* Top row: SYSTEM STATUS: ONLINE pill (and mobile pulse square) */}
+            <div className="-mt-2 sm:-mt-3 md:-mt-4 mb-4 sm:mb-5 md:mb-6 flex items-center justify-center gap-3">
+              <div className="inline-flex items-center gap-2.5 border-2 border-border bg-card px-4 py-1.5 shadow-[3px_3px_0px_0px_var(--border)] label-mono">
+                <span className="size-2 rounded-full bg-status-green animate-pulse" />
+                <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground">
+                  SYSTEM STATUS: ONLINE
                 </span>
               </div>
 
+              {/* Mobile Pulse Trigger Button */}
               <button
                 type="button"
                 data-crosshair-target
                 aria-label="Trigger screen-wide pulse"
                 onClick={triggerScreenPulse}
-                className="group grid size-9 sm:size-10 place-items-center border border-border/50 bg-card/90 font-display text-xl text-lime shadow-xs transition-all duration-200 hover:rotate-45 hover:border-foreground hover:shadow-[2px_2px_0px_0px_var(--foreground)] focus-visible:outline-2 focus-visible:outline-foreground ml-auto sm:ml-0"
+                className="lg:hidden grid size-9 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                title="Click to pulse dot grid"
               >
-                <span className="transition-transform duration-300 group-hover:scale-110">
-                  ◆
-                </span>
+                <span className="text-base font-display">◆</span>
               </button>
             </div>
 
-            {/* Left-aligned Aadhith CJ. TechText */}
-            <div className="relative h-28 w-full max-w-3xl sm:h-36 md:h-44">
+            {/* Centered Aadhith CJ. TechText - shifted upwards */}
+            <div className="relative -mt-1 sm:-mt-2 md:-mt-3 h-24 sm:h-28 md:h-32 lg:h-36 w-full max-w-3xl mx-auto">
               <TechText
                 text="Aadhith CJ."
                 fontFamily="Geist, ui-sans-serif, system-ui, sans-serif"
                 fontWeight={900}
-                fontSize={150}
-                align="left"
+                fontSize={140}
+                align="center"
                 reveal="letter"
                 dashLength={4}
                 dashGap={3}
@@ -169,44 +190,76 @@ function Index() {
               />
             </div>
 
-            {/* Headline - "systems." in readable high-contrast accent */}
-            <h1 className="mt-1 font-display text-4xl leading-[1.08] tracking-tight sm:text-5xl md:text-7xl">
-              i turn ideas into{" "}
-              <em className="italic text-lime not-italic font-normal">systems</em>.
+            {/* Prominent Headline - with natural breathing room below Aadhith CJ. */}
+            <h1 className="mt-3 sm:mt-4 md:mt-5 font-display text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[52px] text-center leading-[1.1] tracking-tight max-w-3xl mx-auto">
+              i build digital products that{" "}
+              <em className="italic text-lime not-italic font-normal">refuse to be boring</em>.
             </h1>
 
-            {/* Animated Bio wrapped in subtle backdrop box for crisp dot matrix readability */}
-            <div className="mt-6 max-w-xl">
-              <div className="inline-flex items-center w-full border border-border/40 bg-card/85 backdrop-blur-sm px-4 py-3 shadow-xs min-h-[3.75rem] sm:min-h-[4rem]">
-                <TextType
-                  text="Full-stack, DevOps and applied AI. Computer Science graduate from Kerala."
-                  typingSpeed={14}
-                  pauseDuration={3500}
-                  loop={false}
-                  showCursor={true}
-                  cursorCharacter="|"
-                  className="block w-full font-mono text-sm leading-relaxed text-foreground/90 sm:text-base"
-                />
+            {/* Animated Bio wrapped in subtle backdrop box with constant size throughout typing */}
+            <div className="mt-3.5 sm:mt-4 max-w-xl sm:max-w-2xl mx-auto w-full">
+              <div className="w-full border border-border/40 bg-card/85 backdrop-blur-sm px-4 sm:px-5 py-2.5 sm:py-3 shadow-xs">
+                <div className="grid grid-cols-1">
+                  {/* Invisible phantom text that reserves the full multi-line dimensions immediately */}
+                  <span
+                    aria-hidden="true"
+                    className="col-start-1 row-start-1 invisible font-mono text-sm leading-relaxed sm:text-base select-none pointer-events-none text-center"
+                  >
+                    Full-stack, DevOps and applied AI. Computer Science graduate from Kerala.
+                  </span>
+                  {/* Animated typing text aligned to the exact same cell */}
+                  <div className="col-start-1 row-start-1">
+                    <TextType
+                      text="Full-stack, DevOps and applied AI. Computer Science graduate from Kerala."
+                      typingSpeed={14}
+                      pauseDuration={3500}
+                      loop={false}
+                      showCursor={true}
+                      cursorCharacter="|"
+                      className="block w-full font-mono text-sm leading-relaxed text-foreground/90 sm:text-base text-center"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Dashed divider line from Screenshot 1 */}
-            <div className="mt-8 border-b border-dashed border-border/70 w-full" />
+            {/* Prominent Action Buttons */}
+            <div className="mt-4 sm:mt-5 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+              <Link
+                to="/projects"
+                data-crosshair-target
+                className="border-2 border-border bg-foreground text-background px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
+              >
+                VIEW PROJECTS <span>→</span>
+              </Link>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                data-crosshair-target
+                className="border-2 border-border bg-card text-foreground px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:bg-surface-secondary hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
+              >
+                ↓ DOWNLOAD CV
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Navigation: Playful multi-accent neobrutalist cards */}
-        <nav className="mb-1 sm:mb-2 w-full rounded-none nb-border nb-shadow bg-card grid grid-cols-1 divide-y-[3px] md:grid-cols-5 md:divide-y-0 md:divide-x-[3px] divide-border overflow-hidden">
+        {/* Bottom Navigation: High-contrast individual tactile neobrutalist cards */}
+        <nav className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2.5 sm:gap-3">
           {nav.map((i) => (
             <Link
               key={i.to}
               to={i.to}
               data-crosshair-target
-              className={`group flex min-h-[58px] sm:min-h-[66px] items-center justify-between gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 transition-colors duration-150 ${i.hoverClass} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-inset`}
+              className={`group relative flex min-h-[58px] sm:min-h-[64px] items-center justify-between gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 ${i.hoverClass} hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground`}
+              activeProps={{
+                className: "ring-2 ring-lime shadow-[6px_6px_0px_0px_var(--border)] -translate-y-0.5",
+              }}
             >
               <div className="flex items-center gap-2.5 shrink-0">
                 <span
-                  className={`border-2 px-1.5 py-0.5 font-mono text-xs font-bold transition-colors ${i.badgeClass}`}
+                  className={`border-2 px-1.5 py-0.5 font-mono text-xs font-bold transition-all duration-150 group-hover:scale-110 ${i.badgeClass}`}
                 >
                   {i.n}
                 </span>
@@ -224,7 +277,7 @@ function Index() {
                     encryptedClassName="text-lime"
                   />
                 </span>
-                <span className="font-mono text-xs text-muted-foreground group-hover:text-inherit group-hover:translate-x-1 transition-all duration-150">
+                <span className="font-mono text-xs text-muted-foreground group-hover:text-inherit group-hover:translate-x-1.5 transition-transform duration-150 font-bold">
                   →
                 </span>
               </div>

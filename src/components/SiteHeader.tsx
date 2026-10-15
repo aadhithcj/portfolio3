@@ -22,22 +22,21 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
           ACJ_
         </Link>
 
-        {/* Center: Title / Metadata Cell */}
-        <div className="hidden lg:flex items-center px-4 sm:px-6 py-2 sm:py-2.5 border-r border-border/40 font-mono text-xs sm:text-sm uppercase tracking-wider text-muted-foreground shrink-0">
-          SOFTWARE ENGINEER // PORTFOLIO '26
-        </div>
+        {/* Left Spacer */}
+        <div className="flex-1 min-w-2 sm:min-w-4" />
 
-        {/* Navigation Tabs for other pages */}
+        {/* Center: Segmented Navigation Tabs for other pages */}
         {!isHome && (
-          <nav className="hidden md:flex items-stretch shrink-0">
+          <nav className="hidden md:flex items-stretch shrink-0 border-l border-border/40">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 data-crosshair-target
-                className="border-r border-border/40 px-3 sm:px-4 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center shrink-0"
+                className="border-r border-border/40 px-3.5 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:bg-surface-secondary transition-colors flex items-center shrink-0"
                 activeProps={{
-                  className: "bg-primary text-primary-foreground font-black",
+                  className:
+                    "bg-primary text-primary-foreground font-black shadow-[inset_0_-3px_0_0_var(--border)]",
                 }}
               >
                 {link.label}
@@ -46,8 +45,8 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
           </nav>
         )}
 
-        {/* Spacer */}
-        <div className="flex-1 min-w-4" />
+        {/* Right Spacer */}
+        <div className="flex-1 min-w-2 sm:min-w-4" />
 
         {/* Right Action Cells */}
         <div className="flex items-stretch shrink-0">
@@ -69,15 +68,16 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
           >
             LINKEDIN
           </a>
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to="/contact"
             data-crosshair-target
             className="border-l border-border/40 bg-primary px-3 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-1"
+            activeProps={{
+              className: "bg-foreground text-background font-black shadow-[inset_0_-3px_0_0_var(--border)]",
+            }}
           >
-            RÉSUMÉ ↗
-          </a>
+            HIRE ME ↗
+          </Link>
         </div>
       </div>
 
@@ -89,9 +89,9 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
               key={link.to}
               to={link.to}
               data-crosshair-target
-              className="px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary whitespace-nowrap flex items-center"
+              className="px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:bg-surface-secondary whitespace-nowrap flex items-center"
               activeProps={{
-                className: "bg-primary text-primary-foreground font-black",
+                className: "bg-primary text-primary-foreground font-black shadow-[inset_0_-2px_0_0_var(--border)]",
               }}
             >
               {link.label}

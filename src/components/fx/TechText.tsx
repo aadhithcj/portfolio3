@@ -156,7 +156,9 @@ export default function TechText({
     const ctx = canvas?.getContext("2d");
     const scratch = document.createElement("canvas");
     const scratchCtx = scratch.getContext("2d");
-    if (!container || !canvas || !ctx || !scratchCtx) return undefined;
+    const probeCanvas = document.createElement("canvas");
+    const probeCtx = probeCanvas.getContext("2d");
+    if (!container || !canvas || !ctx || !scratchCtx || !probeCtx) return undefined;
 
     const reducedMotion = window.matchMedia?.(
       "(prefers-reduced-motion: reduce)"
@@ -218,11 +220,11 @@ export default function TechText({
       const pad = Math.ceil(s.strokeWidth * 2 + 4);
       const left = glyph.box.x1 - pad;
       const top = glyph.box.y1 - pad;
-      const w = glyph.box.x2 - glyph.box.x1 + pad * 2;
-      const h = glyph.box.y2 - glyph.box.y1 + pad * 2;
+      const w = Math.max(4, glyph.box.x2 - glyph.box.x1 + pad * 2);
+      const h = Math.max(4, glyph.box.y2 - glyph.box.y1 + pad * 2);
       const image = document.createElement("canvas");
-      image.width = Math.max(1, Math.ceil(w * dpr));
-      image.height = Math.max(1, Math.ceil(h * dpr));
+      image.width = Math.max(4, Math.ceil(w * dpr));
+      image.height = Math.max(4, Math.ceil(h * dpr));
       const c = image.getContext("2d");
       if (!c) return { image, left, top };
       c.setTransform(dpr, 0, 0, dpr, -left * dpr, -top * dpr);
@@ -248,6 +250,11 @@ export default function TechText({
     };
 
     const ensureLayout = (s: Required<TechTextProps>) => {
+      const activeWidth = width > 50 ? width : Math.max(container.clientWidth, 300);
+      const activeHeight = height > 20 ? height : Math.max(container.clientHeight, 80);
+      width = activeWidth;
+      height = activeHeight;
+
       const key = [
         s.text,
         family(s),
@@ -255,6 +262,7 @@ export default function TechText({
         s.fontSize,
         s.letterSpacing,
         s.color,
+        s.accentColor,
         s.dashLength,
         s.dashGap,
         s.strokeWidth,
@@ -272,21 +280,24 @@ export default function TechText({
         document.fonts.load(wanted, s.text).then(refreshFonts, refreshFonts);
       }
 
-      const probe = scratchCtx;
+      const probe = probeCtx;
       setFont(probe, s, s.fontSize);
       let m = probe.measureText(s.text);
-      const fit = Math.min(
-        1,
-        (width - 50) /
-          Math.max(m.actualBoundingBoxLeft + m.actualBoundingBoxRight, 1),
-        (height * 0.72) /
-          Math.max(m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, 1)
+      const fit = Math.max(
+        0.15,
+        Math.min(
+          1,
+          Math.max(20, width - 50) /
+            Math.max(m.actualBoundingBoxLeft + m.actualBoundingBoxRight, 1),
+          Math.max(20, height * 0.72) /
+            Math.max(m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, 1)
+        )
       );
-      const size = s.fontSize * fit;
+      const size = Math.max(14, s.fontSize * fit);
       setFont(probe, s, size);
       m = probe.measureText(s.text);
-      const inkWidth = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
-      const inkHeight = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+      const inkWidth = Math.max(10, m.actualBoundingBoxLeft + m.actualBoundingBoxRight);
+      const inkHeight = Math.max(10, m.actualBoundingBoxAscent + m.actualBoundingBoxDescent);
       const x =
         s.align === "left"
           ? m.actualBoundingBoxLeft + 16
@@ -326,7 +337,7 @@ export default function TechText({
         const kept = previous[glyphs.length];
         glyphs.push({
           ...base,
-          offset: kept?.char === char ? kept.offset : { x: 0, y: 0 },
+          offset: s.draggable && kept?.char === char ? kept.offset : { x: 0, y: 0 },
           velocity: { x: 0, y: 0 },
           outline: 0,
           index: i,
@@ -633,6 +644,13 @@ export default function TechText({
 
       let moving = false;
       glyphs.forEach((glyph, i) => {
+        if (!s.draggable) {
+          glyph.offset.x = 0;
+          glyph.offset.y = 0;
+          glyph.velocity.x = 0;
+          glyph.velocity.y = 0;
+          return;
+        }
         if (i === dragging) {
           glyph.offset.x = approach(
             glyph.offset.x,
@@ -759,8 +777,11 @@ export default function TechText({
     wakeRef.current = wake;
 
     const resize = () => {
-      width = Math.max(1, container.clientWidth);
-      height = Math.max(1, container.clientHeight);
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+      if (cw < 30 || ch < 20) return;
+      width = cw;
+      height = ch;
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);

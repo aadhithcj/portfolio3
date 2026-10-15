@@ -1,7 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
-import { ArrowUpRight, FileText, Code2, Clock, FolderGit2 } from "lucide-react";
+import {
+  ArrowUpRight,
+  FileText,
+  Code2,
+  Clock,
+  FolderGit2,
+  Film,
+  Camera,
+  Trophy,
+  Compass,
+  Sparkles,
+} from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -25,57 +36,60 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
-const hubs = [
-  {
-    to: "/projects",
-    icon: FolderGit2,
-    title: "Featured Projects",
-    desc: "Retina, DevOpsHub, Inventory System, Roots, and CV Management System case studies.",
-    color: "bg-[#F1BE05] text-black",
-    hoverBorder: "hover:border-[#F1BE05]",
-  },
-  {
-    to: "/skills",
-    icon: Code2,
-    title: "Technical Stack",
-    desc: "Core languages, backend frameworks, DevOps tools, and AI toolkits.",
-    color: "bg-[#42BFDD] text-black",
-    hoverBorder: "hover:border-[#42BFDD]",
-  },
-  {
-    to: "/log",
-    icon: Clock,
-    title: "Timeline & Milestones",
-    desc: "B.Tech education, internships, leadership roles, and hackathons.",
-    color: "bg-[#FF7700] text-black",
-    hoverBorder: "hover:border-[#FF7700]",
-  },
+const skillsPreview = [
+  "React",
+  "TypeScript",
+  "Node.js",
+  "Docker",
+  "PostgreSQL",
+  "Python",
 ];
 
-const beyondCode = [
+const interests = [
   {
+    num: "01",
+    tag: "MOTION",
     title: "Videography & Motion Graphics",
+    icon: Film,
     note: "Crafting visual stories, rhythm-based pacing, and cinematic motion edits. Delivered 50+ social media videos.",
+    color: "bg-[#CE4760] text-white",
+    borderHover: "hover:border-[#CE4760]",
   },
   {
-    title: "Photography",
-    note: "Framing light, perspective, architecture, and everyday street compositions.",
+    num: "02",
+    tag: "35MM",
+    title: "Street & Architecture Photography",
+    icon: Camera,
+    note: "Framing light, perspective, geometry, and everyday street compositions on digital and vintage glass.",
+    color: "bg-[#42BFDD] text-black",
+    borderHover: "hover:border-[#42BFDD]",
   },
   {
-    title: "Football",
-    note: "Playing and following the beautiful game with enduring passion.",
+    num: "03",
+    tag: "THE PITCH",
+    title: "Football (The Beautiful Game)",
+    icon: Trophy,
+    note: "Playing weekly and following the beautiful game with enduring passion. Tactical appreciation & team chemistry.",
+    color: "bg-[#F1BE05] text-black",
+    borderHover: "hover:border-[#F1BE05]",
   },
   {
-    title: "Travelling",
-    note: "Exploring new places, terrains, local cultures, and spontaneous road journeys.",
+    num: "04",
+    tag: "ON THE ROAD",
+    title: "Road Trips & Travelling",
+    icon: Compass,
+    note: "Exploring uncharted terrain, mountain highways, regional food cultures, and spontaneous road trips.",
+    color: "bg-[#FF7700] text-black",
+    borderHover: "hover:border-[#FF7700]",
   },
 ];
 
 function About() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="page-enter mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        {/* Editorial Introduction */}
         <p className="label-mono">
           <DecryptedText
             text="# README.md // PROFILE"
@@ -85,126 +99,281 @@ function About() {
             encryptedClassName="text-lime"
           />
         </p>
+
         <h1 className="mt-4 break-words font-display text-5xl sm:text-6xl md:text-7xl">
-          Hi, I'm <em className="italic text-lime not-italic font-normal">Aadhith CJ</em>.
+          Hi, I'm{" "}
+          <em className="italic text-lime not-italic font-normal">Aadhith CJ</em>
+          .
         </h1>
-        <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-          A Computer Science graduate with hands-on experience in full-stack
-          development, REST APIs, PostgreSQL and AI/ML. I build practical,
-          reliable software with an emphasis on containerized delivery, sound
-          engineering foundations, and clean user experiences.
+
+        <p className="mt-6 text-lg sm:text-xl leading-relaxed text-foreground/90 font-sans">
+          Computer Science graduate from Kerala. I build full-stack
+          applications, experiment with AI, and enjoy making the complicated
+          stuff work.
         </p>
 
-        {/* Dedicated Sections Navigation */}
-        <h2 className="label-mono mb-4 mt-16">
-          <DecryptedText
-            text="## explore portfolio"
-            speed={25}
-            sequential
-            animateOn="view"
-            encryptedClassName="text-lime"
-          />
-        </h2>
-        <div className="grid gap-3 border-t-2 border-border pt-4">
-          {hubs.map((hub) => {
-            const Icon = hub.icon;
-            return (
-              <Link
-                key={hub.to}
-                to={hub.to}
-                data-crosshair-target
-                className={`group flex items-center justify-between rounded-none border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_var(--border)] ${hub.hoverBorder} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground`}
-              >
-                <div className="flex items-center gap-3.5">
-                  <div
-                    className={`grid size-9 place-items-center rounded-none border-2 border-border ${hub.color}`}
-                  >
-                    <Icon className="size-4" />
-                  </div>
-                  <div>
-                    <h3 className="font-display text-lg text-foreground group-hover:text-lime transition-colors">
-                      {hub.title}
-                    </h3>
-                    <p className="font-mono text-xs text-muted-foreground">
-                      {hub.desc}
-                    </p>
-                  </div>
-                </div>
-                <span className="label-mono text-xs text-muted-foreground group-hover:text-foreground">
-                  View →
-                </span>
-              </Link>
-            );
-          })}
+        {/* Tactile Expertise Tags */}
+        <div className="mt-6 flex flex-wrap gap-2 pt-1">
+          {[
+            { label: "FULL-STACK", dot: "bg-[#FF7700]" },
+            { label: "DEVOPS", dot: "bg-[#42BFDD]" },
+            { label: "APPLIED AI", dot: "bg-[#F1BE05]" },
+            { label: "VISUAL STORYTELLING", dot: "bg-[#CE4760]" },
+          ].map((tag) => (
+            <span
+              key={tag.label}
+              className="inline-flex items-center gap-2 px-3 py-1 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] bg-card text-foreground"
+            >
+              <span className={`size-1.5 rounded-full ${tag.dot}`} />
+              {tag.label}
+            </span>
+          ))}
         </div>
 
-        {/* Resume Download Callout */}
-        <div className="mt-6 flex flex-col justify-between gap-3 rounded-none border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] bg-card p-4 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-3">
-            <div className="grid size-9 place-items-center rounded-none border-2 border-border bg-[#F1BE05] text-black">
-              <FileText className="size-4.5" />
+        {/* Section 1: Explore Portfolio (Playful Control Panel) */}
+        <div className="flex items-center justify-between mb-4 mt-16 sm:mt-20">
+          <h2 className="label-mono">
+            <DecryptedText
+              text="## explore portfolio // control panel"
+              speed={25}
+              sequential
+              animateOn="view"
+              encryptedClassName="text-lime"
+            />
+          </h2>
+          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest hidden sm:inline">
+            [3 INTERACTIVE MODULES]
+          </span>
+        </div>
+
+        <div className="grid gap-3.5 border-t-2 border-border pt-4">
+          {/* Card 01: Featured Projects */}
+          <Link
+            to="/projects"
+            data-crosshair-target
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:-translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#F1BE05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+          >
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#F1BE05] text-black shadow-[2px_2px_0px_0px_var(--border)]">
+                <FolderGit2 className="size-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-muted-foreground">
+                    01 //
+                  </span>
+                  <h3 className="font-display text-xl text-foreground group-hover:text-lime transition-colors">
+                    Featured Projects
+                  </h3>
+                </div>
+                <p className="font-mono text-xs text-muted-foreground mt-0.5">
+                  Retina, DevOpsHub, Inventory System, Roots & CV Management.
+                </p>
+              </div>
+            </div>
+            <div className="self-end sm:self-auto shrink-0">
+              <span className="inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground group-hover:bg-[#F1BE05] group-hover:text-black group-hover:border-black transition-colors">
+                OPEN PROJECTS ↗
+              </span>
+            </div>
+          </Link>
+
+          {/* Card 02: Technical Stack */}
+          <Link
+            to="/skills"
+            data-crosshair-target
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#42BFDD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+          >
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--border)] group-hover:-rotate-12 transition-transform duration-200">
+                <Code2 className="size-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-muted-foreground">
+                    02 //
+                  </span>
+                  <h3 className="font-display text-xl text-foreground group-hover:text-lime transition-colors">
+                    Technical Stack
+                  </h3>
+                </div>
+                {/* Micro tech preview tags */}
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {skillsPreview.map((skill) => (
+                    <span
+                      key={skill}
+                      className="border border-border/60 bg-surface-secondary px-1.5 py-0.5 font-mono text-[10px] text-foreground/80"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="self-end sm:self-auto shrink-0">
+              <span className="inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground group-hover:bg-[#42BFDD] group-hover:text-black group-hover:border-black transition-colors">
+                EXPLORE STACK ↗
+              </span>
+            </div>
+          </Link>
+
+          {/* Card 03: Timeline & Milestones */}
+          <Link
+            to="/log"
+            data-crosshair-target
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#FF7700] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+          >
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#FF7700] text-black shadow-[2px_2px_0px_0px_var(--border)]">
+                <Clock className="size-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-muted-foreground">
+                    03 //
+                  </span>
+                  <h3 className="font-display text-xl text-foreground group-hover:text-lime transition-colors">
+                    Timeline & Milestones
+                  </h3>
+                  {/* Small animated timeline badge */}
+                  <span className="hidden sm:inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2 py-0.5 font-mono text-[10px] font-bold text-foreground">
+                    <span className="size-1.5 rounded-full bg-[#FF7700] animate-pulse" />
+                    2022 — 2026
+                  </span>
+                </div>
+                <p className="font-mono text-xs text-muted-foreground mt-0.5">
+                  B.Tech degree, internships, leadership roles & hackathons.
+                </p>
+              </div>
+            </div>
+            <div className="self-end sm:self-auto shrink-0">
+              <span className="inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground group-hover:bg-[#FF7700] group-hover:text-black group-hover:border-black transition-colors">
+                VIEW TIMELINE ↗
+              </span>
+            </div>
+          </Link>
+        </div>
+
+        {/* Section 2: Dedicated Neo-Brutalist Résumé Callout */}
+        <div className="mt-8 border-2 border-border shadow-[5px_5px_0px_0px_var(--border)] bg-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative overflow-hidden">
+          {/* Subtle decorative corner accent */}
+          <div className="absolute top-0 right-0 bg-[#F1BE05] text-black font-mono text-[9px] font-black uppercase px-2 py-0.5 border-b-2 border-l-2 border-border">
+            PDF // CURRICULUM VITAE
+          </div>
+
+          <div className="flex items-start gap-4">
+            <div className="grid size-11 shrink-0 place-items-center border-2 border-border bg-foreground text-background shadow-[3px_3px_0px_0px_var(--border)]">
+              <FileText className="size-5" />
             </div>
             <div>
-              <p className="font-mono text-xs font-bold text-foreground">
-                Looking for a formal overview?
+              <p className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
+                NEED THE SHORT VERSION?
               </p>
-              <p className="font-mono text-[11px] text-muted-foreground">
-                Download my complete resume with education, experience and
-                projects.
+              <p className="font-mono text-xs text-muted-foreground mt-1 max-w-md">
+                Education, experience, and projects — formatted in one clean,
+                printable single-page PDF.
               </p>
             </div>
           </div>
+
           <a
             href="/resume.pdf"
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="inline-flex items-center gap-1.5 self-start rounded-none border-2 border-border bg-primary px-4 py-2 font-mono text-xs font-bold text-black shadow-[2px_2px_0px_0px_var(--border)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground sm:self-auto"
+            className="inline-flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black px-5 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--border)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground shrink-0"
           >
-            <span>Resume PDF</span>
-            <ArrowUpRight className="size-3.5" />
+            <span>GET MY RESUME</span>
+            <ArrowUpRight className="size-4" />
           </a>
         </div>
 
-        {/* Beyond Code Section */}
-        <h2 className="label-mono mb-4 mt-16">
-          <DecryptedText
-            text="## beyond code"
-            speed={25}
-            sequential
-            animateOn="view"
-            encryptedClassName="text-lime"
-          />
-        </h2>
-        <ul className="border-t-2 border-border">
-          {beyondCode.map((item, idx) => {
-            const bulletColors = [
-              "text-[#FF7700]",
-              "text-[#42BFDD]",
-              "text-[#F1BE05]",
-              "text-[#9649CB]",
-              "text-[#FF3C38]",
-            ];
-            const bulletColor = bulletColors[idx % bulletColors.length];
+        {/* Section 3: Divider with marker */}
+        <div className="my-14 sm:my-16 flex items-center gap-4 select-none">
+          <div className="h-0.5 flex-1 bg-border/40" />
+          <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-muted-foreground px-3 py-1 border border-border/40 bg-surface-secondary">
+            // BEYOND THE TERMINAL
+          </span>
+          <div className="h-0.5 flex-1 bg-border/40" />
+        </div>
+
+        {/* Section 4: Beyond Code (Collection of Interests) */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="label-mono">
+            <DecryptedText
+              text="## beyond code // personal archive"
+              speed={25}
+              sequential
+              animateOn="view"
+              encryptedClassName="text-lime"
+            />
+          </h2>
+          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest hidden sm:inline">
+            [4 PASSIONS]
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 border-t-2 border-border pt-4">
+          {interests.map((item) => {
+            const Icon = item.icon;
             return (
-              <li
+              <div
                 key={item.title}
-                className="grid gap-2 border-b border-border py-4 md:grid-cols-[14rem_1fr]"
+                data-crosshair-target
+                className={`group flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] ${item.borderHover}`}
               >
-                <div className="flex items-center gap-2 pt-0.5">
-                  <span className={`text-xs ${bulletColor} font-bold`}>■</span>
-                  <span className="font-medium text-foreground">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="font-mono text-[11px] font-bold text-muted-foreground">
+                      {item.num} // {item.tag}
+                    </span>
+                    <div
+                      className={`grid size-8 place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] ${item.color}`}
+                    >
+                      <Icon className="size-4" />
+                    </div>
+                  </div>
+                  <h3 className="font-display text-lg sm:text-xl text-foreground group-hover:text-lime transition-colors">
                     {item.title}
-                  </span>
+                  </h3>
+                  <p className="font-mono text-xs leading-relaxed text-muted-foreground mt-2">
+                    {item.note}
+                  </p>
                 </div>
-                <p className="font-mono text-xs leading-relaxed text-muted-foreground">
-                  {item.note}
-                </p>
-              </li>
+              </div>
             );
           })}
-        </ul>
+        </div>
+
+        {/* Section 5: Deliberate Terminal Ending */}
+        <div className="mt-16 sm:mt-20 border-2 border-dashed border-border/60 p-6 sm:p-8 bg-card/60 text-center flex flex-col items-center justify-center gap-3 shadow-xs">
+          <div className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            <span className="size-2 rounded-full bg-status-green animate-pulse" />
+            END OF README.md // READY TO COLLABORATE?
+          </div>
+          <p className="font-mono text-xs text-muted-foreground max-w-md">
+            Have an open software engineering role, contract project, or technical
+            idea? Let's build something practical and reliable.
+          </p>
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/contact"
+              data-crosshair-target
+              className="inline-flex items-center gap-2 border-2 border-border bg-foreground text-background px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
+            >
+              GET IN TOUCH <span>→</span>
+            </Link>
+            <Link
+              to="/"
+              data-crosshair-target
+              className="inline-flex items-center gap-2 border-2 border-border bg-card text-foreground px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--border)] hover:bg-surface-secondary transition-all"
+            >
+              RETURN HOME
+            </Link>
+          </div>
+        </div>
       </main>
     </div>
   );
 }
+
