@@ -1,8 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
-import { projects } from "@/lib/portfolio";
+import DotGrid from "@/components/fx/DotGrid";
+import { HandNote } from "@/components/fx/HandNote";
+import { useTheme } from "@/hooks/use-theme";
+import { projects, profile } from "@/lib/portfolio";
 import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/projects/")({
@@ -28,9 +32,8 @@ export const Route = createFileRoute("/projects/")({
 
 const defaultProjectMeta = {
   pill: "RETINA / ASSISTIVE AI",
-  note: "REAL-WORLD OBJECT RECOGNITION",
+  quip: "it sees things 👀",
   features: ["+ CAMERA", "+ AI ANALYSIS", "+ VOICE FEEDBACK", "+ ACCESSIBLE UX"],
-  actionNote: "TURN IDEAS INTO ACCESSIBILITY",
   accentColor: "#CE4760",
 };
 
@@ -38,53 +41,86 @@ const projectMeta: Record<
   string,
   {
     pill: string;
-    note: string;
+    quip: string;
     features: string[];
-    actionNote: string;
     accentColor: string;
   }
 > = {
   retina: defaultProjectMeta,
   devopshub: {
     pill: "DEVOPSHUB / CI-CD AUTOMATION",
-    note: "CONTAINERIZED CLOUD WORKFLOWS",
+    quip: "ship it. again.",
     features: ["+ DOCKER COMPOSE", "+ GITHUB ACTIONS", "+ POSTGRESQL", "+ ZERO-DOWNTIME"],
-    actionNote: "AUTOMATE EVERYTHING RELIABLY",
     accentColor: "#42BFDD",
   },
   inventory: {
     pill: "MOTO-INV / DESKTOP SUITE",
-    note: "ATOMIC TRANSACTION INTEGRITY",
+    quip: "boring? never.",
     features: ["+ SQLITE ATOMIC", "+ PDF INVOICES", "+ REAL-TIME STOCK", "+ PRODUCTION USE"],
-    actionNote: "MISSION CRITICAL ACCURACY",
     accentColor: "#FF7700",
   },
   "crop-recommendation": {
     pill: "ROOTS / AGRITECH AI",
-    note: "CLIMATE & SOIL SYNTHESIS",
+    quip: "grows on you",
     features: ["+ RANDOM FOREST", "+ OPEN-METEO API", "+ 7 PARAMETERS", "+ REACT FRONTEND"],
-    actionNote: "OPTIMIZING HARVEST YIELDS",
     accentColor: "#22C55E",
   },
   "cv-sorting": {
     pill: "CV-SYS / TALENT PIPELINES",
-    note: "MULTI-ATTRIBUTE SCORING",
+    quip: "hired. probably.",
     features: ["+ DUAL PORTALS", "+ SUPABASE PG", "+ TANSTACK QUERY", "+ WORKFLOW ENGINE"],
-    actionNote: "SMARTER HIRING SYSTEMS",
     accentColor: "#9649CB",
   },
 };
 
 function Projects() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [active, setActive] = useState(0);
+  const [hasHovered, setHasHovered] = useState(false);
+  const [showPsst, setShowPsst] = useState(false);
+
   const p = (projects[active] ?? projects[0])!;
   const meta = projectMeta[p.slug] ?? defaultProjectMeta;
 
+  // After 4s of idle time on a selected project, show a subtle playful "psst" nudge on the explore button
+  useEffect(() => {
+    setShowPsst(false);
+    const timer = setTimeout(() => setShowPsst(true), 4000);
+    return () => clearTimeout(timer);
+  }, [active]);
+
   return (
-    <div className="min-h-screen bg-background overflow-x-clip">
+    <div className="min-h-screen bg-background overflow-x-clip relative">
+      {/* Interactive WebGL2 DotGrid Background synced to project accent color */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-80 transition-opacity duration-500">
+        <DotGrid
+          baseColor={isDark ? "#0A3545" : "#2E2D34"}
+          activeColor={meta.accentColor}
+          shape="circle"
+          dotSize={isDark ? 4.5 : 3.6}
+          gap={18}
+          proximity={150}
+          strength={1.2}
+          bounce={0.65}
+          tension={0.4}
+          returnDuration={0.8}
+          shockRadius={330}
+          shockStrength={5.6}
+          swell={0.88}
+          stretch={0.5}
+          glow={0.8}
+          fade={0.15}
+          intro
+          opacity={isDark ? 0.5 : 0.14}
+          mouseInteraction
+          clickShock
+        />
+      </div>
+
       <SiteHeader />
 
-      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative w-full min-w-0">
+      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
         {/* Left Column: Heading and Editorial Project Index */}
         <div className="flex flex-col relative w-full min-w-0">
           {/* Section Marker */}
@@ -98,7 +134,7 @@ function Projects() {
             />
           </p>
 
-          {/* Page Heading matching screenshot */}
+          {/* Page Heading */}
           <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl tracking-tight text-foreground">
             Things I’ve{" "}
             <em className="italic text-lime not-italic font-normal">built</em>.
@@ -108,29 +144,18 @@ function Projects() {
             Software, systems, and experiments — made to solve real problems.
           </p>
 
-          {/* Floating Playful Accent Top-Right (ideas / code / people / impact) */}
-          <div className="hidden sm:flex absolute right-4 top-2 select-none pointer-events-none items-center gap-3">
-            <div className="text-right font-mono text-[9px] uppercase font-bold text-muted-foreground/80 leading-tight">
-              IDEAS<br />
-              CODE<br />
-              PEOPLE<br />
-              IMPACT
-            </div>
-            <svg
-              className="size-7 text-muted-foreground/60 -rotate-12"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-            <div className="size-11 xl:size-12 border-2 border-border bg-[#42BFDD] shadow-[3px_3px_0px_0px_var(--border)] -rotate-6" />
-          </div>
+          {/* Handwritten self-drawing note pointing to the project list, vanishes on first hover */}
+          <AnimatePresence>
+            {!hasHovered && (
+              <motion.div
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.25 }}
+                className="hidden lg:block absolute right-6 top-6"
+              >
+                <HandNote>go on, take a look</HandNote>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Numbered Editorial Project List */}
           <div className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border" role="list">
@@ -142,11 +167,17 @@ function Projects() {
                   role="listitem"
                   className="relative"
                 >
-                  <button
-                    type="button"
-                    onClick={() => setActive(i)}
-                    onMouseEnter={() => setActive(i)}
-                    onFocus={() => setActive(i)}
+                  <Link
+                    to="/projects/$slug"
+                    params={{ slug: x.slug }}
+                    onMouseEnter={() => {
+                      setActive(i);
+                      setHasHovered(true);
+                    }}
+                    onFocus={() => {
+                      setActive(i);
+                      setHasHovered(true);
+                    }}
                     data-crosshair-target
                     className={`w-full text-left transition-all duration-150 flex items-center justify-between py-4 sm:py-5 px-3 sm:px-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
                       isSelected
@@ -185,34 +216,22 @@ function Projects() {
                         </span>
                       )}
                     </div>
-                  </button>
+                  </Link>
                 </div>
               );
             })}
           </div>
 
-          {/* Floating Playful Accent Bottom-Left (scroll / explore / build / repeat) */}
-          <div className="mt-10 hidden sm:flex items-center gap-4 select-none">
-            <div className="relative">
-              {/* Dot matrix grid snippet */}
-              <div className="grid grid-cols-4 gap-1.5 opacity-30">
-                {Array.from({ length: 16 }).map((_, idx) => (
-                  <span key={idx} className="size-1 rounded-full bg-foreground" />
-                ))}
-              </div>
-              <div className="absolute top-1 left-1 size-7 rounded-full border-2 border-border bg-[#FF7700] shadow-[2.5px_2.5px_0px_0px_var(--border)]" />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs text-muted-foreground">↖</span>
-              <span className="font-mono text-[9px] uppercase font-bold text-muted-foreground tracking-widest leading-tight">
-                SCROLL<br />
-                EXPLORE<br />
-                BUILD<br />
-                REPEAT
-              </span>
-            </div>
-          </div>
+          {/* Functional handwritten link to GitHub ending the list */}
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noreferrer"
+            data-crosshair-target
+            className="mt-10 hidden sm:inline-block font-hand text-xl text-muted-foreground hover:text-foreground hover:-rotate-2 transition-all w-fit"
+          >
+            more cooking on github ↗
+          </a>
         </div>
 
         {/* Right Column: Substantial Neo-Brutalist Preview Panel */}
@@ -228,29 +247,19 @@ function Projects() {
             <span className="size-2.5 rounded-full bg-[#FF3C38] animate-pulse" />
           </div>
 
-          {/* Visual Mockup Frame featuring first two letters as requested */}
+          {/* Visual Mockup Frame */}
           <div className="group/frame border-2 border-border bg-surface-secondary/70 p-5 sm:p-6 relative overflow-hidden flex flex-col justify-between min-h-[300px] sm:min-h-[340px] transition-colors duration-200 hover:border-foreground/80">
-            {/* Annotation at Top-Left */}
-            <div className="text-left font-mono text-[9.5px] uppercase font-bold text-muted-foreground/90 max-w-[120px] leading-tight">
-              {meta.note}
-              <div className="mt-0.5 text-xs">⤵</div>
-            </div>
-
-            {/* Decorative Top-Right Elements (Pink circle and tick marks) */}
-            <div className="absolute right-5 top-5 flex items-center gap-3 select-none pointer-events-none">
-              <div className="flex flex-col gap-1 items-end opacity-60">
-                <span className="w-2.5 h-0.5 bg-foreground" />
-                <span className="w-3.5 h-0.5 bg-foreground" />
-                <span className="w-2 h-0.5 bg-foreground" />
-              </div>
-              <div
-                className="size-8 sm:size-10 rounded-full border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] transition-transform duration-200 group-hover/frame:scale-110"
-                style={{ backgroundColor: meta.accentColor }}
-              />
-            </div>
+            {/* Per-project handwritten quip with self-drawing arrow pointing at device card */}
+            <HandNote
+              key={p.slug}
+              rotate={3}
+              className="absolute left-5 top-4 w-44 text-left z-10"
+            >
+              {meta.quip}
+            </HandNote>
 
             {/* Central Graphic Mockup Frame: Clickable Device Card with Tactile Hover & Color Change */}
-            <div className="my-auto mx-auto relative flex flex-col items-center">
+            <div className="my-auto mx-auto relative flex flex-col items-center pt-8 sm:pt-4">
               <Link
                 to="/projects/$slug"
                 params={{ slug: p.slug }}
@@ -296,20 +305,9 @@ function Projects() {
 
           {/* Project Details Below Mockup */}
           <div className="mt-6 flex flex-col">
-            <div className="flex items-start justify-between gap-4">
-              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground uppercase">
-                {p.name}
-              </h2>
-              {/* Hand-drawn style note with arrow */}
-              <div className="hidden sm:flex flex-col items-end text-right">
-                <span className="font-mono text-[9px] uppercase font-bold text-muted-foreground leading-tight max-w-[130px]">
-                  {meta.actionNote}
-                </span>
-                <span className="font-mono text-xs text-muted-foreground -mr-1">
-                  ⤷
-                </span>
-              </div>
-            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground uppercase">
+              {p.name}
+            </h2>
 
             <p className="mt-2 font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {p.tagline}
@@ -327,20 +325,33 @@ function Projects() {
               ))}
             </div>
 
-            {/* High-Contrast Bold Yellow Action Button */}
-            <Link
-              to="/projects/$slug"
-              params={{ slug: p.slug }}
-              data-crosshair-target
-              className="mt-6 w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 sm:py-3.5 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-            >
-              <span>EXPLORE CASE STUDY</span>
-              <ArrowUpRight className="size-4" strokeWidth={2.5} />
-            </Link>
+            {/* High-Contrast Bold Yellow Action Button with Idle Psst Nudge */}
+            <div className="relative mt-6">
+              <AnimatePresence>
+                {showPsst && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8, y: 4 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute -top-3.5 right-4 font-hand text-sm font-bold bg-foreground text-background px-2 py-0.5 -rotate-6 z-20 pointer-events-none shadow-[2px_2px_0px_0px_var(--border)]"
+                  >
+                    psst, click here!
+                  </motion.span>
+                )}
+              </AnimatePresence>
+              <Link
+                to="/projects/$slug"
+                params={{ slug: p.slug }}
+                data-crosshair-target
+                className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 sm:py-3.5 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+              >
+                <span>EXPLORE CASE STUDY</span>
+                <ArrowUpRight className="size-4" strokeWidth={2.5} />
+              </Link>
+            </div>
           </div>
         </aside>
       </main>
     </div>
   );
 }
-

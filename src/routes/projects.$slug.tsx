@@ -8,6 +8,7 @@ import { DevOpsHubCaseStudy } from "@/components/projects/DevOpsHubCaseStudy";
 import { InventoryCaseStudy } from "@/components/projects/InventoryCaseStudy";
 import { RootsCaseStudy } from "@/components/projects/RootsCaseStudy";
 import { CvSorterCaseStudy } from "@/components/projects/CvSorterCaseStudy";
+import { ProjectArchiveNav } from "@/components/projects/ProjectArchiveNav";
 
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => {
@@ -229,50 +230,8 @@ function ProjectPage() {
             )}
 
             {/* Previous and next navigation */}
-            <nav
-              aria-label="Project navigation"
-              className="mt-12 grid grid-cols-1 gap-3 sm:mt-16 sm:grid-cols-2 sm:gap-5"
-            >
-              <Link
-                to="/projects/$slug"
-                params={{ slug: previous.slug }}
-                data-crosshair-target
-                aria-label={`Previous project: ${previous.name}`}
-                className="group flex min-h-28 flex-col justify-between border border-line p-4 transition-colors hover:border-lime/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-4 sm:min-h-32 sm:p-5"
-              >
-                <span className="label-mono text-muted-foreground transition-colors group-hover:text-lime">
-                  <span aria-hidden="true">← </span>previous project
-                </span>
-
-                <span className="break-words font-display text-3xl leading-tight transition-all group-hover:translate-x-1 group-hover:italic group-hover:text-lime sm:text-4xl">
-                  {previous.name}
-                </span>
-              </Link>
-
-              <Link
-                to="/projects/$slug"
-                params={{ slug: next.slug }}
-                data-crosshair-target
-                aria-label={`Next project: ${next.name}`}
-                className="group flex min-h-28 flex-col items-start justify-between border border-line p-4 transition-colors hover:border-lime/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-4 sm:min-h-32 sm:items-end sm:p-5 sm:text-right"
-              >
-                <span className="label-mono text-muted-foreground transition-colors group-hover:text-lime">
-                  next project <span aria-hidden="true">→</span>
-                </span>
-
-                <span className="break-words font-display text-3xl leading-tight transition-all group-hover:translate-x-1 group-hover:italic group-hover:text-lime sm:text-4xl">
-                  {next.name}
-                </span>
-              </Link>
-            </nav>
-
-            <div className="mt-8 text-center">
-              <Link
-                to="/projects"
-                className="cursor-target label-mono inline-flex min-h-10 items-center justify-center transition-colors hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-4"
-              >
-                ← return to project archive
-              </Link>
+            <div className="mt-12">
+              <ProjectArchiveNav previous={previous} next={next} />
             </div>
           </>
         )}
