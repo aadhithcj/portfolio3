@@ -1,0 +1,168 @@
+.border-glow-card {
+  --edge-proximity: 0;
+  --cursor-angle: 45deg;
+  --edge-sensitivity: 4;
+  --color-sensitivity: calc(var(--edge-sensitivity) + 12);
+  --border-radius: 15px;
+  --glow-padding: 22px;
+  --cone-spread: 8;
+
+  position: relative;
+  border-radius: var(--border-radius);
+  isolation: isolate;
+  transform: translate3d(0, 0, 0.01px);
+  display: grid;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background: var(--card-bg, var(--surface, #120f17));
+  overflow: visible;
+  box-shadow:
+    rgba(0, 0, 0, 0.15) 0px 1px 3px,
+    rgba(0, 0, 0, 0.25) 0px 8px 24px;
+}
+
+.border-glow-card--light {
+  border-color: rgb(24 24 27 / 12%);
+  box-shadow:
+    rgb(24 24 27 / 4%) 0 1px 2px,
+    rgb(24 24 27 / 5%) 0 8px 24px;
+}
+
+.border-glow-card--light > .edge-light {
+  mix-blend-mode: normal;
+}
+
+.border-glow-card::before,
+.border-glow-card > .edge-light {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transition: opacity 0.25s ease-out;
+}
+
+.border-glow-card:not(:hover):not(.sweep-active)::before,
+.border-glow-card:not(:hover):not(.sweep-active) > .edge-light {
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+/* Colored mesh-gradient border outline */
+.border-glow-card::before {
+  z-index: 1;
+  pointer-events: none;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--card-bg, var(--surface, #120f17)) 0 100%) padding-box,
+    linear-gradient(rgb(255 255 255 / 0%) 0% 100%) border-box,
+    var(
+        --gradient-one,
+        radial-gradient(
+          at 80% 55%,
+          hsla(268, 100%, 76%, 1) 0px,
+          transparent 50%
+        )
+      )
+      border-box,
+    var(
+        --gradient-two,
+        radial-gradient(
+          at 69% 34%,
+          hsla(349, 100%, 74%, 1) 0px,
+          transparent 50%
+        )
+      )
+      border-box,
+    var(
+        --gradient-three,
+        radial-gradient(at 8% 6%, hsla(136, 100%, 78%, 1) 0px, transparent 50%)
+      )
+      border-box,
+    var(
+        --gradient-four,
+        radial-gradient(
+          at 41% 38%,
+          hsla(192, 100%, 64%, 1) 0px,
+          transparent 50%
+        )
+      )
+      border-box,
+    var(
+        --gradient-five,
+        radial-gradient(
+          at 86% 85%,
+          hsla(186, 100%, 74%, 1) 0px,
+          transparent 50%
+        )
+      )
+      border-box,
+    var(
+        --gradient-six,
+        radial-gradient(at 82% 18%, hsla(52, 100%, 65%, 1) 0px, transparent 50%)
+      )
+      border-box,
+    var(
+        --gradient-seven,
+        radial-gradient(at 51% 4%, hsla(12, 100%, 72%, 1) 0px, transparent 50%)
+      )
+      border-box,
+    var(--gradient-base, linear-gradient(#9fff5b 0 100%)) border-box;
+
+  opacity: calc(
+    (var(--edge-proximity) - var(--color-sensitivity)) /
+      (100 - var(--color-sensitivity))
+  );
+
+  mask-image: conic-gradient(
+    from var(--cursor-angle) at center,
+    black calc(var(--cone-spread) * 1%),
+    transparent calc((var(--cone-spread) + 15) * 1%),
+    transparent calc((100 - var(--cone-spread) - 15) * 1%),
+    black calc((100 - var(--cone-spread)) * 1%)
+  );
+}
+
+/* Outer glow layer — strictly BEHIND the container (z-index: -1) with only outer aura */
+.border-glow-card > .edge-light {
+  inset: calc(var(--glow-padding) * -1);
+  pointer-events: none;
+  z-index: -1;
+
+  mask-image: conic-gradient(
+    from var(--cursor-angle) at center,
+    black 2.5%,
+    transparent 12%,
+    transparent 88%,
+    black 97.5%
+  );
+
+  opacity: calc(
+    (var(--edge-proximity) - var(--edge-sensitivity)) /
+      (100 - var(--edge-sensitivity))
+  );
+  mix-blend-mode: plus-lighter;
+}
+
+.border-glow-card > .edge-light::before {
+  content: "";
+  position: absolute;
+  inset: var(--glow-padding);
+  border-radius: inherit;
+  box-shadow:
+    0 0 1px 0 var(--glow-color-60, hsl(95deg 100% 68% / 60%)),
+    0 0 3px 0 var(--glow-color-50, hsl(95deg 100% 68% / 50%)),
+    0 0 8px 0 var(--glow-color-40, hsl(95deg 100% 68% / 40%)),
+    0 0 16px 1px var(--glow-color-30, hsl(95deg 100% 68% / 30%)),
+    0 0 28px 2px var(--glow-color-20, hsl(95deg 100% 68% / 20%)),
+    0 0 45px 3px var(--glow-color-10, hsl(95deg 100% 68% / 10%));
+}
+
+/* Inner content area: opaque background sits above the outer glow layer */
+.border-glow-inner {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: visible;
+  z-index: 2;
+  border-radius: inherit;
+  background: var(--card-bg, var(--surface, #120f17));
+}

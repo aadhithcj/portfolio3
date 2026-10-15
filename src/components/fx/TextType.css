@@ -1,0 +1,18 @@
+.text-type {
+  display: block;
+  width: 100%;
+  vertical-align: top;
+  white-space: pre-wrap;
+}
+
+.text-type__cursor {
+  margin-left: 0.25rem;
+  display: inline-block;
+  opacity: 1;
+  color: var(--lime, #c8f53c);
+  font-weight: 600;
+}
+
+.text-type__cursor--hidden {
+  display: none;
+}

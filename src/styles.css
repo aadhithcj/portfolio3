@@ -1,0 +1,348 @@
+@import "tailwindcss";
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * The :root and .dark blocks define the actual color values using oklch / hex.
+ * Default is high-contrast Neo-Brutalist Light Mode with warm paper & carbon ink.
+ */
+
+@theme inline {
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-sans: "Space Grotesk", "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-lime: var(--lime);
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-line: var(--line);
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
+  --radius-4xl: var(--radius);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-brutal-yellow: var(--brutal-yellow);
+  --color-brutal-orange: var(--brutal-orange);
+  --color-brutal-blue: var(--brutal-blue);
+  --color-brutal-green: var(--brutal-green);
+  --color-status-green: var(--status-green);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  color-scheme: light;
+  --radius: 0px;
+
+  /* Paper / Warm off-white & carbon ink */
+  --background: oklch(0.965 0.015 95);
+  --foreground: oklch(0.12 0.01 265);
+
+  /* Card & Surface - Aliased for crisp high contrast */
+  --card: oklch(0.995 0.008 95);
+  --card-foreground: oklch(0.17 0.01 265);
+  --surface: var(--card);
+  --surface-secondary: oklch(0.935 0.015 95);
+
+  --popover: var(--card);
+  --popover-foreground: oklch(0.17 0.01 265);
+
+  /* Solid ink borders & lines - Aliased to --border (oklch(0.17 0.01 265)) */
+  --border: oklch(0.17 0.01 265);
+  --line: var(--border);
+  --input: var(--border);
+  --ring: var(--border);
+
+  /* Primary Neo-Brutalist accents */
+  --primary: oklch(0.88 0.21 122);
+  --primary-foreground: oklch(0.12 0.01 265);
+  --lime: oklch(0.88 0.21 122);
+
+  --secondary: oklch(0.83 0.12 205);
+  --secondary-foreground: oklch(0.12 0.01 265);
+
+  --muted: oklch(0.925 0.015 95);
+  --muted-foreground: oklch(0.38 0.02 265);
+
+  --accent: var(--lime);
+  --accent-foreground: var(--primary-foreground);
+
+  --destructive: oklch(0.58 0.24 27);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  /* Dedicated Neo-Brutalist Accent Tokens */
+  --brutal-yellow: #FFD600;
+  --brutal-orange: #FF4D00;
+  --brutal-blue: #2563EB;
+  --brutal-green: #16A34A;
+  --status-green: #16A34A;
+
+  /* Reusable Neo-Brutalist Border & Shadow Tokens */
+  --border-brutal: 2px solid var(--foreground);
+  --border-brutal-thick: 3px solid var(--foreground);
+  --shadow-brutal: 4px 4px 0px 0px var(--foreground);
+  --shadow-brutal-sm: 2px 2px 0px 0px var(--foreground);
+  --shadow-brutal-lg: 6px 6px 0px 0px var(--foreground);
+  --shadow-brutal-xl: 10px 10px 0px 0px var(--foreground);
+
+  --sidebar: oklch(0.965 0.015 95);
+  --sidebar-foreground: oklch(0.12 0.01 265);
+  --sidebar-primary: oklch(0.88 0.21 122);
+  --sidebar-primary-foreground: oklch(0.12 0.01 265);
+  --sidebar-accent: oklch(0.935 0.015 95);
+  --sidebar-accent-foreground: oklch(0.12 0.01 265);
+  --sidebar-border: oklch(0.12 0.01 265);
+  --sidebar-ring: oklch(0.12 0.01 265);
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dark ::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dark {
+  color-scheme: dark;
+  --radius: 0px;
+
+  /* High contrast inverted dark mode */
+  --background: oklch(0.12 0.01 265);
+  --foreground: oklch(0.98 0.005 95);
+
+  /* Card & Surface - Aliased for crisp high contrast */
+  --card: oklch(0.18 0.01 265);
+  --card-foreground: oklch(0.98 0.005 95);
+  --surface: var(--card);
+  --surface-secondary: oklch(0.24 0.01 265);
+
+  --popover: var(--card);
+  --popover-foreground: oklch(0.98 0.005 95);
+
+  /* Border & Line - Aliased to --border (crisp light border in dark mode) */
+  --border: oklch(0.98 0.005 95);
+  --line: var(--border);
+  --input: var(--border);
+  --ring: oklch(0.88 0.21 122);
+
+  --primary: oklch(0.88 0.21 122);
+  --primary-foreground: oklch(0.12 0.01 265);
+  --lime: oklch(0.88 0.21 122);
+
+  --secondary: oklch(0.83 0.12 205);
+  --secondary-foreground: oklch(0.12 0.01 265);
+
+  --muted: oklch(0.22 0.01 265);
+  --muted-foreground: oklch(0.70 0.01 265);
+
+  --accent: var(--lime);
+  --accent-foreground: var(--primary-foreground);
+
+  --destructive: oklch(0.70 0.2 25);
+  --destructive-foreground: oklch(0.12 0.01 265);
+
+  --brutal-yellow: #FFD600;
+  --brutal-orange: #FF4D00;
+  --brutal-blue: #3B82F6;
+  --brutal-green: #22C55E;
+  --status-green: #22C55E;
+
+  --border-brutal: 2px solid var(--foreground);
+  --border-brutal-thick: 3px solid var(--foreground);
+  --shadow-brutal: 4px 4px 0px 0px var(--foreground);
+  --shadow-brutal-sm: 2px 2px 0px 0px var(--foreground);
+  --shadow-brutal-lg: 6px 6px 0px 0px var(--foreground);
+  --shadow-brutal-xl: 10px 10px 0px 0px var(--foreground);
+
+  --sidebar: oklch(0.18 0.01 265);
+  --sidebar-foreground: oklch(0.98 0.005 95);
+  --sidebar-primary: oklch(0.88 0.21 122);
+  --sidebar-primary-foreground: oklch(0.12 0.01 265);
+  --sidebar-accent: oklch(0.24 0.01 265);
+  --sidebar-accent-foreground: oklch(0.98 0.005 95);
+  --sidebar-border: oklch(0.98 0.005 95);
+  --sidebar-ring: oklch(0.88 0.21 122);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Neo-Brutalist core utility classes */
+@utility brutal-box {
+  background: var(--surface);
+  border: var(--border-brutal);
+  box-shadow: var(--shadow-brutal);
+  border-radius: 0px;
+}
+
+@utility brutal-interactive {
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.12s cubic-bezier(0.2, 0, 0, 1);
+  &:hover {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-brutal-sm);
+  }
+  &:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px 0px var(--foreground);
+  }
+}
+
+@utility nb-border {
+  border: 3px solid var(--border);
+}
+
+@utility nb-shadow {
+  box-shadow: 6px 6px 0 0 var(--border);
+}
+
+@utility nb-shadow-sm {
+  box-shadow: 3px 3px 0 0 var(--border);
+}
+
+@utility nb-shadow-lg {
+  box-shadow: 10px 10px 0 0 var(--border);
+}
+
+@utility nb-press {
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 9px 9px 0 0 var(--border);
+    }
+  }
+  &:active {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 0 var(--border);
+  }
+}
+
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+@utility page-enter {
+  animation: page-in 380ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@utility link-slash {
+  position: relative;
+  &::before {
+    content: "/";
+    position: absolute;
+    left: -0.9em;
+    color: var(--lime);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: 180ms ease;
+  }
+  &:hover::before,
+  &[data-status="active"]::before {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nb-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-nb-marquee {
+  animation: nb-marquee 25s linear infinite;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* Smooth circular ripple page transition on theme toggle */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 99999;
+}
+
