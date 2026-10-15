@@ -93,9 +93,9 @@ export function ThemeToggle({
     showToast(targetMode, 1400);
   };
 
-  // Fixed wrapper positioned in bottom right corner across all viewports
+  // Fixed wrapper positioned in top right below title bar across all viewports
   const wrapperClass = fixed
-    ? "fixed bottom-5 right-5 sm:bottom-6 sm:right-6 md:right-8 z-50 flex items-center justify-center pointer-events-auto"
+    ? "fixed top-12 sm:top-14 right-4 sm:right-6 md:right-8 z-40 flex items-center justify-center pointer-events-auto"
     : `relative flex items-center justify-center ${className}`.trim();
 
   const isCompact = !fixed;
@@ -103,16 +103,16 @@ export function ThemeToggle({
   return (
     <div className={wrapperClass} {...props}>
       <div className="relative flex flex-col items-center">
-        {/* Floating toast notification anchored above button */}
+        {/* Floating toast notification anchored below button */}
         {toast && (
           <div
             role="status"
             aria-live="polite"
-            className="pointer-events-none absolute bottom-full mb-3 right-0 whitespace-nowrap border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] rounded-none bg-card px-3 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-foreground transition-all duration-200 animate-in fade-in zoom-in-95 z-50"
+            className="pointer-events-none absolute top-full mt-2.5 right-0 whitespace-nowrap border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] rounded-none bg-card px-3 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-foreground transition-all duration-200 animate-in fade-in zoom-in-95 z-50"
           >
             <span className="mr-1.5 text-lime">◆</span>
             {toast}
-            <span className="absolute -bottom-1.5 right-4 size-2 rotate-45 border-b-2 border-r-2 border-border bg-card" />
+            <span className="absolute -top-1.5 right-4 size-2 rotate-45 border-t-2 border-l-2 border-border bg-card" />
           </div>
         )}
 

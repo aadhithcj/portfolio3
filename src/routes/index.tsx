@@ -91,8 +91,8 @@ function Index() {
       {/* Interactive WebGL2 DotGrid Background with High-Visibility Light/Dark Pulse Colors */}
       <div className="pointer-events-none fixed inset-0 z-0 opacity-80 transition-opacity duration-500">
         <DotGrid
-          baseColor={isDark ? "#43414B" : "#2E2D34"}
-          activeColor={isDark ? "#F1BE05" : "#FF3C38"}
+          baseColor={isDark ? "#0A3545" : "#2E2D34"}
+          activeColor={isDark ? "#22C55E" : "#FF3C38"}
           shape="circle"
           dotSize={isDark ? 4.5 : 3.8}
           gap={18}
@@ -122,15 +122,15 @@ function Index() {
         {/* Hero Section (Restored to exact layout from Screenshot 1) */}
         <div className="my-auto py-6 sm:py-8">
           <div className="w-full max-w-4xl">
-            {/* Top row with subhead and pulse diamond trigger button (Screenshot 1) */}
+            {/* Top row with subhead pill and pulse diamond trigger button */}
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-2 label-mono">
+              <div className="inline-flex items-center gap-2 border border-border/40 bg-card/85 backdrop-blur-sm px-3 sm:px-3.5 py-1.5 shadow-xs">
                 <span className="font-mono text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                   # SOFTWARE ENGINEER
                 </span>
                 <span className="text-muted-foreground/60">•</span>
                 <span className="inline-block size-2 rounded-full bg-status-green animate-pulse" />
-                <span className="font-mono text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                <span className="font-mono text-xs sm:text-sm font-semibold uppercase tracking-wider text-foreground">
                   AVAILABLE TO WORK
                 </span>
               </div>
@@ -140,7 +140,7 @@ function Index() {
                 data-crosshair-target
                 aria-label="Trigger screen-wide pulse"
                 onClick={triggerScreenPulse}
-                className="group grid size-9 sm:size-10 place-items-center border-2 border-foreground bg-card font-display text-xl text-primary shadow-[3px_3px_0px_0px_var(--foreground)] transition-all duration-200 hover:rotate-45 hover:border-foreground hover:shadow-[1px_1px_0px_0px_var(--foreground)] focus-visible:outline-2 focus-visible:outline-foreground ml-auto sm:ml-0"
+                className="group grid size-9 sm:size-10 place-items-center border border-border/50 bg-card/90 font-display text-xl text-lime shadow-xs transition-all duration-200 hover:rotate-45 hover:border-foreground hover:shadow-[2px_2px_0px_0px_var(--foreground)] focus-visible:outline-2 focus-visible:outline-foreground ml-auto sm:ml-0"
               >
                 <span className="transition-transform duration-300 group-hover:scale-110">
                   ◆
@@ -162,7 +162,7 @@ function Index() {
                 specks={15}
                 sweep={false}
                 color={isDark ? "#F7F0D9" : "#2E2D34"}
-                accentColor={isDark ? "#F1BE05" : "#FF3C38"}
+                accentColor={isDark ? "#22C55E" : "#FF3C38"}
                 selection={true}
                 labels={true}
                 draggable={false}
@@ -175,17 +175,19 @@ function Index() {
               <em className="italic text-lime not-italic font-normal">systems</em>.
             </h1>
 
-            {/* Animated Bio */}
-            <div className="mt-6 max-w-xl h-[3.25rem] sm:h-[3.5rem]">
-              <TextType
-                text="Full-stack, DevOps and applied AI. Computer Science graduate from Kerala."
-                typingSpeed={14}
-                pauseDuration={3500}
-                loop={false}
-                showCursor={true}
-                cursorCharacter="|"
-                className="block w-full font-mono text-sm leading-relaxed text-foreground/90 sm:text-base"
-              />
+            {/* Animated Bio wrapped in subtle backdrop box for crisp dot matrix readability */}
+            <div className="mt-6 max-w-xl">
+              <div className="inline-flex items-center w-full border border-border/40 bg-card/85 backdrop-blur-sm px-4 py-3 shadow-xs min-h-[3.75rem] sm:min-h-[4rem]">
+                <TextType
+                  text="Full-stack, DevOps and applied AI. Computer Science graduate from Kerala."
+                  typingSpeed={14}
+                  pauseDuration={3500}
+                  loop={false}
+                  showCursor={true}
+                  cursorCharacter="|"
+                  className="block w-full font-mono text-sm leading-relaxed text-foreground/90 sm:text-base"
+                />
+              </div>
             </div>
 
             {/* Dashed divider line from Screenshot 1 */}
