@@ -81,16 +81,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { title: "Aadhith C Joseph" },
+        { title: "ACJ_ — Software Engineer" },
         {
           name: "description",
-          content: "Portfolio of software engineer Aadhith C Joseph.",
+          content: "Portfolio of software engineer ACJ_: full-stack, DevOps and applied AI.",
         },
-        { name: "author", content: "Aadhith C Joseph" },
-        { property: "og:site_name", content: "Aadhith C Joseph" },
+        { name: "author", content: "ACJ_" },
+        { property: "og:site_name", content: "ACJ_" },
         {
           property: "og:title",
-          content: "Aadhith C Joseph — Software Engineer",
+          content: "ACJ_ — Software Engineer",
         },
         {
           property: "og:description",
@@ -197,8 +197,8 @@ function RootCrosshair() {
 
   return (
     <Crosshair
-      color={isDark ? "#c8f53c" : "#0a0a0a"}
-      coordinatesColor={isDark ? "#c8f53c" : "#0a0a0a"}
+      color={isDark ? "#F1BE05" : "#2E2D34"}
+      coordinatesColor={isDark ? "#F1BE05" : "#2E2D34"}
       targetEffect="lock"
       thickness={1}
       opacity={isDark ? 0.4 : 0.6}

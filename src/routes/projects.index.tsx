@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { useTheme } from "@/hooks/use-theme";
 import TextType from "@/components/fx/TextType";
 import DecryptedText from "@/components/fx/DecryptedText";
 import BorderGlow from "@/components/fx/BorderGlow";
@@ -9,13 +10,13 @@ import { projects } from "@/lib/portfolio";
 export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
-      { title: "Projects — Aadhith C Joseph" },
+      { title: "Projects — ACJ_" },
       {
         name: "description",
         content:
           "Retina, DevOpsHub and other software projects by Aadhith C Joseph.",
       },
-      { property: "og:title", content: "Projects — Aadhith C Joseph" },
+      { property: "og:title", content: "Projects — ACJ_" },
       {
         property: "og:description",
         content: "A numbered archive of full-stack, DevOps and AI work.",
@@ -29,6 +30,8 @@ export const Route = createFileRoute("/projects/")({
 
 function Projects() {
   const [active, setActive] = useState(0);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const p = projects[active] ?? projects[0];
   if (!p) return null;
   return (
@@ -48,7 +51,7 @@ function Projects() {
                   active === i ? "border-lime/50 bg-surface/40" : "border-line"
                 }`}
               >
-                <span className="font-mono text-xs text-lime">
+                <span className="font-mono text-xs font-bold text-lime">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span
@@ -68,13 +71,17 @@ function Projects() {
         <aside className="sticky top-8 h-fit" aria-live="polite">
           <BorderGlow
             edgeSensitivity={4}
-            glowColor="95 100 68"
+            glowColor={isDark ? "95 100 68" : "0 70 50"}
             backgroundColor="var(--surface)"
             borderRadius={15}
             glowRadius={22}
             glowIntensity={1}
             coneSpread={8}
-            colors={["#9fff5b", "#4ade80", "#22c55e"]}
+            colors={
+              isDark
+                ? ["#F1BE05", "#FF7700", "#FF3C38"]
+                : ["#FF3C38", "#FF7700", "#F1BE05"]
+            }
             className="border border-line bg-surface p-5 shadow-xl backdrop-blur-md"
           >
             <p className="label-mono flex items-center justify-between">

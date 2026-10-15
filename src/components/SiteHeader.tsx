@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
   { to: "/about", label: "about" },
@@ -9,44 +8,55 @@ const navLinks = [
   { to: "/contact", label: "contact" },
 ] as const;
 
-export function SiteHeader() {
+export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
   return (
-    <header className="sticky top-0 z-40 w-full border-b-[3px] border-border bg-background/95 backdrop-blur-sm">
-      {/* Main Neo-Brutalist Top Bar */}
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        {/* Left: Brand */}
+    <header className="sticky top-0 z-40 w-full border-b-[3px] border-border bg-card/95 backdrop-blur-sm flex flex-col">
+      {/* Neo-brutalist Edge-to-Edge Grid Header Bar */}
+      <div className="w-full flex items-stretch justify-between overflow-x-auto scrollbar-none">
+        {/* Left: Brand Cell */}
         <Link
           to="/"
           data-crosshair-target
-          className="group flex items-center gap-2 font-sans font-extrabold uppercase tracking-tight text-foreground transition-transform hover:-translate-y-0.5"
+          className="border-r-[3px] border-border px-4 sm:px-6 py-2.5 sm:py-3.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center shrink-0"
         >
-          <span className="grid size-7 sm:size-8 place-items-center border-2 border-border bg-primary font-mono text-xs font-black text-primary-foreground shadow-[2px_2px_0px_0px_var(--border)]">
-            ◆
-          </span>
-          <span className="hidden sm:inline-block text-base md:text-lg font-black tracking-tight">
-            Aadhith C Joseph
-          </span>
-          <span className="sm:hidden font-mono text-sm font-black tracking-wider">
-            ACJ_
-          </span>
+          ACJ_
         </Link>
 
-        {/* Center: Status Metadata */}
-        <div className="hidden lg:flex items-center gap-2.5 font-mono text-xs uppercase tracking-wider text-muted-foreground border-2 border-border bg-card px-3 py-1 shadow-[2px_2px_0px_0px_var(--border)]">
-          <span className="size-2 rounded-full bg-status-green animate-pulse" />
-          <span className="font-bold text-foreground">SOFTWARE ENGINEER // PORTFOLIO '26</span>
-          <span className="text-border">|</span>
-          <span className="text-[11px] text-muted-foreground">KANNUR, KERALA</span>
+        {/* Center: Title / Metadata Cell */}
+        <div className="hidden lg:flex items-center px-4 sm:px-6 py-2.5 sm:py-3.5 border-r-[3px] border-border font-mono text-xs sm:text-sm uppercase tracking-wider text-muted-foreground shrink-0">
+          SOFTWARE ENGINEER // PORTFOLIO '26
         </div>
 
-        {/* Right: Quick Action Buttons + Compact ThemeToggle */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5">
+        {/* Navigation Tabs for other pages */}
+        {!isHome && (
+          <nav className="hidden md:flex items-stretch shrink-0">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                data-crosshair-target
+                className="border-r-[3px] border-border px-3 sm:px-4 py-2.5 sm:py-3.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center shrink-0"
+                activeProps={{
+                  className: "bg-primary text-primary-foreground font-black",
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        )}
+
+        {/* Spacer */}
+        <div className="flex-1 min-w-4" />
+
+        {/* Right Action Cells */}
+        <div className="flex items-stretch shrink-0">
           <a
             href="https://github.com/aadhithcj"
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="nb-border nb-shadow-sm nb-press rounded-none bg-card px-2.5 py-1 sm:px-3 sm:py-1.5 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary"
+            className="border-l-[3px] border-border px-3 sm:px-5 py-2.5 sm:py-3.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center"
           >
             GITHUB
           </a>
@@ -55,7 +65,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="nb-border nb-shadow-sm nb-press rounded-none bg-card px-2.5 py-1 sm:px-3 sm:py-1.5 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary"
+            className="border-l-[3px] border-border px-3 sm:px-5 py-2.5 sm:py-3.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center"
           >
             LINKEDIN
           </a>
@@ -64,39 +74,31 @@ export function SiteHeader() {
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="nb-border nb-shadow-sm nb-press rounded-none bg-primary px-2.5 py-1 sm:px-3 sm:py-1.5 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider text-primary-foreground hover:bg-accent hover:text-accent-foreground"
+            className="border-l-[3px] border-border bg-primary px-3 sm:px-5 py-2.5 sm:py-3.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-1"
           >
-            RÉSUMÉ
+            RÉSUMÉ ↗
           </a>
-
-          {/* Compact Inline ThemeToggle */}
-          <div className="ml-1 sm:ml-2">
-            <ThemeToggle />
-          </div>
         </div>
       </div>
 
-      {/* Secondary Route Navigation Bar */}
-      <div className="border-t-2 border-border/70 bg-card/60 px-4 py-1.5 sm:px-6">
-        <nav
-          aria-label="Route navigation"
-          className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-5 gap-y-1 font-mono text-xs tracking-wider uppercase text-muted-foreground"
-        >
+      {/* On mobile screens for sub-pages: horizontal scrolling navigation bar */}
+      {!isHome && (
+        <nav className="md:hidden flex items-stretch border-t-[2px] border-border bg-card/70 overflow-x-auto scrollbar-none divide-x-[2px] divide-border">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               data-crosshair-target
-              className="link-slash py-0.5 transition-colors hover:text-foreground"
+              className="px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary whitespace-nowrap flex items-center"
               activeProps={{
-                className: "text-foreground font-black underline decoration-[2px] underline-offset-4 decoration-primary",
+                className: "bg-primary text-primary-foreground font-black",
               }}
             >
               {link.label}
             </Link>
           ))}
         </nav>
-      </div>
+      )}
     </header>
   );
 }

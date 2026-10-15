@@ -21,13 +21,13 @@ import {
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Aadhith C Joseph" },
+      { title: "Contact — ACJ_" },
       {
         name: "description",
         content:
           "Email, GitHub, LinkedIn and direct contact for Aadhith C Joseph.",
       },
-      { property: "og:title", content: "Contact — Aadhith C Joseph" },
+      { property: "og:title", content: "Contact — ACJ_" },
       {
         property: "og:description",
         content:
@@ -184,13 +184,13 @@ function Contact() {
         </p>
 
         {/* Resume Card */}
-        <div className="mt-10 flex flex-col justify-between gap-4 rounded-xl border border-line bg-surface/70 p-6 backdrop-blur-md sm:flex-row sm:items-center">
+        <div className="mt-10 flex flex-col justify-between gap-4 rounded-none border-2 border-border bg-card p-6 shadow-[3px_3px_0px_0px_var(--border)] sm:flex-row sm:items-center">
           <div className="flex items-center gap-4">
-            <div className="grid size-12 place-items-center rounded-lg border border-line bg-background/80 text-lime">
+            <div className="grid size-12 place-items-center rounded-none border-2 border-border bg-[#F1BE05] text-[#2E2D34] shadow-[2px_2px_0px_0px_var(--border)]">
               <FileText className="size-6" />
             </div>
             <div>
-              <p className="font-display text-xl sm:text-2xl">Resume</p>
+              <p className="font-display text-xl sm:text-2xl font-bold">Resume</p>
               <p className="font-mono text-xs text-muted-foreground">
                 PDF document · Education, experience, and full stack repertoire
               </p>
@@ -201,7 +201,7 @@ function Contact() {
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-lime/60 bg-lime/10 px-5 py-2.5 font-mono text-xs text-lime transition-all hover:bg-lime hover:text-black hover:shadow-lg sm:text-sm"
+            className="inline-flex items-center justify-center gap-2 rounded-none border-2 border-border bg-primary px-5 py-2.5 font-mono text-xs font-bold text-black shadow-[2px_2px_0px_0px_var(--border)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none sm:text-sm"
           >
             <span>View Resume (PDF)</span>
             <ArrowUpRight className="size-4" />

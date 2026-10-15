@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
+import { useTheme } from "@/hooks/use-theme";
 import DecryptedText from "@/components/fx/DecryptedText";
 import TextType from "@/components/fx/TextType";
 import BorderGlow from "@/components/fx/BorderGlow";
@@ -8,7 +9,7 @@ import { Terminal, Cpu, Cloud, Layers, ArrowUpRight } from "lucide-react";
 export const Route = createFileRoute("/skills")({
   head: () => ({
     meta: [
-      { title: "Skills & Tech Stack — Aadhith C Joseph" },
+      { title: "Skills & Tech Stack — ACJ_" },
       {
         name: "description",
         content:
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/skills")({
       },
       {
         property: "og:title",
-        content: "Skills & Tech Stack — Aadhith C Joseph",
+        content: "Skills & Tech Stack — ACJ_",
       },
       {
         property: "og:description",
@@ -36,6 +37,9 @@ interface SkillCategory {
   name: string;
   description: string;
   icon: typeof Terminal;
+  color: string;
+  bulletColor: string;
+  glowColors: string[];
   skills: Array<{ name: string; note: string }>;
   project?: {
     name: string;
@@ -52,6 +56,9 @@ const categories: SkillCategory[] = [
     name: "Languages & Foundations",
     description: "Programming fundamentals, problem-solving, and core syntax.",
     icon: Terminal,
+    color: "bg-[#FF7700] text-black",
+    bulletColor: "text-[#FF7700]",
+    glowColors: ["#FF7700", "#FF3C38", "#F1BE05"],
     skills: [
       {
         name: "Python",
@@ -85,6 +92,9 @@ const categories: SkillCategory[] = [
     description:
       "Frontend development, backend services, and database-driven applications.",
     icon: Layers,
+    color: "bg-[#F1BE05] text-black",
+    bulletColor: "text-[#F1BE05]",
+    glowColors: ["#F1BE05", "#FF7700", "#FF3C38"],
     skills: [
       {
         name: "React",
@@ -134,6 +144,9 @@ const categories: SkillCategory[] = [
     description:
       "Containerization, CI/CD, deployment, and operational tooling.",
     icon: Cloud,
+    color: "bg-[#42BFDD] text-black",
+    bulletColor: "text-[#42BFDD]",
+    glowColors: ["#42BFDD", "#2E2D34", "#42BFDD"],
     skills: [
       {
         name: "Docker & Docker Compose",
@@ -175,6 +188,9 @@ const categories: SkillCategory[] = [
     description:
       "Native Android development, on-device inference, and computer vision.",
     icon: Cpu,
+    color: "bg-[#9649CB] text-white",
+    bulletColor: "text-[#9649CB]",
+    glowColors: ["#9649CB", "#FF3C38", "#42BFDD"],
     skills: [
       {
         name: "Kotlin & Android Studio",
@@ -219,6 +235,9 @@ const categories: SkillCategory[] = [
 ];
 
 function SkillsPage() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
@@ -236,7 +255,7 @@ function SkillsPage() {
 
           <h1 className="mt-4 break-words font-display text-5xl leading-[1.05] sm:text-7xl md:text-8xl">
             Systems, Stack &{" "}
-            <em className="italic text-lime not-italic">Tools</em>.
+            <em className="italic text-lime not-italic font-normal">Tools</em>.
           </h1>
 
           {/* Constant two-line container matching final state size */}
@@ -260,19 +279,25 @@ function SkillsPage() {
               <BorderGlow
                 key={cat.id}
                 edgeSensitivity={4}
-                glowColor="95 100 68"
+                glowColor={isDark ? "95 100 68" : "0 70 50"}
                 backgroundColor="var(--surface)"
                 borderRadius={15}
                 glowRadius={22}
                 glowIntensity={1}
                 coneSpread={8}
-                colors={["#9fff5b", "#34d399", "#a3e635"]}
-                className="flex flex-col justify-between border border-line bg-surface p-6 backdrop-blur-md transition-shadow hover:shadow-xl"
+                colors={
+                  isDark
+                    ? cat.glowColors
+                    : ["#dc2626", "#ea580c", "#ff5500"]
+                }
+                className="flex flex-col justify-between border-2 border-border bg-card p-6 shadow-[3px_3px_0px_0px_var(--border)] backdrop-blur-md transition-shadow hover:shadow-[5px_5px_0px_0px_var(--border)]"
               >
                 <div>
-                  <div className="flex items-center justify-between border-b border-line/60 pb-4">
+                  <div className="flex items-center justify-between border-b-2 border-border pb-4">
                     <div className="flex items-center gap-3">
-                      <div className="grid size-10 place-items-center rounded-lg border border-line bg-background/80 text-lime">
+                      <div
+                        className={`grid size-10 place-items-center rounded-none border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] ${cat.color}`}
+                      >
                         <Icon className="size-5" aria-hidden="true" />
                       </div>
                       <div>
@@ -284,23 +309,23 @@ function SkillsPage() {
                         </p>
                       </div>
                     </div>
-                    <span className="font-mono text-xs font-semibold text-lime">
+                    <span className="font-mono text-xs font-bold text-foreground">
                       {cat.number}
                     </span>
                   </div>
 
                   <ul
-                    className="mt-4 divide-y divide-line/40"
+                    className="mt-4 divide-y divide-border/60"
                     aria-label={`${cat.name} skills list`}
                   >
                     {cat.skills.map((s) => (
                       <li key={s.name} className="py-2.5 first:pt-1 last:pb-1">
                         <div className="flex items-center gap-2">
                           <span
-                            className="text-xs text-lime"
+                            className={`text-xs ${cat.bulletColor} font-bold`}
                             aria-hidden="true"
                           >
-                            ▹
+                            ■
                           </span>
                           <span className="font-mono text-sm font-medium text-foreground">
                             {s.name}

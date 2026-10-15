@@ -93,9 +93,9 @@ export function ThemeToggle({
     showToast(targetMode, 1400);
   };
 
-  // Fixed wrapper (desktop only; automatically hidden on pages with a header to avoid duplication)
+  // Fixed wrapper positioned in bottom right corner across all viewports
   const wrapperClass = fixed
-    ? "hidden sm:flex fixed sm:bottom-6 sm:right-6 md:right-8 z-50 items-center justify-center pointer-events-auto [body:has(header)_&]:hidden"
+    ? "fixed bottom-5 right-5 sm:bottom-6 sm:right-6 md:right-8 z-50 flex items-center justify-center pointer-events-auto"
     : `relative flex items-center justify-center ${className}`.trim();
 
   const isCompact = !fixed;
@@ -103,16 +103,16 @@ export function ThemeToggle({
   return (
     <div className={wrapperClass} {...props}>
       <div className="relative flex flex-col items-center">
-        {/* Floating toast notification anchored below button */}
+        {/* Floating toast notification anchored above button */}
         {toast && (
           <div
             role="status"
             aria-live="polite"
-            className="pointer-events-none absolute top-full mt-2.5 sm:top-auto sm:-bottom-11 right-0 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 whitespace-nowrap nb-border nb-shadow-sm rounded-none bg-card px-3 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-foreground transition-all duration-200 animate-in fade-in zoom-in-95 z-50"
+            className="pointer-events-none absolute bottom-full mb-3 right-0 whitespace-nowrap border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] rounded-none bg-card px-3 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-foreground transition-all duration-200 animate-in fade-in zoom-in-95 z-50"
           >
             <span className="mr-1.5 text-lime">◆</span>
             {toast}
-            <span className="absolute -top-1 right-3 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 size-2 rotate-45 border-t-[3px] border-l-[3px] border-border bg-card" />
+            <span className="absolute -bottom-1.5 right-4 size-2 rotate-45 border-b-2 border-r-2 border-border bg-card" />
           </div>
         )}
 
@@ -124,22 +124,22 @@ export function ThemeToggle({
           data-crosshair-target
           aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
           className={`group relative grid ${
-            isCompact ? "size-9" : "size-[54px]"
-          } place-items-center rounded-none nb-border nb-shadow-sm nb-press bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-lime transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 ${
-            gave ? "border-lime/80 ring-2 ring-lime/20 bg-primary/20" : ""
+            isCompact ? "size-9" : "size-11 sm:size-12"
+          } place-items-center rounded-none border-[3px] border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 ${
+            gave ? "border-lime ring-2 ring-lime/40 bg-primary/20" : ""
           }`}
         >
           {isDark ? (
             <Sun
               className={`${
                 isCompact ? "size-4" : "size-5"
-              } text-lime transition-transform duration-300 group-hover:rotate-45`}
+              } text-[#FFD600] transition-transform duration-300 group-hover:rotate-45`}
             />
           ) : (
             <Moon
               className={`${
                 isCompact ? "size-4" : "size-5"
-              } text-lime transition-transform duration-300 group-hover:-rotate-12`}
+              } text-foreground transition-transform duration-300 group-hover:-rotate-12`}
             />
           )}
         </button>

@@ -8,13 +8,13 @@ import { ArrowUpRight } from "lucide-react";
 export const Route = createFileRoute("/log")({
   head: () => ({
     meta: [
-      { title: "Log & Timeline — Aadhith C Joseph" },
+      { title: "Log & Timeline — ACJ_" },
       {
         name: "description",
         content:
           "Career timeline, milestones, internships, education and achievements of Aadhith C Joseph.",
       },
-      { property: "og:title", content: "Log & Timeline — Aadhith C Joseph" },
+      { property: "og:title", content: "Log & Timeline — ACJ_" },
       {
         property: "og:description",
         content:
