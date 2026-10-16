@@ -70,6 +70,7 @@ function Contact() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSent, setIsSent] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
   const [errorTarget, setErrorTarget] = useState<{
     field: "name" | "email" | "message";
@@ -98,11 +99,9 @@ function Contact() {
     `Hi Aadhith,\n\n${formData.message}\n\nFrom: ${formData.name} (${formData.email})`
   )}`;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
-
-    const formElement = e.currentTarget;
 
     if (!formData.name.trim()) {
       setErrorTarget({ field: "name", message: "Please fill out your name." });
@@ -142,20 +141,58 @@ function Contact() {
     setErrorTarget(null);
     setIsSubmitting(true);
 
-    // Open compose window in user gesture to avoid pop-up blockers
-    const composeWindow = window.open("about:blank", "_blank");
+    const accessKey = import.meta.env["VITE_WEB3FORMS_KEY"];
 
-    if (!composeWindow) {
+    // If access key is missing, notify and fallback to pre-filled Gmail compose
+    if (!accessKey) {
       setIsSubmitting(false);
-      toast.error("Pop-up blocked. Allow pop-ups or use the direct Gmail channel.");
+      toast.error(
+        "Web3Forms key missing in .env. Opening prefilled Gmail as fallback..."
+      );
+      window.open(gmailComposeUrl, "_blank");
       return;
     }
 
-    composeWindow.opener = null;
-    composeWindow.location.href = gmailComposeUrl;
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          subject:
+            formData.subject.trim() ||
+            `Portfolio inquiry from ${formData.name.trim()}`,
+          message: formData.message.trim(),
+          from_name: `${formData.name.trim()} (Portfolio)`,
+          replyto: formData.email.trim(),
+        }),
+      });
 
-    setIsSubmitting(false);
-    toast.success("Gmail opened. Review your prefilled message and press Send.");
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success("Message dispatched! Delivered directly to my inbox.");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+        setIsSent(true);
+        setTimeout(() => setIsSent(false), 5000);
+      } else {
+        toast.error(
+          result.message ||
+            "Failed to send message. Please try again or email directly."
+        );
+      }
+    } catch {
+      toast.error(
+        "Network error. Please check your connection or email directly."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const directGmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
@@ -352,10 +389,22 @@ function Contact() {
             </span>
             <div className="flex items-center gap-2">
               <span
-                className={`size-2 rounded-full ${isReady ? "bg-[#22C55E]" : "bg-muted-foreground/40"}`}
+                className={`size-2 rounded-full ${
+                  isSubmitting
+                    ? "bg-[#F1BE05]"
+                    : isSent || isReady
+                    ? "bg-[#22C55E]"
+                    : "bg-muted-foreground/40"
+                }`}
               />
               <span className="font-mono text-[10px] font-bold uppercase text-foreground/80 tracking-wider">
-                {isReady ? "MESSAGE READY" : "WAITING FOR YOU"}
+                {isSubmitting
+                  ? "DISPATCHING..."
+                  : isSent
+                  ? "TRANSMITTED"
+                  : isReady
+                  ? "MESSAGE READY"
+                  : "WAITING FOR YOU"}
               </span>
             </div>
           </div>
@@ -501,19 +550,42 @@ function Contact() {
               />
             </div>
 
+            {/* Botcheck honeypot field */}
+            <input
+              type="checkbox"
+              name="botcheck"
+              className="hidden"
+              style={{ display: "none" }}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+
             {/* Action Button: only the paper airplane icon arrow */}
             <button
               type="submit"
               disabled={isSubmitting}
               data-crosshair-target
-              className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+              className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <span>SEND MESSAGE</span>
-              <Send className="size-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <span>
+                {isSubmitting
+                  ? "SENDING MESSAGE..."
+                  : isSent
+                  ? "MESSAGE SENT! ✓"
+                  : "SEND MESSAGE"}
+              </span>
+              <Send
+                className={cn(
+                  "size-4 transition-transform",
+                  isSubmitting && "animate-spin",
+                  !isSubmitting &&
+                    "group-hover:translate-x-1 group-hover:-translate-y-1"
+                )}
+              />
             </button>
 
             <p className="font-mono text-[10px] text-muted-foreground text-center">
-              Pre-fills a message in Gmail so you can review before dispatching.
+              Delivered directly to my inbox · Average response time &lt; 24h
             </p>
           </form>
         </div>
