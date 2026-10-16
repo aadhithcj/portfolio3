@@ -5,7 +5,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
 import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
-import { projects, profile } from "@/lib/portfolio";
+import {
+  projects,
+  profile,
+  getLastActiveProjectSlug,
+  setLastActiveProjectSlug,
+} from "@/lib/portfolio";
 import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/projects/")({
@@ -100,9 +105,30 @@ const projectMeta: Record<
 };
 
 function Projects() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(() => {
+    const slug = getLastActiveProjectSlug();
+    const idx = projects.findIndex((p) => p.slug === slug);
+    return idx >= 0 ? idx : 0;
+  });
   const [hasHovered, setHasHovered] = useState(false);
   const [showPsst, setShowPsst] = useState(false);
+
+  // Sync with previously clicked project on mount
+  useEffect(() => {
+    const slug = getLastActiveProjectSlug();
+    const idx = projects.findIndex((p) => p.slug === slug);
+    if (idx >= 0) {
+      setActive((current) => (idx !== current ? idx : current));
+    }
+  }, []);
+
+  const handleSelect = (idx: number) => {
+    setActive(idx);
+    const slug = projects[idx]?.slug;
+    if (slug) {
+      setLastActiveProjectSlug(slug);
+    }
+  };
 
   const p = (projects[active] ?? projects[0])!;
   const meta = projectMeta[p.slug] ?? defaultProjectMeta;
@@ -170,12 +196,14 @@ function Projects() {
                   <Link
                     to="/projects/$slug"
                     params={{ slug: x.slug }}
+                    onPointerDown={() => handleSelect(i)}
+                    onClick={() => handleSelect(i)}
                     onMouseEnter={() => {
-                      setActive(i);
+                      handleSelect(i);
                       setHasHovered(true);
                     }}
                     onFocus={() => {
-                      setActive(i);
+                      handleSelect(i);
                       setHasHovered(true);
                     }}
                     data-crosshair-target

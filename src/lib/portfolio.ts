@@ -122,3 +122,30 @@ export const projects: Project[] = [
     ],
   },
 ];
+
+let inMemoryActiveSlug = "retina";
+
+export function getLastActiveProjectSlug(): string {
+  if (typeof window !== "undefined") {
+    try {
+      const stored = sessionStorage.getItem("portfolio_last_project");
+      if (stored && projects.some((p) => p.slug === stored)) {
+        return stored;
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return inMemoryActiveSlug;
+}
+
+export function setLastActiveProjectSlug(slug: string): void {
+  inMemoryActiveSlug = slug;
+  if (typeof window !== "undefined") {
+    try {
+      sessionStorage.setItem("portfolio_last_project", slug);
+    } catch {
+      // ignore
+    }
+  }
+}

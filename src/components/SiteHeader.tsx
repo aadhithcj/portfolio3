@@ -11,7 +11,7 @@ const navLinks = [
     activeClass:
       "bg-[#FF7700] hover:bg-[#FF7700] text-white font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
-      "hover:bg-[#FF7700]/15 dark:hover:bg-[#FF7700]/25 hover:text-foreground",
+      "hover:bg-[#FF7700]/15 dark:hover:bg-[#FF7700]/25 hover:text-foreground active:bg-[#FF7700] active:text-white",
     mobileActiveClass:
       "bg-[#FF7700] text-white font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
@@ -21,7 +21,7 @@ const navLinks = [
     activeClass:
       "bg-[#F1BE05] hover:bg-[#F1BE05] text-black font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
-      "hover:bg-[#F1BE05]/15 dark:hover:bg-[#F1BE05]/25 hover:text-foreground",
+      "hover:bg-[#F1BE05]/15 dark:hover:bg-[#F1BE05]/25 hover:text-foreground active:bg-[#F1BE05] active:text-black",
     mobileActiveClass:
       "bg-[#F1BE05] text-black font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
@@ -31,7 +31,7 @@ const navLinks = [
     activeClass:
       "bg-[#42BFDD] hover:bg-[#42BFDD] text-black font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
-      "hover:bg-[#42BFDD]/15 dark:hover:bg-[#42BFDD]/25 hover:text-foreground",
+      "hover:bg-[#42BFDD]/15 dark:hover:bg-[#42BFDD]/25 hover:text-foreground active:bg-[#42BFDD] active:text-black",
     mobileActiveClass:
       "bg-[#42BFDD] text-black font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
@@ -41,7 +41,7 @@ const navLinks = [
     activeClass:
       "bg-[#9649CB] hover:bg-[#9649CB] text-white font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
-      "hover:bg-[#9649CB]/15 dark:hover:bg-[#9649CB]/25 hover:text-foreground",
+      "hover:bg-[#9649CB]/15 dark:hover:bg-[#9649CB]/25 hover:text-foreground active:bg-[#9649CB] active:text-white",
     mobileActiveClass:
       "bg-[#9649CB] text-white font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
@@ -51,7 +51,7 @@ const navLinks = [
     activeClass:
       "bg-[#FF3C38] hover:bg-[#FF3C38] text-white font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
-      "hover:bg-[#FF3C38]/15 dark:hover:bg-[#FF3C38]/25 hover:text-foreground",
+      "hover:bg-[#FF3C38]/15 dark:hover:bg-[#FF3C38]/25 hover:text-foreground active:bg-[#FF3C38] active:text-white",
     mobileActiveClass:
       "bg-[#FF3C38] text-white font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
@@ -59,6 +59,7 @@ const navLinks = [
 
 export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [acjActive, setAcjActive] = useState(false);
   const location = useLocation();
   const pathname = location.pathname;
   const { theme, toggleTheme } = useTheme();
@@ -208,7 +209,18 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
         <Link
           to="/"
           data-crosshair-target
-          className="border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-[#C8FF00] hover:text-black hover:shadow-[0_0_20px_rgba(200,255,0,0.55)] transition-all duration-150 flex items-center shrink-0 cursor-pointer"
+          onPointerDown={() => setAcjActive(true)}
+          onPointerUp={() => setTimeout(() => setAcjActive(false), 250)}
+          onPointerLeave={() => setAcjActive(false)}
+          onClick={() => {
+            setAcjActive(true);
+            setTimeout(() => setAcjActive(false), 250);
+          }}
+          className={`border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-150 flex items-center shrink-0 cursor-pointer hover:bg-[#C8FF00] hover:text-black hover:shadow-[0_0_20px_rgba(200,255,0,0.55)] active:bg-[#C8FF00] active:text-black active:shadow-[0_0_20px_rgba(200,255,0,0.55)] focus-visible:bg-[#C8FF00] focus-visible:text-black focus-visible:shadow-[0_0_20px_rgba(200,255,0,0.55)] ${
+            acjActive
+              ? "bg-[#C8FF00] text-black shadow-[0_0_20px_rgba(200,255,0,0.55)]"
+              : "text-foreground"
+          }`}
         >
           ACJ_
         </Link>

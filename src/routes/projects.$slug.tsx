@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import TextType from "@/components/fx/TextType";
 import DecryptedText from "@/components/fx/DecryptedText";
-import { projects } from "@/lib/portfolio";
+import { projects, setLastActiveProjectSlug } from "@/lib/portfolio";
 import { CaseStudy } from "@/components/projects/CaseStudy";
 import { caseData } from "@/lib/case-data";
 import { ProjectArchiveNav } from "@/components/projects/ProjectArchiveNav";
@@ -45,6 +46,12 @@ export const Route = createFileRoute("/projects/$slug")({
 
 function ProjectPage() {
   const { project, index } = Route.useLoaderData();
+
+  useEffect(() => {
+    if (project?.slug) {
+      setLastActiveProjectSlug(project.slug);
+    }
+  }, [project?.slug]);
 
   if (!project) return null;
 

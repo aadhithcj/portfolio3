@@ -44,40 +44,55 @@ const nav = [
     n: "01",
     label: "About",
     note: "Bio",
+    color: "#FF7700",
     badgeClass: "bg-[#FF7700] text-black border-foreground",
-    hoverClass: "hover:bg-[#FF7700] hover:text-black",
+    activeCardClass: "bg-[#FF7700] text-black",
+    hoverClass:
+      "hover:bg-[#FF7700] hover:text-black active:bg-[#FF7700] active:text-black focus-visible:bg-[#FF7700] focus-visible:text-black",
   },
   {
     to: "/projects",
     n: "02",
     label: "Projects",
     note: "Selected work",
+    color: "#F1BE05",
     badgeClass: "bg-[#F1BE05] text-black border-foreground",
-    hoverClass: "hover:bg-[#F1BE05] hover:text-black",
+    activeCardClass: "bg-[#F1BE05] text-black",
+    hoverClass:
+      "hover:bg-[#F1BE05] hover:text-black active:bg-[#F1BE05] active:text-black focus-visible:bg-[#F1BE05] focus-visible:text-black",
   },
   {
     to: "/skills",
     n: "03",
     label: "Skills",
     note: "Tech & tools",
+    color: "#42BFDD",
     badgeClass: "bg-[#42BFDD] text-black border-foreground",
-    hoverClass: "hover:bg-[#42BFDD] hover:text-black",
+    activeCardClass: "bg-[#42BFDD] text-black",
+    hoverClass:
+      "hover:bg-[#42BFDD] hover:text-black active:bg-[#42BFDD] active:text-black focus-visible:bg-[#42BFDD] focus-visible:text-black",
   },
   {
     to: "/log",
     n: "04",
     label: "Log",
     note: "Timeline",
+    color: "#9649CB",
     badgeClass: "bg-[#9649CB] text-white border-foreground",
-    hoverClass: "hover:bg-[#9649CB] hover:text-white",
+    activeCardClass: "bg-[#9649CB] text-white",
+    hoverClass:
+      "hover:bg-[#9649CB] hover:text-white active:bg-[#9649CB] active:text-white focus-visible:bg-[#9649CB] focus-visible:text-white",
   },
   {
     to: "/contact",
     n: "05",
     label: "Contact",
     note: "Say hello",
+    color: "#FF3C38",
     badgeClass: "bg-[#FF3C38] text-white border-foreground",
-    hoverClass: "hover:bg-[#FF3C38] hover:text-white",
+    activeCardClass: "bg-[#FF3C38] text-white",
+    hoverClass:
+      "hover:bg-[#FF3C38] hover:text-white active:bg-[#FF3C38] active:text-white focus-visible:bg-[#FF3C38] focus-visible:text-white",
   },
 ] as const;
 
@@ -85,8 +100,12 @@ function Index() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const [planetColorIdx, setPlanetColorIdx] = useState(0);
+  const [activeNavIdx, setActiveNavIdx] = useState<number | null>(null);
+  const [navAccentColor, setNavAccentColor] = useState<string | null>(null);
   const currentAccent =
-    PLANET_COLORS[planetColorIdx % PLANET_COLORS.length] ?? "#CE4760";
+    navAccentColor ??
+    PLANET_COLORS[planetColorIdx % PLANET_COLORS.length] ??
+    "#CE4760";
   const mainRef = useRef<HTMLElement>(null);
 
   const triggerScreenPulse = (e: React.MouseEvent) => {
@@ -261,43 +280,87 @@ function Index() {
 
         {/* Bottom Navigation: High-contrast individual tactile neobrutalist cards */}
         <nav className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 sm:gap-2.5 xl:gap-3">
-          {nav.map((i) => (
-            <Link
-              key={i.to}
-              to={i.to}
-              data-crosshair-target
-              className={`group relative flex min-h-[50px] sm:min-h-[56px] xl:min-h-[64px] items-center justify-between gap-1.5 sm:gap-2 px-3 sm:px-3.5 xl:px-4 py-2 sm:py-2.5 xl:py-3 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 ${i.hoverClass} hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--shadow-color)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground overflow-hidden`}
-              activeProps={{
-                className:
-                  "ring-2 ring-lime shadow-[6px_6px_0px_0px_var(--shadow-color)] -translate-y-0.5",
-              }}
-            >
-              <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 shrink-0">
-                <span
-                  className={`border-2 px-1.5 py-0.5 font-mono text-[11px] sm:text-xs font-bold transition-all duration-150 group-hover:scale-110 shrink-0 ${i.badgeClass}`}
-                >
-                  {i.n}
-                </span>
-                <span className="font-display text-lg sm:text-xl xl:text-[22px] text-foreground group-hover:text-inherit transition-colors truncate">
-                  {i.label}
-                </span>
-              </div>
-              <div className="flex items-center justify-end gap-1.5 ml-auto text-right shrink-0">
-                <span className="hidden xl:inline label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase text-muted-foreground group-hover:text-inherit transition-colors whitespace-nowrap">
-                  <DecryptedText
-                    text={i.note}
-                    speed={25}
-                    sequential
-                    animateOn="hover"
-                    encryptedClassName="text-lime"
-                  />
-                </span>
-                <span className="font-mono text-xs text-muted-foreground group-hover:text-inherit group-hover:translate-x-1.5 transition-transform duration-150 font-bold shrink-0">
-                  →
-                </span>
-              </div>
-            </Link>
-          ))}
+          {nav.map((i, idx) => {
+            const isCardActive = activeNavIdx === idx;
+            return (
+              <Link
+                key={i.to}
+                to={i.to}
+                data-crosshair-target
+                onPointerDown={() => {
+                  setActiveNavIdx(idx);
+                  setNavAccentColor(i.color);
+                }}
+                onPointerUp={() => {
+                  setTimeout(() => setActiveNavIdx(null), 250);
+                }}
+                onPointerLeave={() => {
+                  setActiveNavIdx(null);
+                  setNavAccentColor(null);
+                }}
+                onMouseEnter={() => setNavAccentColor(i.color)}
+                onMouseLeave={() => setNavAccentColor(null)}
+                onClick={() => {
+                  setActiveNavIdx(idx);
+                  setNavAccentColor(i.color);
+                }}
+                className={`group relative flex min-h-[50px] sm:min-h-[56px] xl:min-h-[64px] items-center justify-between gap-1.5 sm:gap-2 px-3 sm:px-3.5 xl:px-4 py-2 sm:py-2.5 xl:py-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 ${i.hoverClass} hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--shadow-color)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground overflow-hidden ${
+                  isCardActive
+                    ? `${i.activeCardClass} -translate-y-0.5 shadow-[6px_6px_0px_0px_var(--shadow-color)]`
+                    : "bg-card"
+                }`}
+                activeProps={{
+                  className:
+                    "ring-2 ring-lime shadow-[6px_6px_0px_0px_var(--shadow-color)] -translate-y-0.5",
+                }}
+              >
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 shrink-0">
+                  <span
+                    className={`border-2 px-1.5 py-0.5 font-mono text-[11px] sm:text-xs font-bold transition-all duration-150 group-hover:scale-110 group-active:scale-110 shrink-0 ${
+                      isCardActive ? "scale-110" : ""
+                    } ${i.badgeClass}`}
+                  >
+                    {i.n}
+                  </span>
+                  <span
+                    className={`font-display text-lg sm:text-xl xl:text-[22px] transition-colors truncate ${
+                      isCardActive
+                        ? "text-inherit font-bold"
+                        : "text-foreground group-hover:text-inherit group-active:text-inherit group-focus-visible:text-inherit"
+                    }`}
+                  >
+                    {i.label}
+                  </span>
+                </div>
+                <div className="flex items-center justify-end gap-1.5 ml-auto text-right shrink-0">
+                  <span
+                    className={`hidden xl:inline label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase transition-colors whitespace-nowrap ${
+                      isCardActive
+                        ? "text-inherit"
+                        : "text-muted-foreground group-hover:text-inherit group-active:text-inherit group-focus-visible:text-inherit"
+                    }`}
+                  >
+                    <DecryptedText
+                      text={i.note}
+                      speed={25}
+                      sequential
+                      animateOn="hover"
+                      encryptedClassName="text-lime"
+                    />
+                  </span>
+                  <span
+                    className={`font-mono text-xs transition-transform duration-150 font-bold shrink-0 ${
+                      isCardActive
+                        ? "text-inherit translate-x-1.5"
+                        : "text-muted-foreground group-hover:text-inherit group-active:text-inherit group-focus-visible:text-inherit group-hover:translate-x-1.5 group-active:translate-x-1.5"
+                    }`}
+                  >
+                    →
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </main>
