@@ -363,3 +363,120 @@
   z-index: 99999;
 }
 
+/* ==========================================================================
+   Neo-Brutalist Sonner Toaster Overrides
+   Strict zero-blur hard offset shadows, 2px borders, 0px border-radius, monospace
+   ========================================================================== */
+[data-sonner-toaster] {
+  --border-radius: 0px !important;
+  font-family: var(--font-mono), monospace !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] {
+  border-radius: 0px !important;
+  border: 2px solid var(--border) !important;
+  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
+  font-family: var(--font-mono), monospace !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  padding: 12px 14px !important;
+  gap: 12px !important;
+  align-items: center !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-icon] {
+  width: auto !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-title] {
+  font-family: var(--font-mono), monospace !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: var(--foreground) !important;
+  line-height: 1.4 !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-description] {
+  font-family: var(--font-mono), monospace !important;
+  font-size: 11px !important;
+  color: var(--muted-foreground) !important;
+  line-height: 1.4 !important;
+}
+
+/* Success Toast */
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] {
+  border: 2px solid var(--border) !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] [data-title] {
+  color: var(--foreground) !important;
+}
+
+/* Error Toast */
+[data-sonner-toaster] [data-sonner-toast][data-type="error"] {
+  border: 2px solid #FF3C38 !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="error"] [data-title] {
+  color: #FF3C38 !important;
+}
+
+/* Warning Toast */
+[data-sonner-toaster] [data-sonner-toast][data-type="warning"] {
+  border: 2px solid #FF7700 !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
+}
+
+/* Info Toast */
+[data-sonner-toaster] [data-sonner-toast][data-type="info"] {
+  border: 2px solid #42BFDD !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
+}
+
+/* Close button on toasts */
+[data-sonner-toaster] [data-sonner-toast] [data-close-button] {
+  border-radius: 0px !important;
+  border: 2px solid var(--border) !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  box-shadow: 1px 1px 0px 0px var(--shadow-color) !important;
+  top: 6px !important;
+  right: 6px !important;
+  transition: transform 120ms ease !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-close-button]:hover {
+  background-color: var(--primary) !important;
+  color: #000 !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: none !important;
+}
+
+/* Action button */
+[data-sonner-toaster] [data-sonner-toast] [data-button] {
+  border-radius: 0px !important;
+  border: 2px solid var(--border) !important;
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  font-family: var(--font-mono), monospace !important;
+  font-weight: 800 !important;
+  font-size: 11px !important;
+  box-shadow: 2px 2px 0px 0px var(--shadow-color) !important;
+  cursor: pointer !important;
+}
+
