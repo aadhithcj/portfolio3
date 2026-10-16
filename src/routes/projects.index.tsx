@@ -31,7 +31,7 @@ export const Route = createFileRoute("/projects/")({
 
 const defaultProjectMeta = {
   pill: "RETINA / ASSISTIVE AI",
-  quip: "it sees things 👀",
+  quip: "check me out",
   features: ["+ CAMERA", "+ AI ANALYSIS", "+ VOICE FEEDBACK", "+ ACCESSIBLE UX"],
   accentColor: "#CE4760",
 };

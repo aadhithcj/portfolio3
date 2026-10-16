@@ -154,19 +154,6 @@ function Contact() {
     composeWindow.opener = null;
     composeWindow.location.href = gmailComposeUrl;
 
-    // Trigger DotGrid shockwave pulse from submit button
-    const btn = formElement.querySelector<HTMLElement>('button[type="submit"]');
-    const r = btn?.getBoundingClientRect();
-    window.dispatchEvent(
-      new CustomEvent("dotgrid:bigpulse", {
-        detail: {
-          x: r ? r.left + r.width / 2 : window.innerWidth / 2,
-          y: r ? r.top + r.height / 2 : window.innerHeight / 2,
-          speed: 3200,
-        },
-      })
-    );
-
     setIsSubmitting(false);
     toast.success("Gmail opened. Review your prefilled message and press Send.");
   };
