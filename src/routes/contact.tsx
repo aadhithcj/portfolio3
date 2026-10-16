@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
 import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
+import { useTheme } from "@/hooks/use-theme";
 import { profile } from "@/lib/portfolio";
 import { cn } from "@/lib/utils";
 import {
@@ -14,6 +16,7 @@ import {
   Mail,
   Github,
   Linkedin,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -71,6 +74,8 @@ function FieldToast({
 }
 
 function Contact() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -80,17 +85,29 @@ function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [formTouched, setFormTouched] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const captchaRef = useRef<HCaptcha>(null);
+  const hcaptchaSiteKey =
+    import.meta.env["VITE_HCAPTCHA_SITEKEY"] ||
+    "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+
   const [errorTarget, setErrorTarget] = useState<{
-    field: "name" | "email" | "message";
+    field: "name" | "email" | "message" | "captcha";
     message: string;
   } | null>(null);
 
   const [activeChannel, setActiveChannel] = useState(0);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const isReady =
     formData.name.trim() !== "" &&
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()) &&
-    formData.message.trim() !== "";
+    formData.message.trim() !== "" &&
+    Boolean(captchaToken);
 
   // Auto-dismiss field toast after 5 seconds
   useEffect(() => {
@@ -146,6 +163,19 @@ function Contact() {
       return;
     }
 
+    if (!captchaToken) {
+      setErrorTarget({
+        field: "captcha",
+        message: "Please complete the security check.",
+      });
+      document.getElementById("hcaptcha-container")?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      toast.error("Please complete the hCaptcha verification before sending.");
+      return;
+    }
+
     setErrorTarget(null);
     setIsSubmitting(true);
 
@@ -178,6 +208,7 @@ function Contact() {
           message: formData.message.trim(),
           from_name: `${formData.name.trim()} (Portfolio)`,
           replyto: formData.email.trim(),
+          "h-captcha-response": captchaToken,
         }),
       });
 
@@ -186,6 +217,8 @@ function Contact() {
       if (result.success) {
         toast.success("Message dispatched! Delivered directly to my inbox.");
         setFormData({ name: "", email: "", subject: "", message: "" });
+        setCaptchaToken(null);
+        captchaRef.current?.resetCaptcha();
         setIsSent(true);
         setTimeout(() => setIsSent(false), 5000);
       } else {
@@ -193,11 +226,15 @@ function Contact() {
           result.message ||
             "Failed to send message. Please try again or email directly."
         );
+        captchaRef.current?.resetCaptcha();
+        setCaptchaToken(null);
       }
     } catch {
       toast.error(
         "Network error. Please check your connection or email directly."
       );
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -409,7 +446,11 @@ function Contact() {
                     ? "bg-[#F1BE05]"
                     : isSent || isReady
                       ? "bg-[#22C55E]"
-                      : "bg-muted-foreground/40"
+                      : !captchaToken &&
+                          formData.name.trim() &&
+                          formData.message.trim()
+                        ? "bg-[#F1BE05] animate-pulse"
+                        : "bg-muted-foreground/40"
                 }`}
               />
               <span className="font-mono text-[10px] font-bold uppercase text-foreground/80 tracking-wider">
@@ -418,8 +459,12 @@ function Contact() {
                   : isSent
                     ? "TRANSMITTED"
                     : isReady
-                      ? "MESSAGE READY"
-                      : "WAITING FOR YOU"}
+                      ? "READY TO DISPATCH"
+                      : !captchaToken &&
+                          formData.name.trim() &&
+                          formData.message.trim()
+                        ? "CAPTCHA PENDING"
+                        : "WAITING FOR YOU"}
               </span>
             </div>
           </div>
@@ -566,6 +611,100 @@ function Contact() {
                     : "border-border focus:border-foreground focus:ring-foreground"
                 )}
               />
+            </div>
+
+            {/* Neo-Brutalist hCaptcha Security Verification Module */}
+            <div
+              id="hcaptcha-container"
+              className={cn(
+                "relative border-2 bg-surface-secondary/40 p-3 sm:p-4 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all",
+                errorTarget?.field === "captcha"
+                  ? "border-[#FF3C38] ring-1 ring-[#FF3C38]"
+                  : captchaToken
+                    ? "border-[#22C55E]"
+                    : "border-border"
+              )}
+            >
+              {errorTarget?.field === "captcha" && (
+                <FieldToast
+                  message={errorTarget.message}
+                  onClose={() => setErrorTarget(null)}
+                />
+              )}
+
+              {/* Security Strip Header */}
+              <div className="flex items-center justify-between border-b-2 border-border/60 pb-2.5 mb-3">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div
+                    className={cn(
+                      "size-6 grid place-items-center border-2 border-border shadow-[1px_1px_0px_0px_var(--shadow-color)] shrink-0",
+                      captchaToken
+                        ? "bg-[#22C55E] text-black"
+                        : "bg-[#F1BE05] text-black"
+                    )}
+                  >
+                    <ShieldCheck className="size-3.5" />
+                  </div>
+                  <span className="font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-foreground truncate">
+                    SECURITY PROTOCOL // ANTI-SPAM
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span
+                    className={cn(
+                      "size-2 rounded-full",
+                      captchaToken
+                        ? "bg-[#22C55E]"
+                        : "bg-[#F1BE05] animate-pulse"
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "font-mono text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 border border-border",
+                      captchaToken
+                        ? "bg-[#22C55E] text-black border-[#22C55E]"
+                        : "bg-background text-foreground"
+                    )}
+                  >
+                    {captchaToken ? "VERIFIED ✓" : "REQUIRED"}
+                  </span>
+                </div>
+              </div>
+
+              {/* hCaptcha Widget Container */}
+              <div className="flex justify-center items-center min-h-[78px] overflow-x-auto py-1">
+                {!mounted ? (
+                  <div className="h-[78px] w-full flex items-center justify-center font-mono text-[11px] text-muted-foreground/80 border-2 border-dashed border-border/60 bg-background/50">
+                    [ INITIALIZING SECURITY VERIFICATION... ]
+                  </div>
+                ) : (
+                  <HCaptcha
+                    key={isDark ? "dark" : "light"}
+                    ref={captchaRef}
+                    sitekey={hcaptchaSiteKey}
+                    reCaptchaCompat={false}
+                    theme={isDark ? "dark" : "light"}
+                    onVerify={(token) => {
+                      setCaptchaToken(token);
+                      if (errorTarget?.field === "captcha")
+                        setErrorTarget(null);
+                    }}
+                    onExpire={() => setCaptchaToken(null)}
+                    onError={() => {
+                      setCaptchaToken(null);
+                      toast.error(
+                        "Captcha verification error. Please retry the checkbox."
+                      );
+                    }}
+                  />
+                )}
+              </div>
+
+              {/* Metadata Footer */}
+              <div className="mt-2.5 pt-2 border-t border-border/40 flex items-center justify-between font-mono text-[9px] text-muted-foreground tracking-wider">
+                <span>VERIFIED VIA HCAPTCHA</span>
+                <span>ZERO LOGGING &bull; PRIVACY FIRST</span>
+              </div>
             </div>
 
             {/* Botcheck honeypot field */}
