@@ -3,11 +3,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import TextType from "@/components/fx/TextType";
 import DecryptedText from "@/components/fx/DecryptedText";
 import { projects } from "@/lib/portfolio";
-import { RetinaCaseStudy } from "@/components/projects/RetinaCaseStudy";
-import { DevOpsHubCaseStudy } from "@/components/projects/DevOpsHubCaseStudy";
-import { InventoryCaseStudy } from "@/components/projects/InventoryCaseStudy";
-import { RootsCaseStudy } from "@/components/projects/RootsCaseStudy";
-import { CvSorterCaseStudy } from "@/components/projects/CvSorterCaseStudy";
+import { CaseStudy } from "@/components/projects/CaseStudy";
+import { caseData } from "@/lib/case-data";
 import { ProjectArchiveNav } from "@/components/projects/ProjectArchiveNav";
 
 export const Route = createFileRoute("/projects/$slug")({
@@ -50,6 +47,8 @@ function ProjectPage() {
 
   if (!previous || !next) return null;
 
+  const data = caseData[p.slug];
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
@@ -66,16 +65,8 @@ function ProjectPage() {
           </Link>
         </div>
 
-        {p.slug === "retina" ? (
-          <RetinaCaseStudy project={p} previous={previous} next={next} />
-        ) : p.slug === "devopshub" ? (
-          <DevOpsHubCaseStudy project={p} previous={previous} next={next} />
-        ) : p.slug === "inventory" ? (
-          <InventoryCaseStudy project={p} previous={previous} next={next} />
-        ) : p.slug === "crop-recommendation" ? (
-          <RootsCaseStudy project={p} previous={previous} next={next} />
-        ) : p.slug === "cv-sorting" ? (
-          <CvSorterCaseStudy project={p} previous={previous} next={next} />
+        {data ? (
+          <CaseStudy data={data} project={p} previous={previous} next={next} />
         ) : (
           <>
             {/* Project introduction */}

@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
+import { PageBackdrop } from "@/components/fx/PageBackdrop";
+import { HandNote } from "@/components/fx/HandNote";
 import {
   ArrowUpRight,
   FileText,
@@ -11,7 +15,6 @@ import {
   Camera,
   Trophy,
   Compass,
-  Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
@@ -54,6 +57,8 @@ const interests = [
     note: "Crafting visual stories, rhythm-based pacing, and cinematic motion edits. Delivered 50+ social media videos.",
     color: "bg-[#CE4760] text-white",
     borderHover: "hover:border-[#CE4760]",
+    accent: "#CE4760",
+    quip: "frame by frame",
   },
   {
     num: "02",
@@ -63,6 +68,8 @@ const interests = [
     note: "Framing light, perspective, geometry, and everyday street compositions on digital and vintage glass.",
     color: "bg-[#42BFDD] text-black",
     borderHover: "hover:border-[#42BFDD]",
+    accent: "#42BFDD",
+    quip: "35mm, not 35 tabs",
   },
   {
     num: "03",
@@ -72,6 +79,8 @@ const interests = [
     note: "Playing weekly and following the beautiful game with enduring passion. Tactical appreciation & team chemistry.",
     color: "bg-[#F1BE05] text-black",
     borderHover: "hover:border-[#F1BE05]",
+    accent: "#F1BE05",
+    quip: "yes, I'll talk tactics",
   },
   {
     num: "04",
@@ -81,14 +90,24 @@ const interests = [
     note: "Exploring uncharted terrain, mountain highways, regional food cultures, and spontaneous road trips.",
     color: "bg-[#FF7700] text-black",
     borderHover: "hover:border-[#FF7700]",
+    accent: "#FF7700",
+    quip: "no GPS, just vibes",
   },
 ];
 
 function About() {
+  const [accent, setAccent] = useState("#F1BE05");
+  const [picked, setPicked] = useState(false);
+  const pick = (color: string) => {
+    setAccent(color);
+    setPicked(true);
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-clip">
+      <PageBackdrop accent={accent} />
       <SiteHeader />
-      <main className="page-enter mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+      <main className="page-enter relative z-10 mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
         {/* Editorial Introduction */}
         <p className="label-mono">
           <DecryptedText
@@ -131,7 +150,7 @@ function About() {
         </div>
 
         {/* Section 1: Explore Portfolio (Playful Control Panel) */}
-        <div className="flex items-center justify-between mb-4 mt-16 sm:mt-20">
+        <div className="relative flex items-center justify-between mb-4 mt-16 sm:mt-20">
           <h2 className="label-mono">
             <DecryptedText
               text="## explore portfolio // control panel"
@@ -144,6 +163,19 @@ function About() {
           <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest hidden sm:inline">
             [3 INTERACTIVE MODULES]
           </span>
+
+          <AnimatePresence>
+            {!picked && (
+              <motion.div
+                exit={{ opacity: 0 }}
+                className="hidden xl:block absolute -right-48 -top-6 w-40"
+              >
+                <HandNote flip rotate={4}>
+                  pick a door
+                </HandNote>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="grid gap-3.5 border-t-2 border-border pt-4">
@@ -151,6 +183,7 @@ function About() {
           <Link
             to="/projects"
             data-crosshair-target
+            onMouseEnter={() => pick("#F1BE05")}
             className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:-translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#F1BE05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
           >
             <div className="flex items-start sm:items-center gap-3.5">
@@ -182,6 +215,7 @@ function About() {
           <Link
             to="/skills"
             data-crosshair-target
+            onMouseEnter={() => pick("#42BFDD")}
             className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#42BFDD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
           >
             <div className="flex items-start sm:items-center gap-3.5">
@@ -221,6 +255,7 @@ function About() {
           <Link
             to="/log"
             data-crosshair-target
+            onMouseEnter={() => pick("#FF7700")}
             className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#FF7700] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
           >
             <div className="flex items-start sm:items-center gap-3.5">
@@ -237,7 +272,7 @@ function About() {
                   </h3>
                   {/* Small animated timeline badge */}
                   <span className="hidden sm:inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2 py-0.5 font-mono text-[10px] font-bold text-foreground">
-                    <span className="size-1.5 rounded-full bg-[#FF7700] animate-pulse" />
+                    <span className="size-1.5 rounded-full bg-[#FF7700]" />
                     2022 — 2026
                   </span>
                 </div>
@@ -308,15 +343,22 @@ function About() {
               <div
                 key={item.title}
                 data-crosshair-target
-                className={`group flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] ${item.borderHover}`}
+                onMouseEnter={() => setAccent(item.accent)}
+                className={`group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] ${item.borderHover}`}
               >
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute -top-3 right-3 rotate-3 border-2 border-border px-2 py-0.5 font-hand text-base shadow-[2px_2px_0px_0px_var(--border)] opacity-0 translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:-translate-y-0.5 ${item.color}`}
+                >
+                  {item.quip}
+                </span>
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className="font-mono text-[11px] font-bold text-muted-foreground">
                       {item.num} // {item.tag}
                     </span>
                     <div
-                      className={`grid size-8 place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] ${item.color}`}
+                      className={`grid size-8 place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] transition-transform duration-200 group-hover:rotate-6 ${item.color}`}
                     >
                       <Icon className="size-4" />
                     </div>
@@ -336,7 +378,7 @@ function About() {
         {/* Section 5: Deliberate Terminal Ending */}
         <div className="mt-16 sm:mt-20 border-2 border-dashed border-border/60 p-6 sm:p-8 bg-card/60 text-center flex flex-col items-center justify-center gap-3 shadow-xs">
           <div className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            <span className="size-2 rounded-full bg-status-green animate-pulse" />
+            <span className="size-2 rounded-full bg-status-green" />
             END OF README.md // READY TO COLLABORATE?
           </div>
           <p className="font-mono text-xs text-muted-foreground max-w-md">

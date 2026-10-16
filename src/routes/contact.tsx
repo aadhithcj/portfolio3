@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
+import { PageBackdrop } from "@/components/fx/PageBackdrop";
+import { HandNote } from "@/components/fx/HandNote";
 import { profile } from "@/lib/portfolio";
 import { cn } from "@/lib/utils";
 import { Send, ArrowUpRight, FileText, Mail, Github, Linkedin } from "lucide-react";
@@ -67,12 +70,18 @@ function Contact() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formTouched, setFormTouched] = useState(false);
   const [errorTarget, setErrorTarget] = useState<{
     field: "name" | "email" | "message";
     message: string;
   } | null>(null);
 
   const [activeChannel, setActiveChannel] = useState(0);
+
+  const isReady =
+    formData.name.trim() !== "" &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()) &&
+    formData.message.trim() !== "";
 
   // Auto-dismiss field toast after 5 seconds
   useEffect(() => {
@@ -89,9 +98,11 @@ function Contact() {
     `Hi Aadhith,\n\n${formData.message}\n\nFrom: ${formData.name} (${formData.email})`
   )}`;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    const formElement = e.currentTarget;
 
     if (!formData.name.trim()) {
       setErrorTarget({ field: "name", message: "Please fill out your name." });
@@ -143,6 +154,19 @@ function Contact() {
     composeWindow.opener = null;
     composeWindow.location.href = gmailComposeUrl;
 
+    // Trigger DotGrid shockwave pulse from submit button
+    const btn = formElement.querySelector<HTMLElement>('button[type="submit"]');
+    const r = btn?.getBoundingClientRect();
+    window.dispatchEvent(
+      new CustomEvent("dotgrid:bigpulse", {
+        detail: {
+          x: r ? r.left + r.width / 2 : window.innerWidth / 2,
+          y: r ? r.top + r.height / 2 : window.innerHeight / 2,
+          speed: 3200,
+        },
+      })
+    );
+
     setIsSubmitting(false);
     toast.success("Gmail opened. Review your prefilled message and press Send.");
   };
@@ -160,6 +184,8 @@ function Contact() {
       href: "/resume.pdf",
       icon: FileText,
       markerColor: "bg-[#FF7700] text-black",
+      color: "#FF7700",
+      quip: "one page. promise.",
     },
     {
       index: "02",
@@ -169,6 +195,8 @@ function Contact() {
       href: directGmailLink,
       icon: Mail,
       markerColor: "bg-[#FF3C38] text-white",
+      color: "#FF3C38",
+      quip: "I read every one",
     },
     {
       index: "03",
@@ -178,6 +206,8 @@ function Contact() {
       href: profile.github,
       icon: Github,
       markerColor: "bg-[#F1BE05] text-black",
+      color: "#F1BE05",
+      quip: "commit history doesn't lie",
     },
     {
       index: "04",
@@ -187,15 +217,19 @@ function Contact() {
       href: profile.linkedin,
       icon: Linkedin,
       markerColor: "bg-[#42BFDD] text-black",
+      color: "#42BFDD",
+      quip: "yes, I'll accept",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-clip">
+    <div className="min-h-screen bg-background text-foreground overflow-x-clip relative">
+      <PageBackdrop accent={contactItems[activeChannel]?.color ?? "#F1BE05"} />
+
       <SiteHeader />
 
       {/* Main Container: exactly matching Projects and Skills dimensions, padding & split grid */}
-      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative w-full min-w-0">
+      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
         {/* Left Column: Heading and Editorial Channels Index */}
         <div className="flex flex-col relative w-full min-w-0">
           {/* Eyebrow Label */}
@@ -220,29 +254,17 @@ function Contact() {
             Have a role, project, or interesting engineering challenge in mind? Drop a message below or reach out directly.
           </p>
 
-          {/* Floating Playful Accent Top-Right (matching Projects and Skills) */}
-          <div className="hidden sm:flex absolute right-4 top-2 select-none pointer-events-none items-center gap-3">
-            <div className="text-right font-mono text-[9px] uppercase font-bold text-muted-foreground/80 leading-tight">
-              DIRECT<br />
-              CHANNELS<br />
-              OPEN TO<br />
-              ROLES
-            </div>
-            <svg
-              className="size-7 text-muted-foreground/60 -rotate-12"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-            <div className="size-11 xl:size-12 border-2 border-border bg-[#FF3C38] shadow-[3px_3px_0px_0px_var(--border)] -rotate-6" />
-          </div>
+          {/* Handwritten note aimed at the form, disappears when a field is focused */}
+          <AnimatePresence>
+            {!formTouched && (
+              <motion.div
+                exit={{ opacity: 0, y: -10 }}
+                className="hidden lg:block absolute right-0 top-0"
+              >
+                <HandNote>no really, say hi</HandNote>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Numbered Editorial Contact Channels List (matching Projects and Skills row structure) */}
           <div className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0" role="list">
@@ -322,6 +344,16 @@ function Contact() {
               );
             })}
           </div>
+
+          {/* Hand-written line under the channel list that changes as you hover each channel */}
+          <motion.p
+            key={activeChannel}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 font-hand text-xl text-muted-foreground"
+          >
+            ↑ {contactItems[activeChannel]?.quip}
+          </motion.p>
         </div>
 
         {/* Right Column: Featured Neo-Brutalist Transmission Console Card */}
@@ -332,9 +364,11 @@ function Contact() {
               TRANSMISSION // 01
             </span>
             <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-[#22C55E] animate-pulse" />
+              <span
+                className={`size-2 rounded-full ${isReady ? "bg-[#22C55E]" : "bg-muted-foreground/40"}`}
+              />
               <span className="font-mono text-[10px] font-bold uppercase text-foreground/80 tracking-wider">
-                MESSAGE READY
+                {isReady ? "MESSAGE READY" : "WAITING FOR YOU"}
               </span>
             </div>
           </div>
@@ -351,7 +385,12 @@ function Contact() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} noValidate className="mt-5 space-y-4 w-full min-w-0">
+          <form
+            onSubmit={handleSubmit}
+            onFocus={() => setFormTouched(true)}
+            noValidate
+            className="mt-5 space-y-4 w-full min-w-0"
+          >
             {/* Name & Email Fields */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="relative">

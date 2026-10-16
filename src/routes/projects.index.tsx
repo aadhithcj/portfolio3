@@ -3,9 +3,8 @@ import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
-import DotGrid from "@/components/fx/DotGrid";
+import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
-import { useTheme } from "@/hooks/use-theme";
 import { projects, profile } from "@/lib/portfolio";
 import { ArrowUpRight } from "lucide-react";
 
@@ -74,8 +73,6 @@ const projectMeta: Record<
 };
 
 function Projects() {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
   const [active, setActive] = useState(0);
   const [hasHovered, setHasHovered] = useState(false);
   const [showPsst, setShowPsst] = useState(false);
@@ -93,30 +90,7 @@ function Projects() {
   return (
     <div className="min-h-screen bg-background overflow-x-clip relative">
       {/* Interactive WebGL2 DotGrid Background synced to project accent color */}
-      <div className="pointer-events-none fixed inset-0 z-0 opacity-80 transition-opacity duration-500">
-        <DotGrid
-          baseColor={isDark ? "#0A3545" : "#2E2D34"}
-          activeColor={meta.accentColor}
-          shape="circle"
-          dotSize={isDark ? 4.5 : 3.6}
-          gap={18}
-          proximity={150}
-          strength={1.2}
-          bounce={0.65}
-          tension={0.4}
-          returnDuration={0.8}
-          shockRadius={330}
-          shockStrength={5.6}
-          swell={0.88}
-          stretch={0.5}
-          glow={0.8}
-          fade={0.15}
-          intro
-          opacity={isDark ? 0.5 : 0.14}
-          mouseInteraction
-          clickShock
-        />
-      </div>
+      <PageBackdrop accent={meta.accentColor} />
 
       <SiteHeader />
 
@@ -244,7 +218,7 @@ function Projects() {
             <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
               SELECTED PROJECT / {String(active + 1).padStart(2, "0")}
             </span>
-            <span className="size-2.5 rounded-full bg-[#FF3C38] animate-pulse" />
+            <span className="size-2.5 rounded-full bg-[#FF3C38]" />
           </div>
 
           {/* Visual Mockup Frame */}

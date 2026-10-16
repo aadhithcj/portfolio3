@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useSpring } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
+import { PageBackdrop } from "@/components/fx/PageBackdrop";
+import { HandNote } from "@/components/fx/HandNote";
 import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/log")({
@@ -64,26 +67,6 @@ const entries: LogEntry[] = [
     },
   },
   {
-    period: "Jan — Feb 2025",
-    year: "2025",
-    title: "AI/ML Intern",
-    role: "ICT Academy of Kerala · Trivandrum",
-    description:
-      "Developed and evaluated computer vision and machine-learning models for edge inference and tabular predictive analytics.",
-    category: "Experience",
-    highlights: [
-      "Evaluated prototypes across 5+ real-world datasets",
-      "Trained classification & regression models",
-    ],
-    featuredEvidence: {
-      header: "RECORDED OUTPUTS",
-      items: [
-        { stat: "05+", label: "Real-world datasets evaluated" },
-        { label: "Classification & regression model tuning" },
-      ],
-    },
-  },
-  {
     period: "2025 — 2026",
     year: "2026",
     title: "College Arts Secretary",
@@ -100,6 +83,26 @@ const entries: LogEntry[] = [
       items: [
         { stat: "03+", label: "Multi-day campus festivals organized" },
         { label: "Cross-functional student operations leadership" },
+      ],
+    },
+  },
+  {
+    period: "Jan — Feb 2025",
+    year: "2025",
+    title: "AI/ML Intern",
+    role: "ICT Academy of Kerala · Trivandrum",
+    description:
+      "Developed and evaluated computer vision and machine-learning models for edge inference and tabular predictive analytics.",
+    category: "Experience",
+    highlights: [
+      "Evaluated prototypes across 5+ real-world datasets",
+      "Trained classification & regression models",
+    ],
+    featuredEvidence: {
+      header: "RECORDED OUTPUTS",
+      items: [
+        { stat: "05+", label: "Real-world datasets evaluated" },
+        { label: "Classification & regression model tuning" },
       ],
     },
   },
@@ -170,32 +173,38 @@ const entries: LogEntry[] = [
 // Color mapping: Yellow for education, cyan for technical experience, orange for leadership, purple for awards
 const categoryThemes: Record<
   LogEntry["category"],
-  { badge: string; node: string }
+  { badge: string; node: string; color: string }
 > = {
   Education: {
     badge: "bg-[#F1BE05] text-black",
     node: "bg-[#F1BE05]",
+    color: "#F1BE05",
   },
   Experience: {
     badge: "bg-[#42BFDD] text-black",
     node: "bg-[#42BFDD]",
+    color: "#42BFDD",
   },
   Leadership: {
     badge: "bg-[#FF7700] text-black",
     node: "bg-[#FF7700]",
+    color: "#FF7700",
   },
   Award: {
     badge: "bg-[#9649CB] text-white",
     node: "bg-[#9649CB]",
+    color: "#9649CB",
   },
 };
 
 function TimelineEntryItem({
   item,
   idx,
+  onHover,
 }: {
   item: (typeof entries)[number];
   idx: number;
+  onHover: () => void;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -238,6 +247,7 @@ function TimelineEntryItem({
   return (
     <div
       ref={ref}
+      onMouseEnter={onHover}
       className={`group relative mb-10 sm:mb-12 last:mb-0 transition-all duration-500 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
@@ -333,10 +343,19 @@ function TimelineEntryItem({
 }
 
 function LogPage() {
+  const [accent, setAccent] = useState("#9649CB");
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 75%", "end 60%"],
+  });
+  const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 24 });
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <PageBackdrop accent={accent} />
       <SiteHeader />
-      <main className="page-enter mx-auto max-w-4xl px-5 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+      <main className="page-enter relative z-10 mx-auto max-w-4xl px-5 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
         <header className="relative">
           <p className="label-mono">
             <DecryptedText
@@ -354,43 +373,37 @@ function LogPage() {
           </h1>
 
           <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Milestones, career transitions, competitive programming, and education in chronological sequence.
+            Milestones, career transitions, competitive programming, and education across my engineering journey.
           </p>
-
-          {/* Floating Playful Accent Top-Right */}
-          <div className="hidden sm:flex absolute right-4 top-2 select-none pointer-events-none items-center gap-3">
-            <div className="text-right font-mono text-[9px] uppercase font-bold text-muted-foreground/80 leading-tight">
-              ARCHIVE<br />
-              MILESTONES<br />
-              TIMELINE<br />
-              VERIFIED
-            </div>
-            <svg
-              className="size-7 text-muted-foreground/60 -rotate-12"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-            <div className="size-11 border-2 border-border bg-[#9649CB] shadow-[3px_3px_0px_0px_var(--border)] -rotate-6" />
-          </div>
         </header>
 
-        {/* Timeline list with Bolder 2px Spine */}
-        <div className="relative mt-12 sm:mt-16 border-l-2 border-border pl-6 sm:pl-9">
+        {/* Timeline list with Bolder 2px Spine and dynamic scroll fill */}
+        <div
+          ref={timelineRef}
+          className="relative mt-12 sm:mt-16 border-l-2 border-border pl-6 sm:pl-9"
+        >
+          <motion.div
+            aria-hidden="true"
+            style={{ scaleY: fill }}
+            className="absolute -left-[2px] top-0 h-full w-[2px] origin-top bg-lime"
+          />
           {entries.map((item, idx) => (
-            <TimelineEntryItem key={item.title} item={item} idx={idx} />
+            <TimelineEntryItem
+              key={item.title}
+              item={item}
+              idx={idx}
+              onHover={() => setAccent(categoryThemes[item.category].color)}
+            />
           ))}
         </div>
 
+        {/* CTA nudge */}
+        <HandNote className="hidden sm:block mt-10 ml-auto mr-12 w-fit">
+          next chapter: you?
+        </HandNote>
+
         {/* Bottom CTA with Neo-Brutalist Square Border and Hard Offset Shadow */}
-        <div className="mt-16 flex flex-col justify-between gap-4 border-2 border-border bg-card p-6 sm:p-7 shadow-[5px_5px_0px_0px_var(--border)] sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col justify-between gap-4 border-2 border-border bg-card p-6 sm:p-7 shadow-[5px_5px_0px_0px_var(--border)] sm:flex-row sm:items-center">
           <div>
             <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground">
               Want to build something together?

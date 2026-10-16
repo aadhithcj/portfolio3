@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
+import { PageBackdrop } from "@/components/fx/PageBackdrop";
+import { HandNote } from "@/components/fx/HandNote";
 import { Layers, Cloud, Cpu, ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/skills")({
@@ -46,10 +49,11 @@ interface SkillCategory {
   count: string;
   markerColor: string;
   accentBg: string;
+  accentColor: string;
+  quip: string;
   iconType: "prompt" | "layers" | "cloud" | "cpu";
   description: string;
   chips: string[];
-  stickyNote: string[];
   codeSnippet: React.ReactNode;
   projects: AppliedProject[];
 }
@@ -63,11 +67,12 @@ const categories: SkillCategory[] = [
     count: "12+",
     markerColor: "bg-[#FF7700] text-black",
     accentBg: "bg-[#FF7700]",
+    accentColor: "#FF7700",
+    quip: "always curious",
     iconType: "prompt",
     description:
       "Programming fundamentals, problem-solving, data structures, algorithms, and low-level concepts that form the base of everything I build.",
     chips: ["Python", "Java", "C", "SQL", "DSA", "OOP"],
-    stickyNote: ["IDEAS", "CODE", "INTO", "PRODUCTS"],
     codeSnippet: (
       <div>
         <span className="text-[#9649CB] dark:text-[#C084FC]">def </span>
@@ -115,6 +120,8 @@ const categories: SkillCategory[] = [
     count: "10+",
     markerColor: "bg-[#F1BE05] text-black",
     accentBg: "bg-[#F1BE05]",
+    accentColor: "#F1BE05",
+    quip: "ships on friday",
     iconType: "layers",
     description:
       "Component hierarchy, reactive state management, asynchronous workflows, and robust relational schemas engineered for scale.",
@@ -127,7 +134,6 @@ const categories: SkillCategory[] = [
       "Tailwind CSS",
       "Supabase",
     ],
-    stickyNote: ["CLEAN", "STACK", "MODERN", "WEB"],
     codeSnippet: (
       <div>
         <span className="text-[#9649CB] dark:text-[#C084FC]">const </span>
@@ -185,6 +191,8 @@ const categories: SkillCategory[] = [
     count: "8+",
     markerColor: "bg-[#42BFDD] text-black",
     accentBg: "bg-[#42BFDD]",
+    accentColor: "#42BFDD",
+    quip: "works on my machine ✓",
     iconType: "cloud",
     description:
       "Automated CI/CD pipelines, multi-container orchestration, Linux process supervision, and reliable cloud compute instances.",
@@ -197,7 +205,6 @@ const categories: SkillCategory[] = [
       "CI/CD",
       "Git",
     ],
-    stickyNote: ["BUILD", "TEST", "SHIP", "SCALE"],
     codeSnippet: (
       <div>
         <span className="text-muted-foreground">$ </span>
@@ -250,6 +257,8 @@ const categories: SkillCategory[] = [
     count: "10+",
     markerColor: "bg-[#9649CB] text-white",
     accentBg: "bg-[#9649CB]",
+    accentColor: "#9649CB",
+    quip: "it sees things 👀",
     iconType: "cpu",
     description:
       "Native Android applications, real-time computer vision frame pipelines, edge inference models, and scikit-learn predictive classifiers.",
@@ -262,7 +271,6 @@ const categories: SkillCategory[] = [
       "ML Kit",
       "Scikit-learn",
     ],
-    stickyNote: ["EDGE", "MODELS", "REAL", "TIME"],
     codeSnippet: (
       <div>
         <span className="text-[#9649CB] dark:text-[#C084FC]">val </span>retina ={" "}
@@ -311,15 +319,18 @@ const categories: SkillCategory[] = [
 function SkillsPage() {
   const [active, setActive] = useState<number>(0);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [hasHoveredChip, setHasHoveredChip] = useState(false);
 
   const activeCat = (categories[active] ?? categories[0])!;
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-clip">
+    <div className="min-h-screen bg-background text-foreground overflow-x-clip relative">
+      <PageBackdrop accent={activeCat.accentColor} />
+
       <SiteHeader />
 
       {/* Main Container matching projects page dimensions, padding & split grid */}
-      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative w-full min-w-0">
+      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
         {/* Left Column: Heading and Editorial Skill Index */}
         <div className="flex flex-col relative w-full min-w-0">
           {/* Eyebrow Label */}
@@ -343,30 +354,6 @@ function SkillsPage() {
           <p className="mt-4 text-base sm:text-lg text-muted-foreground font-mono max-w-xl">
             A focused breakdown of the languages, frameworks, infrastructure platforms, and computer vision tools I use in my work.
           </p>
-
-          {/* Floating Playful Accent Top-Right (languages / logic / problem solving / foundations) */}
-          <div className="hidden sm:flex absolute right-4 top-2 select-none pointer-events-none items-center gap-3">
-            <div className="text-right font-mono text-[9px] uppercase font-bold text-muted-foreground/80 leading-tight">
-              LANGUAGES<br />
-              LOGIC<br />
-              PROBLEM SOLVING<br />
-              FOUNDATIONS
-            </div>
-            <svg
-              className="size-7 text-muted-foreground/60 -rotate-12"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-            <div className="size-11 xl:size-12 border-2 border-border bg-[#42BFDD] shadow-[3px_3px_0px_0px_var(--border)] -rotate-6" />
-          </div>
 
           {/* Numbered Editorial Skill List - matching padding & height of Projects */}
           <div className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0" role="list">
@@ -464,31 +451,14 @@ function SkillsPage() {
             })}
           </div>
 
-          {/* Floating Playful Accent Bottom-Left */}
-          <div className="mt-10 hidden sm:flex items-center gap-4 select-none">
-            <div className="relative">
-              {/* Dot matrix grid */}
-              <div className="grid grid-cols-4 gap-1.5 opacity-30">
-                {Array.from({ length: 16 }).map((_, idx) => (
-                  <span
-                    key={idx}
-                    className="size-1 rounded-full bg-foreground"
-                  />
-                ))}
-              </div>
-              <div className="absolute top-1 left-1 size-7 rounded-full border-2 border-border bg-[#FF3C38] shadow-[2.5px_2.5px_0px_0px_var(--border)]" />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs text-muted-foreground">↖</span>
-              <span className="font-mono text-[9px] uppercase font-bold text-muted-foreground tracking-widest leading-tight">
-                SELECT<br />
-                EXPLORE<br />
-                LEARN<br />
-                BUILD
-              </span>
-            </div>
-          </div>
+          {/* Real proof link at bottom-left */}
+          <Link
+            to="/projects"
+            data-crosshair-target
+            className="mt-10 hidden sm:inline-block font-hand text-xl text-muted-foreground hover:text-foreground hover:-rotate-2 transition-all w-fit"
+          >
+            want proof? see it in the projects →
+          </Link>
         </div>
 
         {/* Right Column: Substantial Neo-Brutalist Inspector Card matching Projects Preview */}
@@ -501,7 +471,7 @@ function SkillsPage() {
             <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
               SKILL GROUP / {activeCat.number}
             </span>
-            <span className="size-2.5 rounded-full bg-[#FF3C38] animate-pulse" />
+            <span className="size-2.5 rounded-full bg-[#FF3C38]" />
           </div>
 
           {/* Visual Mockup Frame - full height matching Projects Preview */}
@@ -536,20 +506,15 @@ function SkillsPage() {
               </pre>
             </div>
 
-            {/* Tilted Yellow Sticky Note on Right with 3 Sketch Lines */}
-            <div className="hidden sm:flex absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 z-20 items-center gap-1.5 sm:gap-2 pointer-events-none">
-              <div className="flex flex-col gap-1 items-end opacity-70">
-                <span className="w-2.5 sm:w-3 h-0.5 bg-foreground -rotate-12" />
-                <span className="w-2 sm:w-2.5 h-0.5 bg-foreground -rotate-12" />
-                <span className="w-1.5 sm:w-2 h-0.5 bg-foreground -rotate-12" />
-              </div>
-
-              <div className="border-2 border-border bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--border)] rotate-3 p-1.5 sm:p-2 text-center font-mono font-black text-[9px] sm:text-[11px] uppercase leading-tight tracking-wider">
-                {activeCat.stickyNote.map((line) => (
-                  <div key={line}>{line}</div>
-                ))}
-              </div>
-            </div>
+            {/* Per-category handwritten quip with arrow */}
+            <HandNote
+              key={activeCat.id}
+              flip
+              rotate={3}
+              className="hidden sm:block absolute right-5 top-4 z-20 w-40"
+            >
+              {activeCat.quip}
+            </HandNote>
           </div>
 
           {/* Category Details Below Mockup */}
@@ -561,6 +526,18 @@ function SkillsPage() {
               {activeCat.description}
             </p>
 
+            {/* Hand-written caption directly above chips, vanishes after first hover */}
+            <AnimatePresence>
+              {!hasHoveredChip && (
+                <motion.p
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-4 font-hand text-xl text-muted-foreground"
+                >
+                  hover a skill, see where I actually used it ↓
+                </motion.p>
+              )}
+            </AnimatePresence>
+
             {/* Tech Chips with Interactive Project Highlight on Hover */}
             <div className="mt-4 flex flex-wrap gap-2">
               {activeCat.chips.map((chip) => {
@@ -571,11 +548,19 @@ function SkillsPage() {
                   <button
                     key={chip}
                     type="button"
-                    onMouseEnter={() => setHoveredSkill(chip)}
+                    onMouseEnter={() => {
+                      setHoveredSkill(chip);
+                      setHasHoveredChip(true);
+                    }}
+                    onFocus={() => {
+                      setHoveredSkill(chip);
+                      setHasHoveredChip(true);
+                    }}
                     onMouseLeave={() => setHoveredSkill(null)}
-                    onClick={() =>
-                      setHoveredSkill(hoveredSkill === chip ? null : chip)
-                    }
+                    onClick={() => {
+                      setHoveredSkill(hoveredSkill === chip ? null : chip);
+                      setHasHoveredChip(true);
+                    }}
                     className={`border-2 border-border px-3 py-1 font-mono text-xs font-bold transition-all duration-150 cursor-pointer select-none ${
                       isHovered
                         ? "bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--border)] -translate-y-0.5 scale-105 z-10"
