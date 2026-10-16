@@ -16,7 +16,7 @@ export const Route = createFileRoute("/projects/$slug")({
   head: ({ loaderData }) => {
     const project = loaderData?.project;
     const title = project
-      ? `${project.name} — Aadhith C Joseph`
+      ? `${project.name} - Aadhith C J`
       : "Project unavailable";
     const description = project?.tagline ?? "This project could not be found.";
 

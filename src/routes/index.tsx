@@ -18,13 +18,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ACJ_ — Software Engineer" },
+      { title: "Aadhith C J - Software Engineer" },
       {
         name: "description",
         content:
           "Portfolio of Aadhith C Joseph: full-stack, DevOps and applied AI projects.",
       },
-      { property: "og:title", content: "ACJ_ — Software Engineer" },
+      { property: "og:title", content: "Aadhith C J - Software Engineer" },
       {
         property: "og:description",
         content:

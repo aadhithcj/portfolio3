@@ -82,16 +82,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { title: "ACJ_ — Software Engineer" },
+        { title: "Aadhith C J - Software Engineer" },
         {
           name: "description",
-          content: "Portfolio of software engineer ACJ_: full-stack, DevOps and applied AI.",
+          content: "Portfolio of software engineer Aadhith C J: full-stack, DevOps and applied AI.",
         },
-        { name: "author", content: "ACJ_" },
-        { property: "og:site_name", content: "ACJ_" },
+        { name: "author", content: "Aadhith C J" },
+        { property: "og:site_name", content: "Aadhith C J" },
         {
           property: "og:title",
-          content: "ACJ_ — Software Engineer",
+          content: "Aadhith C J - Software Engineer",
         },
         {
           property: "og:description",
@@ -108,7 +108,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "twitter:card", content: "summary" },
         {
           name: "twitter:title",
-          content: "Aadhith C Joseph — Software Engineer",
+          content: "Aadhith C Joseph - Software Engineer",
         },
         {
           name: "twitter:description",
@@ -132,8 +132,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           rel: "stylesheet",
           href: appCss,
         },
-        { rel: "icon", href: "/favicon.png", type: "image/png" },
-        { rel: "shortcut icon", href: "/favicon.png", type: "image/png" },
+        { rel: "icon", href: "/favicon.png?v=2", type: "image/png" },
+        { rel: "shortcut icon", href: "/favicon.png?v=2", type: "image/png" },
         { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       ],
     }),

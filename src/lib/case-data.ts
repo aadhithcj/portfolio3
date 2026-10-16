@@ -3,7 +3,7 @@ import type { CaseData } from "@/components/projects/CaseStudy";
 export const caseData: Record<string, CaseData> = {
   retina: {
     accent: "#FF3C38",
-    eyebrow: "Android · KTU capstone · 2026",
+    eyebrow: "Android · BTech Final Year Project · 2026",
     title: "Retina",
     tagline: "An Android app that reads text, money and objects aloud for visually impaired users.",
     summary:
@@ -127,7 +127,7 @@ export const caseData: Record<string, CaseData> = {
 
   "cv-sorting": {
     accent: "#9649CB",
-    eyebrow: "Full-stack · KTU mini-project",
+    eyebrow: "Full-stack · BTech mini project",
     title: "CV Flow",
     tagline: "A recruitment app where candidates apply and recruiters rank them.",
     summary:

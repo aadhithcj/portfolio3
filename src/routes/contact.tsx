@@ -13,13 +13,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — ACJ_" },
+      { title: "Contact - Aadhith C J" },
       {
         name: "description",
         content:
           "Email, GitHub, LinkedIn and direct contact for Aadhith C Joseph.",
       },
-      { property: "og:title", content: "Contact — ACJ_" },
+      { property: "og:title", content: "Contact - Aadhith C J" },
       {
         property: "og:description",
         content:

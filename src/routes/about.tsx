@@ -20,13 +20,13 @@ import {
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Aadhith C Joseph" },
+      { title: "About - Aadhith C J" },
       {
         name: "description",
         content:
           "Background, engineering philosophy, and personal profile of Aadhith C Joseph.",
       },
-      { property: "og:title", content: "About — Aadhith C Joseph" },
+      { property: "og:title", content: "About - Aadhith C J" },
       {
         property: "og:description",
         content:

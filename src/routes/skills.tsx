@@ -10,7 +10,7 @@ import { Layers, Cloud, Cpu, ArrowUpRight } from "lucide-react";
 export const Route = createFileRoute("/skills")({
   head: () => ({
     meta: [
-      { title: "Skills & Tech Stack — ACJ_" },
+      { title: "Skills - Aadhith C J" },
       {
         name: "description",
         content:
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/skills")({
       },
       {
         property: "og:title",
-        content: "Skills & Tech Stack — ACJ_",
+        content: "Skills - Aadhith C J",
       },
       {
         property: "og:description",
