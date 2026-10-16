@@ -30,6 +30,14 @@ export const Route = createFileRoute("/projects/$slug")({
         { property: "og:image", content: "/og-image.png" },
         { name: "twitter:image", content: "/og-image.png" },
       ],
+      links: [
+        {
+          rel: "canonical",
+          href: project
+            ? `https://aadhithcj.site/projects/${project.slug}`
+            : "https://aadhithcj.site/projects",
+        },
+      ],
     };
   },
   component: ProjectPage,

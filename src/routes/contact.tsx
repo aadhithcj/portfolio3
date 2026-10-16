@@ -35,6 +35,7 @@ export const Route = createFileRoute("/contact")({
       { property: "og:image", content: "/og-image.png" },
       { name: "twitter:image", content: "/og-image.png" },
     ],
+    links: [{ rel: "canonical", href: "https://aadhithcj.site/contact" }],
   }),
   component: Contact,
 });

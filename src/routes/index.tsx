@@ -33,6 +33,7 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: "/og-image.png" },
       { name: "twitter:image", content: "/og-image.png" },
     ],
+    links: [{ rel: "canonical", href: "https://aadhithcj.site/" }],
   }),
   component: Index,
 });
@@ -258,30 +259,30 @@ function Index() {
         </div>
 
         {/* Bottom Navigation: High-contrast individual tactile neobrutalist cards */}
-        <nav className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2.5 sm:gap-3">
+        <nav className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 sm:gap-2.5 xl:gap-3">
           {nav.map((i) => (
             <Link
               key={i.to}
               to={i.to}
               data-crosshair-target
-              className={`group relative flex min-h-[58px] sm:min-h-[64px] items-center justify-between gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 ${i.hoverClass} hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--shadow-color)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground`}
+              className={`group relative flex min-h-[50px] sm:min-h-[56px] xl:min-h-[64px] items-center justify-between gap-1.5 sm:gap-2 px-3 sm:px-3.5 xl:px-4 py-2 sm:py-2.5 xl:py-3 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 ${i.hoverClass} hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--shadow-color)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground overflow-hidden`}
               activeProps={{
                 className:
                   "ring-2 ring-lime shadow-[6px_6px_0px_0px_var(--shadow-color)] -translate-y-0.5",
               }}
             >
-              <div className="flex items-center gap-2.5 shrink-0">
+              <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 shrink-0">
                 <span
-                  className={`border-2 px-1.5 py-0.5 font-mono text-xs font-bold transition-all duration-150 group-hover:scale-110 ${i.badgeClass}`}
+                  className={`border-2 px-1.5 py-0.5 font-mono text-[11px] sm:text-xs font-bold transition-all duration-150 group-hover:scale-110 shrink-0 ${i.badgeClass}`}
                 >
                   {i.n}
                 </span>
-                <span className="font-display text-xl sm:text-[22px] text-foreground group-hover:text-inherit transition-colors">
+                <span className="font-display text-lg sm:text-xl xl:text-[22px] text-foreground group-hover:text-inherit transition-colors truncate">
                   {i.label}
                 </span>
               </div>
               <div className="flex items-center justify-end gap-1.5 ml-auto text-right shrink-0">
-                <span className="label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase text-muted-foreground group-hover:text-inherit transition-colors">
+                <span className="hidden xl:inline label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase text-muted-foreground group-hover:text-inherit transition-colors whitespace-nowrap">
                   <DecryptedText
                     text={i.note}
                     speed={25}
@@ -290,7 +291,7 @@ function Index() {
                     encryptedClassName="text-lime"
                   />
                 </span>
-                <span className="font-mono text-xs text-muted-foreground group-hover:text-inherit group-hover:translate-x-1.5 transition-transform duration-150 font-bold">
+                <span className="font-mono text-xs text-muted-foreground group-hover:text-inherit group-hover:translate-x-1.5 transition-transform duration-150 font-bold shrink-0">
                   →
                 </span>
               </div>

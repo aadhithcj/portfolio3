@@ -208,7 +208,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
         <Link
           to="/"
           data-crosshair-target
-          className="border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center shrink-0"
+          className="border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-[#C8FF00] hover:text-black hover:shadow-[0_0_20px_rgba(200,255,0,0.55)] transition-all duration-150 flex items-center shrink-0 cursor-pointer"
         >
           ACJ_
         </Link>

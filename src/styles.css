@@ -195,8 +195,8 @@
   --brutal-purple: #9649CB;
   --status-green: #22C55E;
 
-  /* Hard shadows in dark mode: soft lightmode cream tint instead of eye-watering stark white */
-  --shadow-color: rgba(247, 240, 217, 0.28);
+  /* Hard shadows in dark mode: crisp white/cream contrast without 100% blinding glare */
+  --shadow-color: rgba(247, 240, 217, 0.62);
   --border-brutal: 2px solid #F7F0D9;
   --border-brutal-thick: 3px solid #F7F0D9;
   --shadow-brutal: 4px 4px 0px 0px var(--shadow-color);

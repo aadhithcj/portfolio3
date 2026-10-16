@@ -28,6 +28,7 @@ export const Route = createFileRoute("/skills")({
       { property: "og:image", content: "/og-image.png" },
       { name: "twitter:image", content: "/og-image.png" },
     ],
+    links: [{ rel: "canonical", href: "https://aadhithcj.site/skills" }],
   }),
   component: SkillsPage,
 });
