@@ -717,28 +717,116 @@ function Contact() {
               autoComplete="off"
             />
 
-            {/* Action Button: only the paper airplane icon arrow */}
+            {/* Action Button: interactive plane takeoff animation on sent */}
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isSent}
               data-crosshair-target
-              className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 disabled:cursor-not-allowed"
+              className={cn(
+                "relative w-full flex items-center justify-center gap-2.5 border-2 border-border py-3 px-4 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground overflow-hidden select-none",
+                isSent
+                  ? "bg-[#22C55E] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)] translate-x-0.5 translate-y-0.5 cursor-default"
+                  : "bg-[#F1BE05] text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none",
+                isSubmitting && "opacity-80 cursor-wait"
+              )}
             >
-              <span>
+              {/* Button Status Text (no tickmark) */}
+              <span className="relative z-10 font-mono font-black tracking-wider">
                 {isSubmitting
                   ? "SENDING MESSAGE..."
                   : isSent
-                    ? "MESSAGE SENT! ✓"
+                    ? "MESSAGE SENT"
                     : "SEND MESSAGE"}
               </span>
-              <Send
-                className={cn(
-                  "size-4 transition-transform",
-                  isSubmitting && "animate-spin",
-                  !isSubmitting &&
-                    "group-hover:translate-x-1 group-hover:-translate-y-1"
-                )}
-              />
+
+              {/* Plane Flight Animation Container */}
+              <div className="relative size-4 flex items-center justify-center shrink-0">
+                <AnimatePresence mode="wait">
+                  {isSubmitting ? (
+                    <motion.div
+                      key="submitting"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 360 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        rotate: {
+                          duration: 1,
+                          repeat: Infinity,
+                          ease: "linear",
+                        },
+                      }}
+                      className="size-4 grid place-items-center"
+                    >
+                      <Send className="size-3.5" />
+                    </motion.div>
+                  ) : isSent ? (
+                    <div key="sent-takeoff" className="relative size-4">
+                      {/* Wind flight trails */}
+                      <motion.span
+                        initial={{ opacity: 0, scaleX: 0, x: 0 }}
+                        animate={{
+                          opacity: [0, 0.8, 0],
+                          scaleX: [0, 1.4, 0.3],
+                          x: [-12, -4, 6],
+                        }}
+                        transition={{ duration: 0.65, ease: "easeOut" }}
+                        className="absolute top-2 -left-3 h-[2px] w-4 bg-black/70 origin-left"
+                      />
+                      <motion.span
+                        initial={{ opacity: 0, scaleX: 0, x: 0 }}
+                        animate={{
+                          opacity: [0, 0.6, 0],
+                          scaleX: [0, 1, 0.2],
+                          x: [-10, -2, 8],
+                        }}
+                        transition={{
+                          duration: 0.55,
+                          delay: 0.08,
+                          ease: "easeOut",
+                        }}
+                        className="absolute top-3 -left-2 h-[1.5px] w-3 bg-black/50 origin-left"
+                      />
+
+                      {/* Paper plane leaving: wind up, bank, and zoom off diagonally */}
+                      <motion.div
+                        initial={{
+                          x: 0,
+                          y: 0,
+                          rotate: 0,
+                          scale: 1,
+                          opacity: 1,
+                        }}
+                        animate={{
+                          x: [0, -5, 22, 70],
+                          y: [0, 2, -20, -55],
+                          rotate: [0, -15, 32, 45],
+                          scale: [1, 0.9, 1.2, 0.4],
+                          opacity: [1, 1, 0.9, 0],
+                        }}
+                        transition={{
+                          duration: 0.9,
+                          times: [0, 0.15, 0.5, 1],
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="size-4 flex items-center justify-center"
+                      >
+                        <Send className="size-4 text-black" />
+                      </motion.div>
+                    </div>
+                  ) : (
+                    <motion.div
+                      key="idle"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="size-4 flex items-center justify-center transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                    >
+                      <Send className="size-4" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </button>
 
             <p className="font-mono text-[10px] text-muted-foreground text-center">
