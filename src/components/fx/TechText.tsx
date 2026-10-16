@@ -186,6 +186,7 @@ export default function TechText({
     const frame = { x1: 0, y1: 0, x2: 0, y2: 0, alpha: 0, index: -1 };
 
     const refreshFonts = () => {
+      if (!alive) return;
       layoutKey = "";
       wakeRef.current();
     };
@@ -278,9 +279,16 @@ export default function TechText({
       if (key === layoutKey && word) return word;
       layoutKey = key;
       const wanted = fontFor(s, 64);
+
       if (document.fonts && wanted !== requestedFont) {
         requestedFont = wanted;
-        document.fonts.load(wanted, s.text).then(refreshFonts, refreshFonts);
+
+        void document.fonts
+          .load(wanted, s.text)
+          .then(refreshFonts)
+          .catch(() => {
+            // Keep the system fallback font if loading fails.
+          });
       }
 
       const probe = probeCtx;
@@ -357,6 +365,15 @@ export default function TechText({
       });
       dragging = -1;
       frame.index = -1;
+      frame.alpha = 0;
+      presence = 0;
+      placed = false;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       return next;
     };
 

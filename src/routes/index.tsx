@@ -181,6 +181,7 @@ function Index() {
             {/* Centered Aadhith CJ. TechText - shifted upwards */}
             <div className="relative -mt-1 sm:-mt-2 md:-mt-3 h-24 sm:h-28 md:h-32 lg:h-36 w-full max-w-3xl mx-auto">
               <TechText
+                key={isDark ? "dark" : "light"}
                 text="Aadhith CJ."
                 fontFamily="Geist, ui-sans-serif, system-ui, sans-serif"
                 fontWeight={900}
