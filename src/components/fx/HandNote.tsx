@@ -21,7 +21,9 @@ export function HandNote({
       animate={{ y: [0, -4, 0] }}
       transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
     >
-      <p className={`font-hand text-xl leading-none ${flip ? "text-right" : ""}`}>
+      <p
+        className={`font-hand text-xl leading-none ${flip ? "text-right" : ""}`}
+      >
         {children}
       </p>
       {arrow && (

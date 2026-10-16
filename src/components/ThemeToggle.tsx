@@ -1,4 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type HTMLAttributes,
+} from "react";
 import { useTheme } from "@/hooks/use-theme";
 import { Moon, Sun } from "lucide-react";
 
@@ -7,11 +13,9 @@ export function ThemeToggle({
   fixed = false,
   gave = false,
   ...props
-}: {
-  className?: string;
+}: HTMLAttributes<HTMLDivElement> & {
   fixed?: boolean;
   gave?: boolean;
-  [key: string]: any;
 }) {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
@@ -108,7 +112,7 @@ export function ThemeToggle({
           <div
             role="status"
             aria-live="polite"
-            className="pointer-events-none absolute top-full mt-2.5 right-0 whitespace-nowrap border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] rounded-none bg-card px-3 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-foreground transition-all duration-200 animate-in fade-in zoom-in-95 z-50"
+            className="pointer-events-none absolute top-full mt-2.5 right-0 whitespace-nowrap border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] rounded-none bg-card px-3 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-foreground transition-all duration-200 animate-in fade-in zoom-in-95 z-50"
           >
             <span className="mr-1.5 text-lime">◆</span>
             {toast}
@@ -125,7 +129,7 @@ export function ThemeToggle({
           aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
           className={`group relative grid ${
             isCompact ? "size-9" : "size-11 sm:size-12"
-          } place-items-center rounded-none border-[3px] border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 ${
+          } place-items-center rounded-none border-[3px] border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 ${
             gave ? "border-lime ring-2 ring-lime/40 bg-primary/20" : ""
           }`}
         >

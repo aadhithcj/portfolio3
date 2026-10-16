@@ -28,7 +28,9 @@ export function CaseStudy({
   next: Project;
 }) {
   const links = [
-    ...(project.repoUrl ? [{ label: "Source code", href: project.repoUrl }] : []),
+    ...(project.repoUrl
+      ? [{ label: "Source code", href: project.repoUrl }]
+      : []),
     ...(project.demoUrl ? [{ label: "Live demo", href: project.demoUrl }] : []),
     ...(data.links ?? []),
   ];
@@ -37,10 +39,14 @@ export function CaseStudy({
     <article className="space-y-14 sm:space-y-16">
       <header className="space-y-5">
         <div className="flex flex-wrap items-center gap-3 font-mono text-xs font-bold uppercase">
-          <span className="size-2.5" style={{ background: data.accent }} aria-hidden="true" />
+          <span
+            className="size-2.5"
+            style={{ background: data.accent }}
+            aria-hidden="true"
+          />
           <span>{data.eyebrow}</span>
           {data.status && (
-            <span className="border-2 border-border bg-[#F1BE05] px-2 py-0.5 text-black shadow-[2px_2px_0px_0px_var(--border)]">
+            <span className="border-2 border-border bg-[#F1BE05] px-2 py-0.5 text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
               {data.status}
             </span>
           )}
@@ -51,7 +57,9 @@ export function CaseStudy({
           <span style={{ color: data.accent }}>.</span>
         </h1>
 
-        <p className="font-display text-2xl sm:text-3xl leading-tight">{data.tagline}</p>
+        <p className="font-display text-2xl sm:text-3xl leading-tight">
+          {data.tagline}
+        </p>
         <p className="max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
           {data.summary}
         </p>
@@ -73,8 +81,10 @@ export function CaseStudy({
                 target="_blank"
                 rel="noreferrer"
                 data-crosshair-target
-                className={`inline-flex min-h-11 items-center gap-2 border-2 border-border px-5 py-2.5 font-mono text-xs font-bold shadow-[4px_4px_0px_0px_var(--border)] transition-all hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] ${
-                  i === 0 ? "bg-[#F1BE05] text-black" : "bg-card text-foreground"
+                className={`inline-flex min-h-11 items-center gap-2 border-2 border-border px-5 py-2.5 font-mono text-xs font-bold shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${
+                  i === 0
+                    ? "bg-[#F1BE05] text-black"
+                    : "bg-card text-foreground"
                 }`}
               >
                 {l.label} <ArrowUpRight className="size-4" aria-hidden="true" />
@@ -91,7 +101,9 @@ export function CaseStudy({
         <ul className="space-y-3 font-mono text-sm leading-relaxed">
           {data.built.map((b) => (
             <li key={b} className="flex gap-3">
-              <span style={{ color: data.accent }} aria-hidden="true">▸</span>
+              <span style={{ color: data.accent }} aria-hidden="true">
+                ▸
+              </span>
               <span>{b}</span>
             </li>
           ))}
@@ -106,14 +118,27 @@ export function CaseStudy({
           {data.problems.map((p) => (
             <div
               key={p.title}
-              className="border-2 border-border bg-card p-5 shadow-[4px_4px_0px_0px_var(--border)]"
+              className="border-2 border-border bg-card p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)]"
             >
               <h3 className="font-display text-xl font-bold">{p.title}</h3>
               <dl className="mt-3 space-y-2 font-mono text-xs leading-relaxed text-muted-foreground">
-                <div><dt className="inline font-bold text-foreground">Problem: </dt><dd className="inline">{p.problem}</dd></div>
-                <div><dt className="inline font-bold text-foreground">Fix: </dt><dd className="inline">{p.fix}</dd></div>
+                <div>
+                  <dt className="inline font-bold text-foreground">
+                    Problem:{" "}
+                  </dt>
+                  <dd className="inline">{p.problem}</dd>
+                </div>
+                <div>
+                  <dt className="inline font-bold text-foreground">Fix: </dt>
+                  <dd className="inline">{p.fix}</dd>
+                </div>
                 {p.learned && (
-                  <div><dt className="inline font-bold text-foreground">Learned: </dt><dd className="inline">{p.learned}</dd></div>
+                  <div>
+                    <dt className="inline font-bold text-foreground">
+                      Learned:{" "}
+                    </dt>
+                    <dd className="inline">{p.learned}</dd>
+                  </div>
                 )}
               </dl>
             </div>
@@ -147,11 +172,13 @@ export function CaseStudy({
             to="/projects/$slug"
             params={{ slug: p.slug }}
             data-crosshair-target
-            className={`group flex min-h-[110px] flex-col justify-between border-2 border-border bg-card p-5 shadow-[4px_4px_0px_0px_var(--border)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] ${
+            className={`group flex min-h-[110px] flex-col justify-between border-2 border-border bg-card p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${
               right ? "sm:items-end sm:text-right" : ""
             }`}
           >
-            <span className="font-mono text-[10px] font-black uppercase text-muted-foreground">{label}</span>
+            <span className="font-mono text-[10px] font-black uppercase text-muted-foreground">
+              {label}
+            </span>
             <span className="font-display text-2xl sm:text-3xl transition-all group-hover:translate-x-1 group-hover:italic">
               {p.name}
             </span>

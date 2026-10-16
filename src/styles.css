@@ -118,12 +118,13 @@
   --status-green: #22C55E;
 
   /* Reusable Neo-Brutalist Border & Shadow Tokens with #2E2D34 */
+  --shadow-color: #2E2D34;
   --border-brutal: 2px solid #2E2D34;
   --border-brutal-thick: 3px solid #2E2D34;
-  --shadow-brutal: 4px 4px 0px 0px #2E2D34;
-  --shadow-brutal-sm: 2px 2px 0px 0px #2E2D34;
-  --shadow-brutal-lg: 6px 6px 0px 0px #2E2D34;
-  --shadow-brutal-xl: 10px 10px 0px 0px #2E2D34;
+  --shadow-brutal: 4px 4px 0px 0px var(--shadow-color);
+  --shadow-brutal-sm: 2px 2px 0px 0px var(--shadow-color);
+  --shadow-brutal-lg: 6px 6px 0px 0px var(--shadow-color);
+  --shadow-brutal-xl: 10px 10px 0px 0px var(--shadow-color);
 
   --sidebar: #F7F0D9;
   --sidebar-foreground: #2E2D34;
@@ -194,13 +195,14 @@
   --brutal-purple: #9649CB;
   --status-green: #22C55E;
 
-  /* Hard shadows in dark mode: #F7F0D9 */
+  /* Hard shadows in dark mode: soft lightmode cream tint instead of eye-watering stark white */
+  --shadow-color: rgba(247, 240, 217, 0.28);
   --border-brutal: 2px solid #F7F0D9;
   --border-brutal-thick: 3px solid #F7F0D9;
-  --shadow-brutal: 4px 4px 0px 0px #F7F0D9;
-  --shadow-brutal-sm: 2px 2px 0px 0px #F7F0D9;
-  --shadow-brutal-lg: 6px 6px 0px 0px #F7F0D9;
-  --shadow-brutal-xl: 10px 10px 0px 0px #F7F0D9;
+  --shadow-brutal: 4px 4px 0px 0px var(--shadow-color);
+  --shadow-brutal-sm: 2px 2px 0px 0px var(--shadow-color);
+  --shadow-brutal-lg: 6px 6px 0px 0px var(--shadow-color);
+  --shadow-brutal-xl: 10px 10px 0px 0px var(--shadow-color);
 
   --sidebar: #04242F;
   --sidebar-foreground: #F7F0D9;

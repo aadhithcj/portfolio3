@@ -77,12 +77,15 @@ const categories: SkillCategory[] = [
       <div>
         <span className="text-[#9649CB] dark:text-[#C084FC]">def </span>
         <span className="text-[#42BFDD] dark:text-[#38BDF8]">build</span>():
-        {"\n"}  ideas = [
+        {"\n"} ideas = [
         <span className="text-[#FF7700] dark:text-[#FB923C]">"solve"</span>,{" "}
         <span className="text-[#FF7700] dark:text-[#FB923C]">"build"</span>,{" "}
         <span className="text-[#FF7700] dark:text-[#FB923C]">"learn"</span>]
-        {"\n"}  <span className="text-[#CE4760] dark:text-[#F87171]">return </span>
-        <span className="text-[#22C55E] dark:text-[#4ADE80]">"always curious"</span>
+        {"\n"}{" "}
+        <span className="text-[#CE4760] dark:text-[#F87171]">return </span>
+        <span className="text-[#22C55E] dark:text-[#4ADE80]">
+          "always curious"
+        </span>
       </div>
     ),
     projects: [
@@ -137,15 +140,20 @@ const categories: SkillCategory[] = [
     codeSnippet: (
       <div>
         <span className="text-[#9649CB] dark:text-[#C084FC]">const </span>
-        <span className="text-[#42BFDD] dark:text-[#38BDF8]">stack</span> = &#123;
-        {"\n"}  frontend: [
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">stack</span> =
+        &#123;
+        {"\n"} frontend: [
         <span className="text-[#FF7700] dark:text-[#FB923C]">"React"</span>,{" "}
-        <span className="text-[#FF7700] dark:text-[#FB923C]">"TypeScript"</span>],
-        {"\n"}  backend: [
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"TypeScript"</span>
+        ],
+        {"\n"} backend: [
         <span className="text-[#FF7700] dark:text-[#FB923C]">"Flask"</span>,{" "}
         <span className="text-[#FF7700] dark:text-[#FB923C]">"Postgres"</span>],
-        {"\n"}  <span className="text-[#CE4760] dark:text-[#F87171]">build</span>: () =&gt;{" "}
-        <span className="text-[#22C55E] dark:text-[#4ADE80]">"production ready"</span>
+        {"\n"} <span className="text-[#CE4760] dark:text-[#F87171]">build</span>
+        : () =&gt;{" "}
+        <span className="text-[#22C55E] dark:text-[#4ADE80]">
+          "production ready"
+        </span>
         {"\n"}&#125;;
       </div>
     ),
@@ -208,10 +216,17 @@ const categories: SkillCategory[] = [
     codeSnippet: (
       <div>
         <span className="text-muted-foreground">$ </span>
-        <span className="text-[#42BFDD] dark:text-[#38BDF8]">docker compose </span>up -d
-        {"\n"}<span className="text-[#22C55E]">✓ </span>backend : container healthy
-        {"\n"}<span className="text-[#22C55E]">✓ </span>postgres: listening on 5432
-        {"\n"}<span className="text-[#22C55E]">✓ </span>actions : tests passed (0 errors)
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">
+          docker compose{" "}
+        </span>
+        up -d
+        {"\n"}
+        <span className="text-[#22C55E]">✓ </span>backend : container healthy
+        {"\n"}
+        <span className="text-[#22C55E]">✓ </span>postgres: listening on 5432
+        {"\n"}
+        <span className="text-[#22C55E]">✓ </span>actions : tests passed (0
+        errors)
       </div>
     ),
     projects: [
@@ -258,9 +273,16 @@ const categories: SkillCategory[] = [
     codeSnippet: (
       <div>
         <span className="text-[#9649CB] dark:text-[#C084FC]">val </span>retina ={" "}
-        <span className="text-[#42BFDD] dark:text-[#38BDF8]">VisionPipeline</span>()
-        {"\n"}retina.<span className="text-[#FF7700] dark:text-[#FB923C]">detect</span>(frame) &#123; obj =&gt;
-        {"\n"}  tts.<span className="text-[#CE4760] dark:text-[#F87171]">speak</span>(obj.label, obj.distance)
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">
+          VisionPipeline
+        </span>
+        ()
+        {"\n"}retina.
+        <span className="text-[#FF7700] dark:text-[#FB923C]">detect</span>
+        (frame) &#123; obj =&gt;
+        {"\n"} tts.
+        <span className="text-[#CE4760] dark:text-[#F87171]">speak</span>
+        (obj.label, obj.distance)
         {"\n"}&#125;
       </div>
     ),
@@ -328,16 +350,24 @@ function SkillsPage() {
 
           {/* Subtitle - matching text size and mono styling as Projects */}
           <p className="mt-4 text-base sm:text-lg text-muted-foreground font-mono max-w-xl">
-            A focused breakdown of the languages, frameworks, infrastructure platforms, and computer vision tools I use in my work.
+            A focused breakdown of the languages, frameworks, infrastructure
+            platforms, and computer vision tools I use in my work.
           </p>
 
           {/* Numbered Editorial Skill List - matching padding & height of Projects */}
-          <div className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0" role="list">
+          <div
+            className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0"
+            role="list"
+          >
             {categories.map((cat, i) => {
               const isSelected = active === i;
 
               return (
-                <div key={cat.id} role="listitem" className="relative w-full min-w-0">
+                <div
+                  key={cat.id}
+                  role="listitem"
+                  className="relative w-full min-w-0"
+                >
                   <button
                     type="button"
                     onClick={() => {
@@ -349,7 +379,7 @@ function SkillsPage() {
                     data-crosshair-target
                     className={`w-full min-w-0 overflow-hidden text-left transition-all duration-150 flex items-center justify-between py-3.5 sm:py-5 px-3 sm:px-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
                       isSelected
-                        ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] my-1 -translate-y-0.5 z-10"
+                        ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] my-1 -translate-y-0.5 z-10"
                         : "border-b border-border/40 hover:bg-[#F1BE05]/10 dark:hover:bg-[#F1BE05]/15 hover:border-border/60 hover:-translate-y-0.5 text-foreground"
                     }`}
                   >
@@ -365,7 +395,7 @@ function SkillsPage() {
 
                       {/* Square Icon Badge */}
                       <div
-                        className={`size-9 sm:size-11 grid place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] shrink-0 transition-transform ${cat.markerColor}`}
+                        className={`size-9 sm:size-11 grid place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] shrink-0 transition-transform ${cat.markerColor}`}
                       >
                         {cat.iconType === "prompt" && (
                           <span className="font-mono font-black text-xs sm:text-sm tracking-tighter">
@@ -410,7 +440,9 @@ function SkillsPage() {
                     <div className="flex items-center gap-2 sm:gap-3 shrink-0 pl-2">
                       <span
                         className={`font-mono text-xs sm:text-base font-black transition-colors ${
-                          isSelected ? "text-black font-bold" : "text-muted-foreground"
+                          isSelected
+                            ? "text-black font-bold"
+                            : "text-muted-foreground"
                         }`}
                       >
                         {cat.count}
@@ -439,7 +471,7 @@ function SkillsPage() {
 
         {/* Right Column: Substantial Neo-Brutalist Inspector Card matching Projects Preview */}
         <aside
-          className="w-full min-w-0 max-w-full overflow-hidden sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-4 sm:p-7 shadow-[5px_5px_0px_0px_var(--border)] sm:shadow-[8px_8px_0px_0px_var(--border)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--border)] relative"
+          className="w-full min-w-0 max-w-full overflow-hidden sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-4 sm:p-7 shadow-[5px_5px_0px_0px_var(--shadow-color)] sm:shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
           aria-live="polite"
         >
           {/* Panel Top Header Bar */}
@@ -464,11 +496,11 @@ function SkillsPage() {
 
             {/* Tilted Back Accent Card */}
             <div
-              className={`absolute w-[220px] sm:w-[330px] h-[110px] sm:h-[160px] border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] -rotate-3 -translate-x-2 sm:-translate-x-4 -translate-y-2 transition-colors duration-200 ${activeCat.accentBg}`}
+              className={`absolute w-[220px] sm:w-[330px] h-[110px] sm:h-[160px] border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] -rotate-3 -translate-x-2 sm:-translate-x-4 -translate-y-2 transition-colors duration-200 ${activeCat.accentBg}`}
             />
 
             {/* Front Editor Window */}
-            <div className="relative z-10 w-full max-w-[240px] sm:max-w-[340px] border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--border)] p-3 sm:p-4">
+            <div className="relative z-10 w-full max-w-[240px] sm:max-w-[340px] border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] p-3 sm:p-4">
               {/* Window Controls */}
               <div className="flex items-center gap-1.5 pb-2 border-b border-border/50">
                 <span className="size-2.5 rounded-full bg-[#FF3C38] border border-border/40" />
@@ -539,8 +571,8 @@ function SkillsPage() {
                     }}
                     className={`border-2 border-border px-3 py-1 font-mono text-xs font-bold transition-all duration-150 cursor-pointer select-none ${
                       isHovered
-                        ? "bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--border)] -translate-y-0.5 scale-105 z-10"
-                        : "bg-card text-foreground shadow-[2px_2px_0px_0px_var(--border)] hover:bg-[#F1BE05] hover:text-black hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--border)]"
+                        ? "bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] -translate-y-0.5 scale-105 z-10"
+                        : "bg-card text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--shadow-color)]"
                     }`}
                     title={`Hover to highlight projects using ${chip}`}
                   >
@@ -556,7 +588,7 @@ function SkillsPage() {
                 <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground flex items-center gap-2">
                   <span>APPLIED IN PROJECTS</span>
                   {hoveredSkill && (
-                    <span className="text-[10px] font-bold text-black bg-[#F1BE05] px-1.5 py-0.5 border border-border shadow-[1px_1px_0px_0px_var(--border)]">
+                    <span className="text-[10px] font-bold text-black bg-[#F1BE05] px-1.5 py-0.5 border border-border shadow-[1px_1px_0px_0px_var(--shadow-color)]">
                       USING: {hoveredSkill.toUpperCase()}
                     </span>
                   )}
@@ -578,7 +610,9 @@ function SkillsPage() {
                     ? proj.skills.some(
                         (s) =>
                           s.toLowerCase() === hoveredSkill.toLowerCase() ||
-                          hoveredSkill.toLowerCase().includes(s.toLowerCase()) ||
+                          hoveredSkill
+                            .toLowerCase()
+                            .includes(s.toLowerCase()) ||
                           s.toLowerCase().includes(hoveredSkill.toLowerCase())
                       )
                     : false;
@@ -592,15 +626,17 @@ function SkillsPage() {
                       className={`border-2 border-border p-2.5 transition-all duration-150 flex items-center gap-2.5 group/proj relative ${
                         hoveredSkill
                           ? isMatching
-                            ? "bg-[#F1BE05]/20 shadow-[4px_4px_0px_0px_var(--border)] -translate-y-1 border-foreground ring-1 ring-[#F1BE05]"
+                            ? "bg-[#F1BE05]/20 shadow-[4px_4px_0px_0px_var(--shadow-color)] -translate-y-1 border-foreground ring-1 ring-[#F1BE05]"
                             : "bg-card opacity-35 grayscale-[50%] scale-[0.98]"
-                          : "bg-card hover:bg-surface-secondary/90 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--border)]"
+                          : "bg-card hover:bg-surface-secondary/90 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--shadow-color)]"
                       }`}
                     >
                       {/* Two-letter badge */}
                       <div
-                        className={`size-9 sm:size-10 grid place-items-center border-2 border-border font-mono text-xs sm:text-sm font-black text-black shrink-0 shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-transform ${
-                          isMatching ? "scale-105 shadow-[2.5px_2.5px_0px_0px_var(--border)]" : ""
+                        className={`size-9 sm:size-10 grid place-items-center border-2 border-border font-mono text-xs sm:text-sm font-black text-black shrink-0 shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)] transition-transform ${
+                          isMatching
+                            ? "scale-105 shadow-[2.5px_2.5px_0px_0px_var(--shadow-color)]"
+                            : ""
                         } group-hover/proj:scale-105 ${proj.badgeBg}`}
                       >
                         {proj.initials}

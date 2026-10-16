@@ -141,7 +141,7 @@ function Index() {
               data-crosshair-target
               aria-label="Trigger screen-wide pulse"
               onClick={triggerScreenPulse}
-              className="group relative size-12 xl:size-14 grid place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
+              className="group relative size-12 xl:size-14 grid place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
               title="Click to pulse dot grid"
             >
               <span className="font-display text-2xl xl:text-3xl transition-transform duration-300 group-hover:scale-125 group-hover:rotate-45">
@@ -170,7 +170,7 @@ function Index() {
                 data-crosshair-target
                 aria-label="Trigger screen-wide pulse"
                 onClick={triggerScreenPulse}
-                className="grid size-9 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                className="grid size-9 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
                 title="Click to pulse dot grid"
               >
                 <span className="text-base font-display">◆</span>
@@ -201,7 +201,10 @@ function Index() {
             {/* Prominent Headline - with natural breathing room below Aadhith CJ. */}
             <h1 className="mt-3 sm:mt-4 md:mt-5 font-display text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[52px] text-center leading-[1.1] tracking-tight max-w-3xl mx-auto">
               i build digital products that{" "}
-              <em className="italic text-lime not-italic font-normal">refuse to be boring</em>.
+              <em className="italic text-lime not-italic font-normal">
+                refuse to be boring
+              </em>
+              .
             </h1>
 
             {/* Animated Bio wrapped in subtle backdrop box with constant size throughout typing */}
@@ -213,7 +216,8 @@ function Index() {
                     aria-hidden="true"
                     className="col-start-1 row-start-1 invisible font-mono text-sm leading-relaxed sm:text-base select-none pointer-events-none text-center"
                   >
-                    Full-stack, DevOps and applied AI. Computer Science graduate from Kerala.
+                    Full-stack, DevOps and applied AI. Computer Science graduate
+                    from Kerala.
                   </span>
                   {/* Animated typing text aligned to the exact same cell */}
                   <div className="col-start-1 row-start-1">
@@ -236,7 +240,7 @@ function Index() {
               <Link
                 to="/projects"
                 data-crosshair-target
-                className="border-2 border-border bg-foreground text-background px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
+                className="border-2 border-border bg-[#F1BE05] text-black px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color,var(--shadow-color))] hover:bg-[#ffd738] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color,var(--shadow-color))] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
               >
                 VIEW PROJECTS <span>→</span>
               </Link>
@@ -245,7 +249,7 @@ function Index() {
                 target="_blank"
                 rel="noreferrer"
                 data-crosshair-target
-                className="border-2 border-border bg-card text-foreground px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:bg-surface-secondary hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
+                className="border-2 border-border bg-card text-foreground px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-surface-secondary hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
               >
                 ↓ DOWNLOAD CV
               </a>
@@ -260,9 +264,10 @@ function Index() {
               key={i.to}
               to={i.to}
               data-crosshair-target
-              className={`group relative flex min-h-[58px] sm:min-h-[64px] items-center justify-between gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 ${i.hoverClass} hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground`}
+              className={`group relative flex min-h-[58px] sm:min-h-[64px] items-center justify-between gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 ${i.hoverClass} hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--shadow-color)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground`}
               activeProps={{
-                className: "ring-2 ring-lime shadow-[6px_6px_0px_0px_var(--border)] -translate-y-0.5",
+                className:
+                  "ring-2 ring-lime shadow-[6px_6px_0px_0px_var(--shadow-color)] -translate-y-0.5",
               }}
             >
               <div className="flex items-center gap-2.5 shrink-0">

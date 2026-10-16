@@ -158,7 +158,8 @@ export default function TechText({
     const scratchCtx = scratch.getContext("2d");
     const probeCanvas = document.createElement("canvas");
     const probeCtx = probeCanvas.getContext("2d");
-    if (!container || !canvas || !ctx || !scratchCtx || !probeCtx) return undefined;
+    if (!container || !canvas || !ctx || !scratchCtx || !probeCtx)
+      return undefined;
 
     const reducedMotion = window.matchMedia?.(
       "(prefers-reduced-motion: reduce)"
@@ -250,8 +251,10 @@ export default function TechText({
     };
 
     const ensureLayout = (s: Required<TechTextProps>) => {
-      const activeWidth = width > 50 ? width : Math.max(container.clientWidth, 300);
-      const activeHeight = height > 20 ? height : Math.max(container.clientHeight, 80);
+      const activeWidth =
+        width > 50 ? width : Math.max(container.clientWidth, 300);
+      const activeHeight =
+        height > 20 ? height : Math.max(container.clientHeight, 80);
       width = activeWidth;
       height = activeHeight;
 
@@ -296,8 +299,14 @@ export default function TechText({
       const size = Math.max(14, s.fontSize * fit);
       setFont(probe, s, size);
       m = probe.measureText(s.text);
-      const inkWidth = Math.max(10, m.actualBoundingBoxLeft + m.actualBoundingBoxRight);
-      const inkHeight = Math.max(10, m.actualBoundingBoxAscent + m.actualBoundingBoxDescent);
+      const inkWidth = Math.max(
+        10,
+        m.actualBoundingBoxLeft + m.actualBoundingBoxRight
+      );
+      const inkHeight = Math.max(
+        10,
+        m.actualBoundingBoxAscent + m.actualBoundingBoxDescent
+      );
       const x =
         s.align === "left"
           ? m.actualBoundingBoxLeft + 16
@@ -337,7 +346,8 @@ export default function TechText({
         const kept = previous[glyphs.length];
         glyphs.push({
           ...base,
-          offset: s.draggable && kept?.char === char ? kept.offset : { x: 0, y: 0 },
+          offset:
+            s.draggable && kept?.char === char ? kept.offset : { x: 0, y: 0 },
           velocity: { x: 0, y: 0 },
           outline: 0,
           index: i,

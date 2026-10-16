@@ -9,51 +9,51 @@ const navLinks = [
     to: "/about",
     label: "about",
     activeClass:
-      "bg-[#FF7700] hover:bg-[#FF7700] text-white font-black shadow-[inset_0_-3px_0_0_var(--border)]",
+      "bg-[#FF7700] hover:bg-[#FF7700] text-white font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
       "hover:bg-[#FF7700]/15 dark:hover:bg-[#FF7700]/25 hover:text-foreground",
     mobileActiveClass:
-      "bg-[#FF7700] text-white font-black shadow-[inset_0_-2px_0_0_var(--border)]",
+      "bg-[#FF7700] text-white font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
   {
     to: "/projects",
     label: "projects",
     activeClass:
-      "bg-[#F1BE05] hover:bg-[#F1BE05] text-black font-black shadow-[inset_0_-3px_0_0_var(--border)]",
+      "bg-[#F1BE05] hover:bg-[#F1BE05] text-black font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
       "hover:bg-[#F1BE05]/15 dark:hover:bg-[#F1BE05]/25 hover:text-foreground",
     mobileActiveClass:
-      "bg-[#F1BE05] text-black font-black shadow-[inset_0_-2px_0_0_var(--border)]",
+      "bg-[#F1BE05] text-black font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
   {
     to: "/skills",
     label: "skills",
     activeClass:
-      "bg-[#42BFDD] hover:bg-[#42BFDD] text-black font-black shadow-[inset_0_-3px_0_0_var(--border)]",
+      "bg-[#42BFDD] hover:bg-[#42BFDD] text-black font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
       "hover:bg-[#42BFDD]/15 dark:hover:bg-[#42BFDD]/25 hover:text-foreground",
     mobileActiveClass:
-      "bg-[#42BFDD] text-black font-black shadow-[inset_0_-2px_0_0_var(--border)]",
+      "bg-[#42BFDD] text-black font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
   {
     to: "/log",
     label: "log",
     activeClass:
-      "bg-[#9649CB] hover:bg-[#9649CB] text-white font-black shadow-[inset_0_-3px_0_0_var(--border)]",
+      "bg-[#9649CB] hover:bg-[#9649CB] text-white font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
       "hover:bg-[#9649CB]/15 dark:hover:bg-[#9649CB]/25 hover:text-foreground",
     mobileActiveClass:
-      "bg-[#9649CB] text-white font-black shadow-[inset_0_-2px_0_0_var(--border)]",
+      "bg-[#9649CB] text-white font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
   {
     to: "/contact",
     label: "contact",
     activeClass:
-      "bg-[#FF3C38] hover:bg-[#FF3C38] text-white font-black shadow-[inset_0_-3px_0_0_var(--border)]",
+      "bg-[#FF3C38] hover:bg-[#FF3C38] text-white font-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]",
     hoverClass:
       "hover:bg-[#FF3C38]/15 dark:hover:bg-[#FF3C38]/25 hover:text-foreground",
     mobileActiveClass:
-      "bg-[#FF3C38] text-white font-black shadow-[inset_0_-2px_0_0_var(--border)]",
+      "bg-[#FF3C38] text-white font-black shadow-[inset_0_-2px_0_0_var(--shadow-color)]",
   },
 ] as const;
 
@@ -81,7 +81,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
     hireMeClass = "bg-[#9649CB] hover:bg-[#9649CB]/85 text-white";
   } else if (pathname.startsWith("/contact")) {
     hireMeClass =
-      "bg-[#FF3C38] hover:bg-[#FF3C38] text-white shadow-[inset_0_-3px_0_0_var(--border)]";
+      "bg-[#FF3C38] hover:bg-[#FF3C38] text-white shadow-[inset_0_-3px_0_0_var(--shadow-color)]";
   }
 
   const mobileNavItems = [
@@ -101,7 +101,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
           to="/"
           data-crosshair-target
           onClick={() => setMobileMenuOpen(false)}
-          className="inline-flex items-center border-2 border-border bg-[#c4f000] dark:bg-[#F1BE05] px-3 py-1 font-mono text-sm font-black text-black shadow-[3px_3px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-transform"
+          className="inline-flex items-center border-2 border-border bg-[#c4f000] dark:bg-[#F1BE05] px-3 py-1 font-mono text-sm font-black text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-transform"
         >
           ACJ<span className="text-[#FF3C38]">_</span>
         </Link>
@@ -110,10 +110,12 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
         <button
           type="button"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={
+            mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
+          }
           aria-expanded={mobileMenuOpen}
           data-crosshair-target
-          className="grid size-10 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[3px_3px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-transform"
+          className="grid size-10 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-transform"
         >
           {mobileMenuOpen ? (
             <X className="size-5 stroke-[2.5]" />
@@ -145,8 +147,8 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                   data-crosshair-target
                   className={`w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border block text-left transition-all ${
                     isActive
-                      ? "bg-black text-white dark:bg-white dark:text-black shadow-[2px_2px_0px_0px_var(--border)]"
-                      : "bg-white dark:bg-card text-foreground shadow-[3px_3px_0px_0px_var(--border)] hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--border)]"
+                      ? "bg-black text-white dark:bg-white dark:text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]"
+                      : "bg-white dark:bg-card text-foreground shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)]"
                   }`}
                 >
                   {item.label}
@@ -160,7 +162,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
               target="_blank"
               rel="noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--border)] transition-all flex items-center justify-between"
+              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)] transition-all flex items-center justify-between"
             >
               <span>RESUME</span>
               <span className="font-mono text-xs">↗</span>
@@ -171,7 +173,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                 href="https://github.com/aadhithcj"
                 target="_blank"
                 rel="noreferrer"
-                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black text-center transition-all"
+                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black text-center transition-all"
               >
                 GITHUB ↗
               </a>
@@ -179,7 +181,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                 href="https://linkedin.com/in/aadhithcj"
                 target="_blank"
                 rel="noreferrer"
-                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black text-center transition-all"
+                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black text-center transition-all"
               >
                 LINKEDIN ↗
               </a>
@@ -191,7 +193,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
               onClick={() => {
                 toggleTheme();
               }}
-              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] bg-white dark:bg-card text-foreground flex items-center justify-between hover:bg-[#F1BE05] hover:text-black transition-all"
+              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground flex items-center justify-between hover:bg-[#F1BE05] hover:text-black transition-all"
             >
               <span>THEME // {isDark ? "LIGHT MODE" : "DARK MODE"}</span>
               <span className="font-bold">{isDark ? "☀" : "☾"}</span>
@@ -277,4 +279,3 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
     </header>
   );
 }
-

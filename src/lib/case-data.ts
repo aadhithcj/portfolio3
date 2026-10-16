@@ -5,10 +5,18 @@ export const caseData: Record<string, CaseData> = {
     accent: "#FF3C38",
     eyebrow: "Android · BTech Final Year Project · 2026",
     title: "Retina",
-    tagline: "An Android app that reads text, money and objects aloud for visually impaired users.",
+    tagline:
+      "An Android app that reads text, money and objects aloud for visually impaired users.",
     summary:
       "Retina runs four models on the phone camera feed and speaks the results. Everything runs on the device. The paper was presented at ICFISN 2026.",
-    stack: ["Kotlin", "CameraX", "ML Kit", "TensorFlow Lite", "YOLOv8n", "MiDaS"],
+    stack: [
+      "Kotlin",
+      "CameraX",
+      "ML Kit",
+      "TensorFlow Lite",
+      "YOLOv8n",
+      "MiDaS",
+    ],
     built: [
       "My contribution: trained the YOLOv8 currency model, built the CameraX real-time frame pipeline, and integrated on-device inference with vibration feedback.",
       "Text reader using ML Kit OCR, for labels, mail and signs.",
@@ -20,13 +28,15 @@ export const caseData: Record<string, CaseData> = {
     problems: [
       {
         title: "Camera frames arrive faster than the models run",
-        problem: "Queued frames filled memory and caused freezes, so warnings arrived late.",
+        problem:
+          "Queued frames filled memory and caused freezes, so warnings arrived late.",
         fix: "Used CameraX's keep-only-latest strategy so the model always gets the newest frame.",
         learned: "For live assistance a fresh answer beats a complete one.",
       },
       {
         title: "Too much speech",
-        problem: "Detections fire every frame, and reading them all out drowned the user in audio.",
+        problem:
+          "Detections fire every frame, and reading them all out drowned the user in audio.",
         fix: "Skip text that is nearly identical to what was just said (Levenshtein distance). Collision warnings still interrupt.",
       },
     ],
@@ -37,10 +47,17 @@ export const caseData: Record<string, CaseData> = {
     eyebrow: "DevOps · learning project",
     status: "In progress",
     title: "DevOpsHub",
-    tagline: "A small Flask app I used to learn CI/CD, Docker and deploying to AWS.",
+    tagline:
+      "A small Flask app I used to learn CI/CD, Docker and deploying to AWS.",
     summary:
       "Every push to main is tested, built into a Docker image and deployed to an EC2 instance. If the new version fails its health check, the old one is restored.",
-    stack: ["Flask", "PostgreSQL", "Docker Compose", "GitHub Actions", "AWS EC2 + SSM"],
+    stack: [
+      "Flask",
+      "PostgreSQL",
+      "Docker Compose",
+      "GitHub Actions",
+      "AWS EC2 + SSM",
+    ],
     built: [
       "GitHub Actions workflow: pytest, frontend build and a container smoke test.",
       "Images tagged with the commit SHA and pushed to GitHub Container Registry.",
@@ -50,19 +67,26 @@ export const caseData: Record<string, CaseData> = {
     problems: [
       {
         title: "Shell quoting broke inside SSM commands",
-        problem: "Multi-line scripts passed through YAML, JSON and bash kept breaking on nested quotes.",
+        problem:
+          "Multi-line scripts passed through YAML, JSON and bash kept breaking on nested quotes.",
         fix: "Put deploy.sh on the server. The workflow now runs one short command and passes the SHA.",
         learned: "CI should trigger scripts, not contain them.",
       },
       {
         title: "A failed deploy left the site down",
-        problem: "The first version stopped the old container before the new one was ready.",
+        problem:
+          "The first version stopped the old container before the new one was ready.",
         fix: "Pull the image first, swap containers, health-check, and restore the previous tag on failure.",
       },
     ],
-    limits: ["Next: Prometheus metrics, CloudWatch logs, Terraform. None of these are built yet."],
+    limits: [
+      "Next: Prometheus metrics, CloudWatch logs, Terraform. None of these are built yet.",
+    ],
     links: [
-      { label: "CI run", href: "https://github.com/aadhithcj/devopshub/actions/runs/38448430972" },
+      {
+        label: "CI run",
+        href: "https://github.com/aadhithcj/devopshub/actions/runs/38448430972",
+      },
     ],
   },
 
@@ -87,14 +111,16 @@ export const caseData: Record<string, CaseData> = {
     problems: [
       {
         title: "Stock counts drifting",
-        problem: "Paper bills and end-of-day tallying meant counts were often wrong.",
+        problem:
+          "Paper bills and end-of-day tallying meant counts were often wrong.",
         fix: "Stock changes only happen inside the sale transaction, after a check.",
       },
       {
         title: "Typing in supplier deliveries",
         problem: "Entering a long delivery by hand was slow.",
         fix: "Let Gemini extract the lines, then match them to existing parts and have the clerk confirm.",
-        learned: "AI extraction is only safe with a human check before it touches stock.",
+        learned:
+          "AI extraction is only safe with a human check before it touches stock.",
       },
     ],
   },
@@ -116,7 +142,8 @@ export const caseData: Record<string, CaseData> = {
     problems: [
       {
         title: "Weather APIs only give today's rain",
-        problem: "'0 mm right now' says nothing about whether a crop will grow.",
+        problem:
+          "'0 mm right now' says nothing about whether a crop will grow.",
         fix: "Used Open-Meteo's climate archive (1991–2020) to get typical annual rainfall, cached per location.",
       },
     ],
@@ -129,7 +156,8 @@ export const caseData: Record<string, CaseData> = {
     accent: "#9649CB",
     eyebrow: "Full-stack · BTech mini project",
     title: "CV Flow",
-    tagline: "A recruitment app where candidates apply and recruiters rank them.",
+    tagline:
+      "A recruitment app where candidates apply and recruiters rank them.",
     summary:
       "Candidates keep one structured profile and apply to jobs. Recruiters see applicants ranked by a score they can adjust. Built by a team of three.",
     stack: ["React", "TypeScript", "Supabase", "PostgreSQL", "TanStack Query"],
@@ -148,6 +176,8 @@ export const caseData: Record<string, CaseData> = {
         fix: "The score is a plain weighted sum. Everyone stays visible, and the recruiter can see how each factor contributed.",
       },
     ],
-    limits: ["Matching is keyword-based. Semantic matching (Postgres ≈ SQL) is not built."],
+    limits: [
+      "Matching is keyword-based. Semantic matching (Postgres ≈ SQL) is not built.",
+    ],
   },
 };

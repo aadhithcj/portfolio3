@@ -7,7 +7,14 @@ import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
 import { profile } from "@/lib/portfolio";
 import { cn } from "@/lib/utils";
-import { Send, ArrowUpRight, FileText, Mail, Github, Linkedin } from "lucide-react";
+import {
+  Send,
+  ArrowUpRight,
+  FileText,
+  Mail,
+  Github,
+  Linkedin,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
@@ -42,7 +49,7 @@ function FieldToast({
   return (
     <div
       role="alert"
-      className="absolute -top-10 left-0 z-40 flex items-center gap-2 border-2 border-border bg-[#FF3C38] text-white px-2.5 py-1 font-mono text-[11px] font-bold shadow-[3px_3px_0px_0px_var(--border)] rounded-none animate-in fade-in slide-in-from-bottom-2 duration-150 max-w-[calc(100vw-64px)] sm:whitespace-nowrap select-none"
+      className="absolute -top-10 left-0 z-40 flex items-center gap-2 border-2 border-border bg-[#FF3C38] text-white px-2.5 py-1 font-mono text-[11px] font-bold shadow-[3px_3px_0px_0px_var(--shadow-color)] rounded-none animate-in fade-in slide-in-from-bottom-2 duration-150 max-w-[calc(100vw-64px)] sm:whitespace-nowrap select-none"
     >
       <span className="size-3.5 grid place-items-center bg-black text-white text-[9px] font-black border border-white/40 shrink-0">
         !
@@ -270,12 +277,16 @@ function Contact() {
           {/* Heading - exact matching scale as Projects and Skills */}
           <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl tracking-tight text-foreground">
             Let's build{" "}
-            <em className="italic text-lime not-italic font-normal">something</em>.
+            <em className="italic text-lime not-italic font-normal">
+              something
+            </em>
+            .
           </h1>
 
           {/* Subtitle - matching text size and mono styling as Projects and Skills */}
           <p className="mt-4 text-base sm:text-lg text-muted-foreground font-mono max-w-xl">
-            Have a role, project, or interesting engineering challenge in mind? Drop a message below or reach out directly.
+            Have a role, project, or interesting engineering challenge in mind?
+            Drop a message below or reach out directly.
           </p>
 
           {/* Handwritten note aimed at the form, disappears when a field is focused */}
@@ -291,7 +302,10 @@ function Contact() {
           </AnimatePresence>
 
           {/* Numbered Editorial Contact Channels List (matching Projects and Skills row structure) */}
-          <div className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0" role="list">
+          <div
+            className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0"
+            role="list"
+          >
             {contactItems.map((item, i) => {
               const isSelected = activeChannel === i;
               return (
@@ -305,7 +319,7 @@ function Contact() {
                   onFocus={() => setActiveChannel(i)}
                   className={`group relative py-3.5 sm:py-5 px-3 sm:px-4 transition-all duration-150 block cursor-pointer w-full min-w-0 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
                     isSelected
-                      ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] my-1 -translate-y-0.5 z-10"
+                      ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] my-1 -translate-y-0.5 z-10"
                       : "border-b border-border/40 hover:bg-[#F1BE05]/15 hover:border-border/60 hover:-translate-y-0.5 text-foreground"
                   }`}
                 >
@@ -320,7 +334,7 @@ function Contact() {
                       </span>
                       {/* Square Icon Badge matching Skills page */}
                       <div
-                        className={`size-9 sm:size-11 grid place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] shrink-0 transition-transform ${item.markerColor}`}
+                        className={`size-9 sm:size-11 grid place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] shrink-0 transition-transform ${item.markerColor}`}
                       >
                         <item.icon className="size-4 sm:size-5" />
                       </div>
@@ -381,7 +395,7 @@ function Contact() {
         </div>
 
         {/* Right Column: Featured Neo-Brutalist Transmission Console Card */}
-        <div className="w-full min-w-0 border-2 border-border bg-card p-4 sm:p-7 shadow-[5px_5px_0px_0px_var(--border)] sm:shadow-[8px_8px_0px_0px_var(--border)] relative flex flex-col overflow-hidden">
+        <div className="w-full min-w-0 border-2 border-border bg-card p-4 sm:p-7 shadow-[5px_5px_0px_0px_var(--shadow-color)] sm:shadow-[8px_8px_0px_0px_var(--shadow-color)] relative flex flex-col overflow-hidden">
           {/* Card Top Header with Live Status Indicator */}
           <div className="flex items-center justify-between border-b-2 border-border pb-4">
             <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
@@ -393,18 +407,18 @@ function Contact() {
                   isSubmitting
                     ? "bg-[#F1BE05]"
                     : isSent || isReady
-                    ? "bg-[#22C55E]"
-                    : "bg-muted-foreground/40"
+                      ? "bg-[#22C55E]"
+                      : "bg-muted-foreground/40"
                 }`}
               />
               <span className="font-mono text-[10px] font-bold uppercase text-foreground/80 tracking-wider">
                 {isSubmitting
                   ? "DISPATCHING..."
                   : isSent
-                  ? "TRANSMITTED"
-                  : isReady
-                  ? "MESSAGE READY"
-                  : "WAITING FOR YOU"}
+                    ? "TRANSMITTED"
+                    : isReady
+                      ? "MESSAGE READY"
+                      : "WAITING FOR YOU"}
               </span>
             </div>
           </div>
@@ -454,7 +468,7 @@ function Contact() {
                     if (errorTarget?.field === "name") setErrorTarget(null);
                   }}
                   className={cn(
-                    "w-full border-2 bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--border)] focus:outline-none focus:shadow-[3px_3px_0px_0px_var(--border)] focus:ring-1 transition-all",
+                    "w-full border-2 bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--shadow-color)] focus:outline-none focus:shadow-[3px_3px_0px_0px_var(--shadow-color)] focus:ring-1 transition-all",
                     errorTarget?.field === "name"
                       ? "border-[#FF3C38] focus:border-[#FF3C38] focus:ring-[#FF3C38]"
                       : "border-border focus:border-foreground focus:ring-foreground"
@@ -487,7 +501,7 @@ function Contact() {
                     if (errorTarget?.field === "email") setErrorTarget(null);
                   }}
                   className={cn(
-                    "w-full border-2 bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--border)] focus:outline-none focus:shadow-[3px_3px_0px_0px_var(--border)] focus:ring-1 transition-all",
+                    "w-full border-2 bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--shadow-color)] focus:outline-none focus:shadow-[3px_3px_0px_0px_var(--shadow-color)] focus:ring-1 transition-all",
                     errorTarget?.field === "email"
                       ? "border-[#FF3C38] focus:border-[#FF3C38] focus:ring-[#FF3C38]"
                       : "border-border focus:border-foreground focus:ring-foreground"
@@ -502,7 +516,10 @@ function Contact() {
                 htmlFor="contact-subject"
                 className="block font-mono text-[10px] font-black uppercase tracking-wider text-foreground mb-1.5"
               >
-                SUBJECT <span className="text-muted-foreground font-normal text-[9px]">(OPTIONAL)</span>
+                SUBJECT{" "}
+                <span className="text-muted-foreground font-normal text-[9px]">
+                  (OPTIONAL)
+                </span>
               </label>
               <input
                 id="contact-subject"
@@ -512,7 +529,7 @@ function Contact() {
                 onChange={(e) =>
                   setFormData({ ...formData, subject: e.target.value })
                 }
-                className="w-full border-2 border-border bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--border)] focus:outline-none focus:border-foreground focus:shadow-[3px_3px_0px_0px_var(--border)] focus:ring-1 focus:ring-foreground transition-all"
+                className="w-full border-2 border-border bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--shadow-color)] focus:outline-none focus:border-foreground focus:shadow-[3px_3px_0px_0px_var(--shadow-color)] focus:ring-1 focus:ring-foreground transition-all"
               />
             </div>
 
@@ -542,7 +559,7 @@ function Contact() {
                   if (errorTarget?.field === "message") setErrorTarget(null);
                 }}
                 className={cn(
-                  "w-full resize-none border-2 bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--border)] focus:outline-none focus:shadow-[3px_3px_0px_0px_var(--border)] focus:ring-1 transition-all",
+                  "w-full resize-none border-2 bg-background px-3 py-2 font-mono text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 shadow-[2px_2px_0px_0px_var(--shadow-color)] focus:outline-none focus:shadow-[3px_3px_0px_0px_var(--shadow-color)] focus:ring-1 transition-all",
                   errorTarget?.field === "message"
                     ? "border-[#FF3C38] focus:border-[#FF3C38] focus:ring-[#FF3C38]"
                     : "border-border focus:border-foreground focus:ring-foreground"
@@ -565,14 +582,14 @@ function Contact() {
               type="submit"
               disabled={isSubmitting}
               data-crosshair-target
-              className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <span>
                 {isSubmitting
                   ? "SENDING MESSAGE..."
                   : isSent
-                  ? "MESSAGE SENT! ✓"
-                  : "SEND MESSAGE"}
+                    ? "MESSAGE SENT! ✓"
+                    : "SEND MESSAGE"}
               </span>
               <Send
                 className={cn(

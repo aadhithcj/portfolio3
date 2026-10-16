@@ -85,7 +85,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { title: "Aadhith C J - Software Engineer" },
         {
           name: "description",
-          content: "Portfolio of software engineer Aadhith C J: full-stack, DevOps and applied AI.",
+          content:
+            "Portfolio of software engineer Aadhith C J: full-stack, DevOps and applied AI.",
         },
         { name: "author", content: "Aadhith C J" },
         { property: "og:site_name", content: "Aadhith C J" },

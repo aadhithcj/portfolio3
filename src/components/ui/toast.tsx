@@ -26,7 +26,10 @@ interface ToastContextValue {
   add: (options: ToastOptions) => string;
   close: (id: string) => void;
   error: (message: React.ReactNode, options?: Partial<ToastOptions>) => string;
-  success: (message: React.ReactNode, options?: Partial<ToastOptions>) => string;
+  success: (
+    message: React.ReactNode,
+    options?: Partial<ToastOptions>
+  ) => string;
 }
 
 const ToastContext = React.createContext<ToastContextValue | null>(null);
@@ -34,14 +37,17 @@ const ToastContext = React.createContext<ToastContextValue | null>(null);
 export function useToastManager(): ToastContextValue {
   const context = React.useContext(ToastContext);
   if (!context) {
-    throw new Error("useToastManager must be used within a <Toaster> provider.");
+    throw new Error(
+      "useToastManager must be used within a <Toaster> provider."
+    );
   }
   return context;
 }
 
 export interface ToasterProps {
   children?: React.ReactNode;
-  position?: "top-right" | "top-center" | "bottom-right" | "bottom-center" | "inline";
+  position?:
+    "top-right" | "top-center" | "bottom-right" | "bottom-center" | "inline";
   className?: string;
 }
 
@@ -58,7 +64,9 @@ export function Toaster({
 
   const add = React.useCallback(
     (options: ToastOptions) => {
-      const id = options.id ?? `toast-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      const id =
+        options.id ??
+        `toast-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
       const duration = options.duration ?? 4500;
 
       const item: ToastItem = {
@@ -102,10 +110,14 @@ export function Toaster({
   );
 
   const positionClasses = {
-    "top-right": "fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none",
-    "top-center": "fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-3 pointer-events-none items-center",
-    "bottom-right": "fixed bottom-5 right-5 z-50 flex flex-col gap-3 pointer-events-none",
-    "bottom-center": "fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-3 pointer-events-none items-center",
+    "top-right":
+      "fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none",
+    "top-center":
+      "fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-3 pointer-events-none items-center",
+    "bottom-right":
+      "fixed bottom-5 right-5 z-50 flex flex-col gap-3 pointer-events-none",
+    "bottom-center":
+      "fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-3 pointer-events-none items-center",
     inline: "relative z-30 flex flex-col gap-2 w-full",
   }[position];
 
@@ -120,11 +132,9 @@ export function Toaster({
             key={item.id}
             role="alert"
             className={cn(
-              "pointer-events-auto border-2 border-border p-3.5 sm:p-4 rounded-none shadow-[4px_4px_0px_0px_var(--border)] font-mono text-xs max-w-sm w-full transition-all flex items-start justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-150",
-              item.type === "error" &&
-                "bg-[#FF3C38] text-white",
-              item.type === "success" &&
-                "bg-[#22C55E] text-black",
+              "pointer-events-auto border-2 border-border p-3.5 sm:p-4 rounded-none shadow-[4px_4px_0px_0px_var(--shadow-color)] font-mono text-xs max-w-sm w-full transition-all flex items-start justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-150",
+              item.type === "error" && "bg-[#FF3C38] text-white",
+              item.type === "success" && "bg-[#22C55E] text-black",
               (!item.type || item.type === "default") &&
                 "bg-card text-foreground"
             )}
@@ -133,10 +143,16 @@ export function Toaster({
               <span
                 className={cn(
                   "size-4 grid place-items-center font-black text-[10px] border border-current shrink-0 mt-0.5",
-                  item.type === "error" ? "bg-black text-white" : "bg-black text-white"
+                  item.type === "error"
+                    ? "bg-black text-white"
+                    : "bg-black text-white"
                 )}
               >
-                {item.type === "error" ? "!" : item.type === "success" ? "✓" : "i"}
+                {item.type === "error"
+                  ? "!"
+                  : item.type === "success"
+                    ? "✓"
+                    : "i"}
               </span>
 
               <div className="flex flex-col min-w-0">

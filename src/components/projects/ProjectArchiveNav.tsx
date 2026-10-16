@@ -24,7 +24,10 @@ export function ProjectArchiveNav({
       {/* Header bar: archive title + index link */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-2">
-          <Compass className="size-4 text-foreground stroke-[2.5]" aria-hidden="true" />
+          <Compass
+            className="size-4 text-foreground stroke-[2.5]"
+            aria-hidden="true"
+          />
           <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
             PROJECT ARCHIVE NAVIGATION
           </span>
@@ -32,7 +35,7 @@ export function ProjectArchiveNav({
         <Link
           to="/projects"
           data-crosshair-target
-          className="group inline-flex items-center gap-2 border-2 border-border bg-card px-3.5 py-1.5 font-mono text-xs font-black uppercase tracking-wider text-foreground shadow-[2px_2px_0px_0px_var(--border)] hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
+          className="group inline-flex items-center gap-2 border-2 border-border bg-card px-3.5 py-1.5 font-mono text-xs font-black uppercase tracking-wider text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
         >
           <span className="font-mono text-xs transition-transform group-hover:-translate-x-1">
             ←
@@ -49,7 +52,7 @@ export function ProjectArchiveNav({
           params={{ slug: previous.slug }}
           data-crosshair-target
           aria-label={`Previous case study: ${previous.name}`}
-          className="group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[7px_7px_0px_0px_var(--border)] hover:border-foreground active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer min-h-[136px]"
+          className="group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[7px_7px_0px_0px_var(--shadow-color)] hover:border-foreground active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer min-h-[136px]"
         >
           {/* Top meta strip */}
           <div className="flex items-center justify-between gap-2 border-b-2 border-border/40 pb-2.5 mb-3.5">
@@ -69,7 +72,7 @@ export function ProjectArchiveNav({
           {/* Action row with tactile mechanical arrow box */}
           <div className="flex items-center gap-3.5 sm:gap-4">
             <div
-              className="size-11 sm:size-12 shrink-0 border-2 border-border bg-surface-secondary text-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_var(--border)] group-hover:bg-[#F1BE05] group-hover:text-black group-hover:shadow-[3px_3px_0px_0px_var(--border)] group-hover:-translate-x-0.5 active:translate-x-0 active:translate-y-0 transition-all"
+              className="size-11 sm:size-12 shrink-0 border-2 border-border bg-surface-secondary text-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_var(--shadow-color)] group-hover:bg-[#F1BE05] group-hover:text-black group-hover:shadow-[3px_3px_0px_0px_var(--shadow-color)] group-hover:-translate-x-0.5 active:translate-x-0 active:translate-y-0 transition-all"
               aria-hidden="true"
             >
               <ArrowLeft className="size-5 sm:size-6 stroke-[3] group-hover:-translate-x-0.5 transition-transform" />
@@ -95,7 +98,7 @@ export function ProjectArchiveNav({
           params={{ slug: next.slug }}
           data-crosshair-target
           aria-label={`Next case study: ${next.name}`}
-          className="group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[7px_7px_0px_0px_var(--border)] hover:border-foreground active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer min-h-[136px]"
+          className="group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[7px_7px_0px_0px_var(--shadow-color)] hover:border-foreground active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer min-h-[136px]"
         >
           {/* Top meta strip */}
           <div className="flex items-center justify-between gap-2 border-b-2 border-border/40 pb-2.5 mb-3.5">
@@ -124,7 +127,7 @@ export function ProjectArchiveNav({
             </div>
 
             <div
-              className="size-11 sm:size-12 shrink-0 border-2 border-border bg-surface-secondary text-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_var(--border)] group-hover:bg-[#42BFDD] group-hover:text-black group-hover:shadow-[3px_3px_0px_0px_var(--border)] group-hover:translate-x-0.5 active:translate-x-0 active:translate-y-0 transition-all order-first sm:order-last"
+              className="size-11 sm:size-12 shrink-0 border-2 border-border bg-surface-secondary text-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_var(--shadow-color)] group-hover:bg-[#42BFDD] group-hover:text-black group-hover:shadow-[3px_3px_0px_0px_var(--shadow-color)] group-hover:translate-x-0.5 active:translate-x-0 active:translate-y-0 transition-all order-first sm:order-last"
               aria-hidden="true"
             >
               <ArrowRight className="size-5 sm:size-6 stroke-[3] group-hover:translate-x-0.5 transition-transform" />

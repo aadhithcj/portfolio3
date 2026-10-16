@@ -254,14 +254,12 @@ function TimelineEntryItem({
     >
       {/* Stable, Outlined Timeline Node with Category Accent Center */}
       <div
-        className={`absolute -left-[35px] sm:-left-[43px] top-1 size-5 sm:size-5.5 border-2 border-border bg-background shadow-[2px_2px_0px_0px_var(--border)] grid place-items-center transition-transform duration-200 group-hover:scale-110 ${
+        className={`absolute -left-[35px] sm:-left-[43px] top-1 size-5 sm:size-5.5 border-2 border-border bg-background shadow-[2px_2px_0px_0px_var(--shadow-color)] grid place-items-center transition-transform duration-200 group-hover:scale-110 ${
           isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"
         }`}
         aria-hidden="true"
       >
-        <span
-          className={`size-1.5 border border-border/80 ${theme.node}`}
-        />
+        <span className={`size-1.5 border border-border/80 ${theme.node}`} />
       </div>
 
       {/* Header Row: Period, Category Badge, and Archive Identifier */}
@@ -271,7 +269,7 @@ function TimelineEntryItem({
             {item.period}
           </span>
           <span
-            className={`border border-border px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-wider shadow-[1.5px_1.5px_0px_0px_var(--border)] ${theme.badge}`}
+            className={`border border-border px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-wider shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)] ${theme.badge}`}
           >
             {item.category}
           </span>
@@ -296,10 +294,12 @@ function TimelineEntryItem({
 
         {/* Compact Featured Evidence Callout Block */}
         {item.featuredEvidence && (
-          <div className="mt-3.5 border-2 border-border bg-card p-3 sm:p-4 shadow-[4px_4px_0px_0px_var(--border)] max-w-xl transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_var(--border)]">
+          <div className="mt-3.5 border-2 border-border bg-card p-3 sm:p-4 shadow-[4px_4px_0px_0px_var(--shadow-color)] max-w-xl transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_var(--shadow-color)]">
             <div className="flex items-center justify-between border-b border-border/60 pb-1.5 mb-2.5">
               <span className="font-mono text-[10px] font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                <span className={`size-1.5 border border-border ${theme.node}`} />
+                <span
+                  className={`size-1.5 border border-border ${theme.node}`}
+                />
                 {item.featuredEvidence.header}
               </span>
               <span className="font-mono text-[9px] font-bold text-muted-foreground uppercase">
@@ -328,7 +328,7 @@ function TimelineEntryItem({
           {item.highlights.map((hl) => (
             <li
               key={hl}
-              className="flex items-center gap-1.5 border border-border bg-card px-2.5 py-1 font-mono text-[11px] sm:text-xs font-semibold text-foreground/90 shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-colors hover:bg-surface-secondary"
+              className="flex items-center gap-1.5 border border-border bg-card px-2.5 py-1 font-mono text-[11px] sm:text-xs font-semibold text-foreground/90 shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)] transition-colors hover:bg-surface-secondary"
             >
               <span className="text-lime font-bold" aria-hidden="true">
                 ▸
@@ -373,7 +373,8 @@ function LogPage() {
           </h1>
 
           <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Milestones, career transitions, competitive programming, and education across my engineering journey.
+            Milestones, career transitions, competitive programming, and
+            education across my engineering journey.
           </p>
         </header>
 
@@ -403,19 +404,20 @@ function LogPage() {
         </HandNote>
 
         {/* Bottom CTA with Neo-Brutalist Square Border and Hard Offset Shadow */}
-        <div className="mt-6 flex flex-col justify-between gap-4 border-2 border-border bg-card p-6 sm:p-7 shadow-[5px_5px_0px_0px_var(--border)] sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col justify-between gap-4 border-2 border-border bg-card p-6 sm:p-7 shadow-[5px_5px_0px_0px_var(--shadow-color)] sm:flex-row sm:items-center">
           <div>
             <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground">
               Want to build something together?
             </h3>
             <p className="font-mono text-xs text-muted-foreground mt-1">
-              Always open to discussing new roles, contracts, and engineering challenges.
+              Always open to discussing new roles, contracts, and engineering
+              challenges.
             </p>
           </div>
           <Link
             to="/contact"
             data-crosshair-target
-            className="inline-flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] px-5 py-2.5 font-mono text-xs sm:text-sm font-black text-black shadow-[3px_3px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--border)] transition-all shrink-0 uppercase tracking-wider"
+            className="inline-flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] px-5 py-2.5 font-mono text-xs sm:text-sm font-black text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)] transition-all shrink-0 uppercase tracking-wider"
           >
             <span>Get in touch</span>
             <ArrowUpRight className="size-4" strokeWidth={2.5} />

@@ -121,7 +121,9 @@ function About() {
 
         <h1 className="mt-4 break-words font-display text-5xl sm:text-6xl md:text-7xl">
           Hi, I'm{" "}
-          <em className="italic text-lime not-italic font-normal">Aadhith CJ</em>
+          <em className="italic text-lime not-italic font-normal">
+            Aadhith CJ
+          </em>
           .
         </h1>
 
@@ -141,7 +143,7 @@ function About() {
           ].map((tag) => (
             <span
               key={tag.label}
-              className="inline-flex items-center gap-2 px-3 py-1 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] bg-card text-foreground"
+              className="inline-flex items-center gap-2 px-3 py-1 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] bg-card text-foreground"
             >
               <span className={`size-1.5 rounded-full ${tag.dot}`} />
               {tag.label}
@@ -184,10 +186,10 @@ function About() {
             to="/projects"
             data-crosshair-target
             onMouseEnter={() => pick("#F1BE05")}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:-translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#F1BE05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:-translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:border-[#F1BE05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
           >
             <div className="flex items-start sm:items-center gap-3.5">
-              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#F1BE05] text-black shadow-[2px_2px_0px_0px_var(--border)]">
+              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#F1BE05] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
                 <FolderGit2 className="size-5" />
               </div>
               <div>
@@ -216,10 +218,10 @@ function About() {
             to="/skills"
             data-crosshair-target
             onMouseEnter={() => pick("#42BFDD")}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#42BFDD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:border-[#42BFDD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
           >
             <div className="flex items-start sm:items-center gap-3.5">
-              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--border)] group-hover:-rotate-12 transition-transform duration-200">
+              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)] group-hover:-rotate-12 transition-transform duration-200">
                 <Code2 className="size-5" />
               </div>
               <div>
@@ -256,10 +258,10 @@ function About() {
             to="/log"
             data-crosshair-target
             onMouseEnter={() => pick("#FF7700")}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] hover:border-[#FF7700] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:border-[#FF7700] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
           >
             <div className="flex items-start sm:items-center gap-3.5">
-              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#FF7700] text-black shadow-[2px_2px_0px_0px_var(--border)]">
+              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#FF7700] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
                 <Clock className="size-5" />
               </div>
               <div>
@@ -290,14 +292,14 @@ function About() {
         </div>
 
         {/* Section 2: Dedicated Neo-Brutalist Resume Callout with popup hover */}
-        <div className="mt-8 border-2 border-border shadow-[5px_5px_0px_0px_var(--border)] bg-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative overflow-hidden transition-all duration-150 hover:-translate-y-1 hover:shadow-[7px_7px_0px_0px_var(--border)] hover:border-[#F1BE05] group">
+        <div className="mt-8 border-2 border-border shadow-[5px_5px_0px_0px_var(--shadow-color)] bg-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative overflow-hidden transition-all duration-150 hover:-translate-y-1 hover:shadow-[7px_7px_0px_0px_var(--shadow-color)] hover:border-[#F1BE05] group">
           {/* Subtle decorative corner accent */}
           <div className="absolute top-0 right-0 bg-[#F1BE05] text-black font-mono text-[9px] font-black uppercase px-2 py-0.5 border-b-2 border-l-2 border-border">
             PDF // CURRICULUM VITAE
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="grid size-11 shrink-0 place-items-center border-2 border-border bg-foreground text-background shadow-[3px_3px_0px_0px_var(--border)]">
+            <div className="grid size-11 shrink-0 place-items-center border-2 border-border bg-foreground text-background shadow-[3px_3px_0px_0px_var(--shadow-color)]">
               <FileText className="size-5" />
             </div>
             <div>
@@ -316,7 +318,7 @@ function About() {
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="inline-flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black px-5 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--border)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground shrink-0"
+            className="inline-flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black px-5 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--shadow-color)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground shrink-0"
           >
             <span>GET MY RESUME</span>
             <ArrowUpRight className="size-4" />
@@ -344,11 +346,11 @@ function About() {
                 key={item.title}
                 data-crosshair-target
                 onMouseEnter={() => setAccent(item.accent)}
-                className={`group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--border)] transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--border)] ${item.borderHover}`}
+                className={`group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${item.borderHover}`}
               >
                 <span
                   aria-hidden="true"
-                  className={`pointer-events-none absolute -top-3 right-3 rotate-3 border-2 border-border px-2 py-0.5 font-hand text-base shadow-[2px_2px_0px_0px_var(--border)] opacity-0 translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:-translate-y-0.5 ${item.color}`}
+                  className={`pointer-events-none absolute -top-3 right-3 rotate-3 border-2 border-border px-2 py-0.5 font-hand text-base shadow-[2px_2px_0px_0px_var(--shadow-color)] opacity-0 translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:-translate-y-0.5 ${item.color}`}
                 >
                   {item.quip}
                 </span>
@@ -358,7 +360,7 @@ function About() {
                       {item.num} // {item.tag}
                     </span>
                     <div
-                      className={`grid size-8 place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--border)] transition-transform duration-200 group-hover:rotate-6 ${item.color}`}
+                      className={`grid size-8 place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] transition-transform duration-200 group-hover:rotate-6 ${item.color}`}
                     >
                       <Icon className="size-4" />
                     </div>
@@ -382,21 +384,21 @@ function About() {
             END OF README.md // READY TO COLLABORATE?
           </div>
           <p className="font-mono text-xs text-muted-foreground max-w-md">
-            Have an open software engineering role, contract project, or technical
-            idea? Let's build something practical and reliable.
+            Have an open software engineering role, contract project, or
+            technical idea? Let's build something practical and reliable.
           </p>
           <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               to="/contact"
               data-crosshair-target
-              className="inline-flex items-center gap-2 border-2 border-border bg-foreground text-background px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
+              className="inline-flex items-center gap-2 border-2 border-border bg-foreground text-background px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
             >
               GET IN TOUCH <span>→</span>
             </Link>
             <Link
               to="/"
               data-crosshair-target
-              className="inline-flex items-center gap-2 border-2 border-border bg-card text-foreground px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--border)] hover:bg-surface-secondary transition-all"
+              className="inline-flex items-center gap-2 border-2 border-border bg-card text-foreground px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:bg-surface-secondary transition-all"
             >
               RETURN HOME
             </Link>
@@ -406,4 +408,3 @@ function About() {
     </div>
   );
 }
-

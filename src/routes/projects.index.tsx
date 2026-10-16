@@ -20,7 +20,8 @@ export const Route = createFileRoute("/projects/")({
       { property: "og:title", content: "Projects - Aadhith C J" },
       {
         property: "og:description",
-        content: "Things I've built: an interactive archive of full-stack, DevOps and AI projects.",
+        content:
+          "Things I've built: an interactive archive of full-stack, DevOps and AI projects.",
       },
       { property: "og:image", content: "/og-image.png" },
       { name: "twitter:image", content: "/og-image.png" },
@@ -32,7 +33,12 @@ export const Route = createFileRoute("/projects/")({
 const defaultProjectMeta = {
   pill: "RETINA / ASSISTIVE AI",
   quip: "check me out",
-  features: ["+ CAMERA", "+ AI ANALYSIS", "+ VOICE FEEDBACK", "+ ACCESSIBLE UX"],
+  features: [
+    "+ CAMERA",
+    "+ AI ANALYSIS",
+    "+ VOICE FEEDBACK",
+    "+ ACCESSIBLE UX",
+  ],
   accentColor: "#CE4760",
 };
 
@@ -49,25 +55,45 @@ const projectMeta: Record<
   devopshub: {
     pill: "DEVOPSHUB / CI-CD AUTOMATION",
     quip: "ship it. again.",
-    features: ["+ DOCKER COMPOSE", "+ GITHUB ACTIONS", "+ POSTGRESQL", "+ ZERO-DOWNTIME"],
+    features: [
+      "+ DOCKER COMPOSE",
+      "+ GITHUB ACTIONS",
+      "+ POSTGRESQL",
+      "+ ZERO-DOWNTIME",
+    ],
     accentColor: "#42BFDD",
   },
   inventory: {
     pill: "MOTO-INV / DESKTOP SUITE",
     quip: "boring? never.",
-    features: ["+ SQLITE ATOMIC", "+ PDF INVOICES", "+ REAL-TIME STOCK", "+ PRODUCTION USE"],
+    features: [
+      "+ SQLITE ATOMIC",
+      "+ PDF INVOICES",
+      "+ REAL-TIME STOCK",
+      "+ PRODUCTION USE",
+    ],
     accentColor: "#FF7700",
   },
   "crop-recommendation": {
     pill: "ROOTS / AGRITECH AI",
     quip: "grows on you",
-    features: ["+ RANDOM FOREST", "+ OPEN-METEO API", "+ 7 PARAMETERS", "+ REACT FRONTEND"],
+    features: [
+      "+ RANDOM FOREST",
+      "+ OPEN-METEO API",
+      "+ 7 PARAMETERS",
+      "+ REACT FRONTEND",
+    ],
     accentColor: "#22C55E",
   },
   "cv-sorting": {
     pill: "CV-SYS / TALENT PIPELINES",
     quip: "hired. probably.",
-    features: ["+ DUAL PORTALS", "+ SUPABASE PG", "+ TANSTACK QUERY", "+ WORKFLOW ENGINE"],
+    features: [
+      "+ DUAL PORTALS",
+      "+ SUPABASE PG",
+      "+ TANSTACK QUERY",
+      "+ WORKFLOW ENGINE",
+    ],
     accentColor: "#9649CB",
   },
 };
@@ -132,15 +158,14 @@ function Projects() {
           </AnimatePresence>
 
           {/* Numbered Editorial Project List */}
-          <div className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border" role="list">
+          <div
+            className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border"
+            role="list"
+          >
             {projects.map((x, i) => {
               const isSelected = active === i;
               return (
-                <div
-                  key={x.slug}
-                  role="listitem"
-                  className="relative"
-                >
+                <div key={x.slug} role="listitem" className="relative">
                   <Link
                     to="/projects/$slug"
                     params={{ slug: x.slug }}
@@ -155,7 +180,7 @@ function Projects() {
                     data-crosshair-target
                     className={`w-full text-left transition-all duration-150 flex items-center justify-between py-4 sm:py-5 px-3 sm:px-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
                       isSelected
-                        ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] my-1 -translate-y-0.5 z-10"
+                        ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] my-1 -translate-y-0.5 z-10"
                         : "border-b border-border/40 hover:bg-[#F1BE05]/10 dark:hover:bg-[#F1BE05]/15 hover:border-border/60 hover:-translate-y-0.5 text-foreground"
                     }`}
                   >
@@ -169,7 +194,9 @@ function Projects() {
                       </span>
                       <span
                         className={`font-display text-3xl sm:text-4xl md:text-[42px] leading-tight transition-all ${
-                          isSelected ? "font-bold" : "font-normal hover:translate-x-1 hover:text-foreground"
+                          isSelected
+                            ? "font-bold"
+                            : "font-normal hover:translate-x-1 hover:text-foreground"
                         }`}
                       >
                         {x.name}
@@ -179,7 +206,9 @@ function Projects() {
                     <div className="flex items-center gap-3">
                       <span
                         className={`font-mono text-xs sm:text-sm transition-colors ${
-                          isSelected ? "text-black font-bold" : "text-muted-foreground"
+                          isSelected
+                            ? "text-black font-bold"
+                            : "text-muted-foreground"
                         }`}
                       >
                         {x.year}
@@ -210,7 +239,7 @@ function Projects() {
 
         {/* Right Column: Substantial Neo-Brutalist Preview Panel */}
         <aside
-          className="sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-5 sm:p-7 shadow-[8px_8px_0px_0px_var(--border)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--border)] relative"
+          className="sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-5 sm:p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
           aria-live="polite"
         >
           {/* Panel Top Header Bar */}
@@ -238,7 +267,7 @@ function Projects() {
                 to="/projects/$slug"
                 params={{ slug: p.slug }}
                 data-crosshair-target
-                className="group/card block w-44 sm:w-52 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--border)] p-4 text-center relative transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[7px_7px_0px_0px_var(--border)] hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer"
+                className="group/card block w-44 sm:w-52 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] p-4 text-center relative transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[7px_7px_0px_0px_var(--shadow-color)] hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer"
                 title={`Explore ${p.name} case study`}
               >
                 {/* Phone Top Notch / Header Bar */}
@@ -253,7 +282,7 @@ function Projects() {
                 </div>
 
                 {/* Big Two-Letter Placeholder Display with Color Reaction on Hover */}
-                <div className="size-20 sm:size-24 mx-auto rounded-none border-2 border-border bg-surface-secondary flex items-center justify-center font-display text-5xl sm:text-6xl font-black text-foreground shadow-[inset_0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-200 group-hover/card:bg-[#F1BE05] group-hover/card:text-black group-hover/card:scale-105 group-hover/card:shadow-[3px_3px_0px_0px_var(--border)]">
+                <div className="size-20 sm:size-24 mx-auto rounded-none border-2 border-border bg-surface-secondary flex items-center justify-center font-display text-5xl sm:text-6xl font-black text-foreground shadow-[inset_0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-200 group-hover/card:bg-[#F1BE05] group-hover/card:text-black group-hover/card:scale-105 group-hover/card:shadow-[3px_3px_0px_0px_var(--shadow-color)]">
                   {p.name.slice(0, 2).toUpperCase()}
                 </div>
 
@@ -292,7 +321,7 @@ function Projects() {
               {p.stack.map((tech) => (
                 <span
                   key={tech}
-                  className="border-2 border-border bg-card px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-[2px_2px_0px_0px_var(--border)]"
+                  className="border-2 border-border bg-card px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)]"
                 >
                   {tech}
                 </span>
@@ -307,7 +336,7 @@ function Projects() {
                     initial={{ opacity: 0, scale: 0.8, y: 4 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className="absolute -top-3.5 right-4 font-hand text-sm font-bold bg-foreground text-background px-2 py-0.5 -rotate-6 z-20 pointer-events-none shadow-[2px_2px_0px_0px_var(--border)]"
+                    className="absolute -top-3.5 right-4 font-hand text-sm font-bold bg-foreground text-background px-2 py-0.5 -rotate-6 z-20 pointer-events-none shadow-[2px_2px_0px_0px_var(--shadow-color)]"
                   >
                     psst, click here!
                   </motion.span>
@@ -317,7 +346,7 @@ function Projects() {
                 to="/projects/$slug"
                 params={{ slug: p.slug }}
                 data-crosshair-target
-                className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 sm:py-3.5 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+                className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 sm:py-3.5 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
               >
                 <span>EXPLORE CASE STUDY</span>
                 <ArrowUpRight className="size-4" strokeWidth={2.5} />

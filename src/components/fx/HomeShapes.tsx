@@ -52,7 +52,8 @@ export function InteractivePinkPlanet({
     );
   };
 
-  const currentColor = PLANET_COLORS[activeColorIdx % PLANET_COLORS.length] ?? PLANET_COLORS[0]!;
+  const currentColor =
+    PLANET_COLORS[activeColorIdx % PLANET_COLORS.length] ?? PLANET_COLORS[0]!;
 
   return (
     <div className="hidden lg:flex absolute right-0 xl:right-4 top-1/2 -translate-y-1/2 z-20 items-center">
@@ -63,7 +64,7 @@ export function InteractivePinkPlanet({
             initial={{ opacity: 0, y: 6, scale: 0.8 }}
             animate={{ opacity: 1, y: -12, scale: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-card border-2 border-border px-2.5 py-0.5 font-mono text-[10px] font-black uppercase text-foreground shadow-[2.5px_2.5px_0px_0px_var(--border)] z-30 pointer-events-none"
+            className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-card border-2 border-border px-2.5 py-0.5 font-mono text-[10px] font-black uppercase text-foreground shadow-[2.5px_2.5px_0px_0px_var(--shadow-color)] z-30 pointer-events-none"
           >
             {speech}
           </motion.div>
@@ -74,7 +75,7 @@ export function InteractivePinkPlanet({
           onClick={handleBop}
           aria-label="Interactive color-changing planet. Click to cycle color and pulse grid."
           data-crosshair-target
-          className="relative block size-12 xl:size-14 rounded-full border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground transition-shadow"
+          className="relative block size-12 xl:size-14 rounded-full border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground transition-shadow"
           style={{ backgroundColor: currentColor }}
           whileHover={{ scale: 1.1, rotate: 12 }}
           whileTap={{ scale: 0.86, rotate: -15 }}
@@ -121,7 +122,7 @@ export function DraggableSticker({
       className="hidden md:flex absolute top-4 sm:top-6 right-6 xl:right-24 z-30 select-none cursor-grab active:cursor-grabbing"
       initial={{ rotate: -5 }}
     >
-      <div className="flex items-center gap-1.5 border-2 border-border bg-[#F1BE05] text-black px-3 py-1 font-mono text-xs font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--border)] active:shadow-[2px_2px_0px_0px_var(--border)] transition-shadow">
+      <div className="flex items-center gap-1.5 border-2 border-border bg-[#F1BE05] text-black px-3 py-1 font-mono text-xs font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] active:shadow-[2px_2px_0px_0px_var(--shadow-color)] transition-shadow">
         <span className="font-mono text-sm leading-none opacity-70">⠿</span>
         <span>{isDragging ? "WHEEE! ✦" : "DRAG ME"}</span>
         <span className="text-[10px]">↗</span>
@@ -153,11 +154,9 @@ export function HoverReactiveShape() {
           scale: isHovered ? 1.15 : 1,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 15 }}
-        className="size-10 xl:size-11 grid place-items-center border-2 border-border bg-[#9649CB] text-white shadow-[4px_4px_0px_0px_var(--border)] cursor-default transition-shadow"
+        className="size-10 xl:size-11 grid place-items-center border-2 border-border bg-[#9649CB] text-white shadow-[4px_4px_0px_0px_var(--shadow-color)] cursor-default transition-shadow"
       >
-        <span className="text-base font-black">
-          {isHovered ? "✦" : "✳"}
-        </span>
+        <span className="text-base font-black">{isHovered ? "✦" : "✳"}</span>
       </motion.div>
 
       {/* Unfolding Banner on Hover Only */}
@@ -169,7 +168,7 @@ export function HoverReactiveShape() {
           scale: isHovered ? 1 : 0.9,
         }}
         transition={{ duration: 0.15 }}
-        className="pointer-events-none border-2 border-border bg-card text-foreground px-2 py-0.5 font-mono text-[10.5px] font-bold uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--border)]"
+        className="pointer-events-none border-2 border-border bg-card text-foreground px-2 py-0.5 font-mono text-[10.5px] font-bold uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--shadow-color)]"
       >
         PEEK-A-BOO! 👀
       </motion.div>
