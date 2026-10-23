@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 
 export const PLANET_COLORS = [
@@ -95,12 +95,31 @@ export function InteractivePinkPlanet({
   );
 }
 
+/** Current time in Kerala as HH:MM. Empty until mount so SSR markup stays stable. */
+function useKeralaTime() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    const tick = () => setTime(fmt.format(new Date()));
+    tick();
+    const timer = window.setInterval(tick, 15_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return time;
+}
+
 /**
- * Shape 2: Draggable Neo-Brutalist Sticker
- * ("draggable across the whole homescreen")
- * - Can be dragged anywhere across the whole page
- * - Elastic spring physics, tilts and scales up with high z-index
- * - Changes text to "WHEEE! ✦" when dragging
+ * Shape 2: Draggable "open to work" tag
+ * - Can be dragged anywhere across the home screen
+ * - Carries availability, target roles and live local time in Kerala
+ * - Header strip says "WHEEE! ✦" while being dragged
  */
 export function DraggableSticker({
   containerRef,
@@ -108,6 +127,7 @@ export function DraggableSticker({
   containerRef?: React.RefObject<HTMLElement | null>;
 }) {
   const [isDragging, setIsDragging] = useState(false);
+  const time = useKeralaTime();
 
   return (
     <motion.div
@@ -115,20 +135,43 @@ export function DraggableSticker({
       dragConstraints={containerRef ?? false}
       dragElastic={0.08}
       dragMomentum={false}
-      whileDrag={{ scale: 1.15, rotate: 6, zIndex: 100 }}
-      whileHover={{ scale: 1.05 }}
+      whileDrag={{ scale: 1.08, rotate: 4, zIndex: 100 }}
+      whileHover={{ scale: 1.03 }}
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => setIsDragging(false)}
-      role="button"
-      tabIndex={0}
-      aria-label="Interactive sticker. Drag me anywhere across the screen."
-      className="hidden md:flex absolute top-4 sm:top-6 right-6 xl:right-24 z-30 select-none cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-      initial={{ rotate: -5 }}
+      role="note"
+      aria-label={`Open to work: software engineering, full-stack and web development roles. Based in Kerala${time ? `, local time ${time}` : ""}.`}
+      className="hidden md:block absolute -top-28 right-0 xl:-top-6 xl:right-auto xl:left-[calc(100%-16px)] z-30 w-52 select-none cursor-grab active:cursor-grabbing"
+      initial={{ rotate: -4 }}
     >
-      <div className="flex items-center gap-1.5 border-2 border-border bg-[#F1BE05] text-black px-3 py-1 font-mono text-xs font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] active:shadow-[2px_2px_0px_0px_var(--shadow-color)] transition-shadow">
-        <span className="font-mono text-sm leading-none opacity-70">⠿</span>
-        <span>{isDragging ? "WHEEE! ✦" : "DRAG ME"}</span>
-        <span className="text-[10px]">↗</span>
+      <div className="border-2 border-border bg-card text-foreground shadow-[4px_4px_0px_0px_var(--shadow-color)]">
+        <div className="flex items-center justify-between gap-2 border-b-2 border-border bg-[#22C55E] px-2.5 py-1 font-mono text-[11px] font-black uppercase tracking-wider text-black">
+          <span className="flex items-center gap-1.5">
+            <span className="relative flex size-2" aria-hidden="true">
+              <span className="absolute inline-flex size-full animate-ping bg-black/60" />
+              <span className="relative inline-flex size-2 bg-black" />
+            </span>
+            {isDragging ? "WHEEE! ✦" : "Open to work"}
+          </span>
+          <span className="text-sm leading-none opacity-60" aria-hidden="true">
+            ⠿
+          </span>
+        </div>
+        <dl className="space-y-1 px-2.5 py-2 font-mono text-[11px] leading-snug">
+          <div className="flex gap-2">
+            <dt className="w-10 shrink-0 text-muted-foreground">roles</dt>
+            <dd className="font-bold">SWE, full-stack, web</dd>
+          </div>
+          <div className="flex gap-2">
+            <dt className="w-10 shrink-0 text-muted-foreground">from</dt>
+            <dd className="font-bold">
+              Kerala
+              <span className="ml-1.5 tabular-nums text-muted-foreground font-normal">
+                {time ? `${time} IST` : "IST"}
+              </span>
+            </dd>
+          </div>
+        </dl>
       </div>
     </motion.div>
   );

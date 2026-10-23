@@ -1,20 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
 import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
+import { AboutLanyard } from "@/components/fx/AboutLanyard";
+import { profile } from "@/lib/portfolio";
+import { portrait, contactSheet } from "@/lib/about-media";
 import {
   ArrowUpRight,
-  FileText,
-  Code2,
-  Clock,
-  FolderGit2,
   Film,
   Camera,
   Trophy,
   Compass,
+  Instagram,
 } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
@@ -24,13 +24,13 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Background, engineering philosophy, and personal profile of Aadhith C Joseph.",
+          "Background, current work, and personal profile of Aadhith C Joseph.",
       },
       { property: "og:title", content: "About - Aadhith C J" },
       {
         property: "og:description",
         content:
-          "Software engineering, backend, cloud, and beyond-code passions.",
+          "Full-stack engineering, web development, and beyond-code passions.",
       },
       { property: "og:image", content: "/og-image.png" },
       { name: "twitter:image", content: "/og-image.png" },
@@ -40,368 +40,426 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
-const skillsPreview = [
-  "React",
-  "TypeScript",
-  "Node.js",
-  "Docker",
-  "PostgreSQL",
-  "Python",
+const tags = [
+  { label: "FULL-STACK", dot: "bg-[#FF7700]" },
+  { label: "WEB DEV", dot: "bg-[#42BFDD]" },
+  { label: "SOFTWARE ENGINEERING", dot: "bg-[#F1BE05]" },
+  { label: "VISUAL STORYTELLING", dot: "bg-[#CE4760]" },
+];
+
+// Update these whenever they stop being true; the date stamp tells visitors how fresh it is
+const nowUpdated = "Oct 2026";
+const now = [
+  {
+    key: "building",
+    color: "bg-[#F1BE05] text-black",
+    value: "This portfolio, one page at a time.",
+  },
+  {
+    key: "learning",
+    color: "bg-[#42BFDD] text-black",
+    value:
+      "DevOps: CI/CD, Docker and AWS through DevOpsHub. Terraform and Prometheus are next.",
+  },
+  {
+    key: "maintaining",
+    color: "bg-[#FF7700] text-black",
+    value:
+      "The inventory and billing app a motor-parts shop runs on every day.",
+  },
+  {
+    key: "looking for",
+    color: "bg-[#22C55E] text-black",
+    value: "Software engineering and full-stack roles.",
+  },
 ];
 
 const interests = [
   {
-    num: "01",
     tag: "MOTION",
-    title: "Videography & Motion Graphics",
+    title: "Videography & motion graphics",
     icon: Film,
-    note: "Crafting visual stories, rhythm-based pacing, and cinematic motion edits. Delivered 50+ social media videos.",
-    color: "bg-[#CE4760] text-white",
-    borderHover: "hover:border-[#CE4760]",
+    note: "Rhythm-based edits and motion graphics. 50+ social media videos delivered.",
     accent: "#CE4760",
-    quip: "frame by frame",
+    ink: "text-white",
   },
   {
-    num: "02",
     tag: "35MM",
-    title: "Street & Architecture Photography",
+    title: "Street & architecture photography",
     icon: Camera,
-    note: "Framing light, perspective, geometry, and everyday street compositions on digital and vintage glass.",
-    color: "bg-[#42BFDD] text-black",
-    borderHover: "hover:border-[#42BFDD]",
+    note: "Light, geometry and everyday street scenes, on digital and vintage glass.",
     accent: "#42BFDD",
-    quip: "35mm, not 35 tabs",
+    ink: "text-black",
   },
   {
-    num: "03",
     tag: "THE PITCH",
-    title: "Football (The Beautiful Game)",
+    title: "Football",
     icon: Trophy,
-    note: "Playing weekly and following the beautiful game with enduring passion. Tactical appreciation & team chemistry.",
-    color: "bg-[#F1BE05] text-black",
-    borderHover: "hover:border-[#F1BE05]",
+    note: "Playing weekly, and always happy to talk tactics.",
     accent: "#F1BE05",
-    quip: "yes, I'll talk tactics",
+    ink: "text-black",
   },
   {
-    num: "04",
     tag: "ON THE ROAD",
-    title: "Road Trips & Travelling",
+    title: "Road trips",
     icon: Compass,
-    note: "Exploring uncharted terrain, mountain highways, regional food cultures, and spontaneous road trips.",
-    color: "bg-[#FF7700] text-black",
-    borderHover: "hover:border-[#FF7700]",
+    note: "Mountain highways, regional food, and trips planned the night before.",
     accent: "#FF7700",
-    quip: "no GPS, just vibes",
+    ink: "text-black",
   },
 ];
 
+// Fine SVG noise, laid over photos for the same film grain the 3D card gets
+const GRAIN =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+/** The portrait in black and white with grain; falls back to a monogram if no photo is set. */
+function BwPortrait({ className = "" }: { className?: string }) {
+  if (!portrait) {
+    return (
+      <div
+        role="img"
+        aria-label={profile.name}
+        className={`grid place-items-center bg-[#FF7700] font-badge text-[#2E2D34] ${className}`}
+      >
+        AC
+      </div>
+    );
+  }
+  return (
+    <div className={`relative overflow-hidden bg-white ${className}`}>
+      <img
+        src={portrait.src}
+        alt={portrait.alt}
+        draggable={false}
+        className="size-full object-cover object-[50%_30%] grayscale contrast-125"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-35 mix-blend-multiply"
+        style={{ backgroundImage: GRAIN }}
+      />
+    </div>
+  );
+}
+
+/** Static, draggable ID card: the desktop fallback when WebGL is unavailable. */
+function IdCard() {
+  return (
+    <motion.figure
+      drag
+      dragSnapToOrigin
+      dragElastic={0.2}
+      whileDrag={{ rotate: -2, scale: 1.04, cursor: "grabbing" }}
+      initial={{ rotate: 4 }}
+      className="relative w-52 shrink-0 cursor-grab select-none border-2 border-border bg-[#FFFDF7] text-[#2E2D34] shadow-[6px_6px_0px_0px_var(--shadow-color)]"
+    >
+      <div className="flex items-center justify-between border-b-2 border-border bg-[#F1BE05] px-2.5 py-1.5 text-black">
+        <span className="font-badge text-xs">
+          ACJ<span className="text-[#FF3C38]">_</span>
+        </span>
+        <span className="font-sora text-[10px] font-semibold">ID // 2026</span>
+      </div>
+      <BwPortrait className="m-3 aspect-[4/5] border-2 border-border shadow-[4px_4px_0px_0px_#2E2D34]" />
+      <figcaption className="px-3 pb-2">
+        <p className="font-badge text-base leading-tight">{profile.name}</p>
+        <p className="mt-1 font-sora text-[11px] font-semibold">
+          Full-stack engineer
+        </p>
+        <p className="font-sora text-[10px] text-[#605D68]">Kerala, India</p>
+      </figcaption>
+      <div className="flex items-center gap-1.5 border-t-2 border-border bg-[#22C55E] px-3 py-1.5 font-badge text-[11px] text-black">
+        <span className="size-2 bg-black" aria-hidden="true" />
+        OPEN TO WORK
+      </div>
+    </motion.figure>
+  );
+}
+
+/** Compact ID shown on phones and tablets, where the hanging card is switched off. */
+function IdStrip() {
+  return (
+    <div className="flex w-fit max-w-full -rotate-1 items-stretch border-2 border-border bg-[#FFFDF7] text-[#2E2D34] shadow-[4px_4px_0px_0px_var(--shadow-color)]">
+      <BwPortrait className="w-20 shrink-0 border-r-2 border-border" />
+      <div className="flex min-w-0 flex-col justify-center gap-0.5 px-3 py-2.5">
+        <p className="font-badge text-sm leading-tight">{profile.name}</p>
+        <p className="font-sora text-[11px] font-semibold">
+          Full-stack engineer, Kerala
+        </p>
+        <p className="mt-1 flex w-fit items-center gap-1.5 border-2 border-border bg-[#22C55E] px-1.5 py-0.5 font-badge text-[10px] text-black">
+          <span className="size-1.5 bg-black" aria-hidden="true" />
+          OPEN TO WORK
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function About() {
   const [accent, setAccent] = useState("#F1BE05");
-  const [picked, setPicked] = useState(false);
-  const pick = (color: string) => {
-    setAccent(color);
-    setPicked(true);
-  };
 
   return (
     <div className="min-h-screen bg-background overflow-x-clip">
       <PageBackdrop accent={accent} />
       <SiteHeader />
-      <main className="page-enter relative z-10 mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
-        {/* Editorial Introduction */}
-        <p className="label-mono">
-          <DecryptedText
-            text="# README.md // PROFILE"
-            speed={25}
-            sequential
-            animateOn="view"
-            encryptedClassName="text-lime"
-          />
-        </p>
-
-        <h1 className="mt-4 break-words font-display text-5xl sm:text-6xl md:text-7xl">
-          Hi, I'm <em className="italic text-lime font-normal">Aadhith CJ</em>.
-        </h1>
-
-        <p className="mt-6 text-lg sm:text-xl leading-relaxed text-foreground/90 font-sans">
-          Computer Science graduate from Kerala. I build full-stack
-          applications, experiment with AI, and enjoy making the complicated
-          stuff work.
-        </p>
-
-        {/* Tactile Expertise Tags */}
-        <div className="mt-6 flex flex-wrap gap-2 pt-1">
-          {[
-            { label: "FULL-STACK", dot: "bg-[#FF7700]" },
-            { label: "DEVOPS", dot: "bg-[#42BFDD]" },
-            { label: "APPLIED AI", dot: "bg-[#F1BE05]" },
-            { label: "VISUAL STORYTELLING", dot: "bg-[#CE4760]" },
-          ].map((tag) => (
-            <span
-              key={tag.label}
-              className="inline-flex items-center gap-2 px-3 py-1 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] bg-card text-foreground"
-            >
-              <span className={`size-1.5 rounded-full ${tag.dot}`} />
-              {tag.label}
-            </span>
-          ))}
-        </div>
-
-        {/* Section 1: Explore Portfolio (Playful Control Panel) */}
-        <div className="relative flex items-center justify-between mb-4 mt-16 sm:mt-20">
-          <h2 className="label-mono">
-            <DecryptedText
-              text="## explore portfolio // control panel"
-              speed={25}
-              sequential
-              animateOn="view"
-              encryptedClassName="text-lime"
-            />
-          </h2>
-          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest hidden sm:inline">
-            [3 INTERACTIVE MODULES]
-          </span>
-
-          <AnimatePresence>
-            {!picked && (
-              <motion.div
-                exit={{ opacity: 0 }}
-                className="hidden sm:block absolute right-4 sm:right-36 -top-9 w-36 pointer-events-none z-20"
-              >
-                <HandNote flip rotate={4}>
-                  pick a door
-                </HandNote>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        <div className="grid gap-3.5 border-t-2 border-border pt-4">
-          {/* Card 01: Featured Projects */}
-          <Link
-            to="/projects"
-            data-crosshair-target
-            onMouseEnter={() => pick("#F1BE05")}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:-translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:border-[#F1BE05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-          >
-            <div className="flex items-start sm:items-center gap-3.5">
-              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#F1BE05] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
-                <FolderGit2 className="size-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-muted-foreground">
-                    01 //
-                  </span>
-                  <h3 className="font-display text-xl text-foreground font-bold group-hover:text-black dark:group-hover:text-white transition-colors">
-                    Featured Projects
-                  </h3>
-                </div>
-                <p className="font-mono text-xs text-muted-foreground mt-0.5">
-                  Retina, DevOpsHub, Inventory System, Roots & CV Management.
-                </p>
-              </div>
-            </div>
-            <div className="self-end sm:self-auto shrink-0">
-              <span className="inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground group-hover:bg-[#F1BE05] group-hover:text-black group-hover:border-black transition-colors">
-                OPEN PROJECTS ↗
-              </span>
-            </div>
-          </Link>
-
-          {/* Card 02: Technical Stack */}
-          <Link
-            to="/skills"
-            data-crosshair-target
-            onMouseEnter={() => pick("#42BFDD")}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:border-[#42BFDD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-          >
-            <div className="flex items-start sm:items-center gap-3.5">
-              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#42BFDD] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)] group-hover:-rotate-12 transition-transform duration-200">
-                <Code2 className="size-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-muted-foreground">
-                    02 //
-                  </span>
-                  <h3 className="font-display text-xl text-foreground font-bold group-hover:text-black dark:group-hover:text-white transition-colors">
-                    Technical Stack
-                  </h3>
-                </div>
-                {/* Micro tech preview tags */}
-                <div className="mt-1.5 flex flex-wrap gap-1">
-                  {skillsPreview.map((skill) => (
-                    <span
-                      key={skill}
-                      className="border border-border/60 bg-surface-secondary px-1.5 py-0.5 font-mono text-[10px] text-foreground/80"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="self-end sm:self-auto shrink-0">
-              <span className="inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground group-hover:bg-[#42BFDD] group-hover:text-black group-hover:border-black transition-colors">
-                EXPLORE STACK ↗
-              </span>
-            </div>
-          </Link>
-
-          {/* Card 03: Timeline & Milestones */}
-          <Link
-            to="/log"
-            data-crosshair-target
-            onMouseEnter={() => pick("#FF7700")}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] bg-card p-4 sm:p-5 transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:border-[#FF7700] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-          >
-            <div className="flex items-start sm:items-center gap-3.5">
-              <div className="grid size-10 shrink-0 place-items-center border-2 border-border bg-[#FF7700] text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
-                <Clock className="size-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-muted-foreground">
-                    03 //
-                  </span>
-                  <h3 className="font-display text-xl text-foreground font-bold group-hover:text-black dark:group-hover:text-white transition-colors">
-                    Timeline & Milestones
-                  </h3>
-                  {/* Small animated timeline badge */}
-                  <span className="hidden sm:inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2 py-0.5 font-mono text-[10px] font-bold text-foreground">
-                    <span className="size-1.5 rounded-full bg-[#FF7700]" />
-                    2022 — 2026
-                  </span>
-                </div>
-                <p className="font-mono text-xs text-muted-foreground mt-0.5">
-                  B.Tech degree, internships, leadership roles & hackathons.
-                </p>
-              </div>
-            </div>
-            <div className="self-end sm:self-auto shrink-0">
-              <span className="inline-flex items-center gap-1.5 border border-border bg-surface-secondary px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-foreground group-hover:bg-[#FF7700] group-hover:text-black group-hover:border-black transition-colors">
-                VIEW TIMELINE ↗
-              </span>
-            </div>
-          </Link>
-        </div>
-
-        {/* Section 2: Dedicated Neo-Brutalist Resume Callout with popup hover */}
-        <div className="mt-8 border-2 border-border shadow-[5px_5px_0px_0px_var(--shadow-color)] bg-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative overflow-hidden transition-all duration-150 hover:-translate-y-1 hover:shadow-[7px_7px_0px_0px_var(--shadow-color)] hover:border-[#F1BE05] group">
-          {/* Subtle decorative corner accent */}
-          <div className="absolute top-0 right-0 bg-[#F1BE05] text-black font-mono text-[9px] font-black uppercase px-2 py-0.5 border-b-2 border-l-2 border-border">
-            PDF // CURRICULUM VITAE
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="grid size-11 shrink-0 place-items-center border-2 border-border bg-foreground text-background shadow-[3px_3px_0px_0px_var(--shadow-color)]">
-              <FileText className="size-5" />
-            </div>
-            <div>
-              <p className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
-                NEED THE SHORT VERSION?
-              </p>
-              <p className="font-mono text-xs text-muted-foreground mt-1 max-w-md">
-                Education, experience, and projects — formatted in one clean,
-                printable single-page PDF.
-              </p>
-            </div>
-          </div>
-
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noreferrer"
-            data-crosshair-target
-            className="inline-flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black px-5 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--shadow-color)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground shrink-0"
-          >
-            <span>GET MY RESUME</span>
-            <ArrowUpRight className="size-4" />
-          </a>
-        </div>
-
-        {/* Section 3: Beyond Code (Collection of Interests) */}
-        <div className="mt-10 sm:mt-12 flex items-center justify-between mb-4">
-          <h2 className="label-mono">
-            <DecryptedText
-              text="## beyond code // personal archive"
-              speed={25}
-              sequential
-              animateOn="view"
-              encryptedClassName="text-lime"
-            />
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 border-t-2 border-border pt-4">
-          {interests.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.title}
-                data-crosshair-target
-                onMouseEnter={() => setAccent(item.accent)}
-                className={`group relative flex flex-col justify-between border-2 border-border bg-card p-4 sm:p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all duration-150 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${item.borderHover}`}
-              >
-                <span
-                  aria-hidden="true"
-                  className={`pointer-events-none absolute -top-3 right-3 rotate-3 border-2 border-border px-2 py-0.5 font-hand text-base shadow-[2px_2px_0px_0px_var(--shadow-color)] opacity-0 translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:-translate-y-0.5 ${item.color}`}
-                >
-                  {item.quip}
-                </span>
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="font-mono text-[11px] font-bold text-muted-foreground">
-                      {item.num} // {item.tag}
-                    </span>
-                    <div
-                      className={`grid size-8 place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] transition-transform duration-200 group-hover:rotate-6 ${item.color}`}
-                    >
-                      <Icon className="size-4" />
-                    </div>
-                  </div>
-                  <h3 className="font-display text-lg sm:text-xl text-foreground group-hover:text-lime transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="font-mono text-xs leading-relaxed text-muted-foreground mt-2">
-                    {item.note}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Section 5: Deliberate Terminal Ending */}
-        <div className="mt-16 sm:mt-20 border-2 border-dashed border-border/60 p-6 sm:p-8 bg-card/60 text-center flex flex-col items-center justify-center gap-3 shadow-xs">
-          <div className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            <span className="size-2 rounded-full bg-status-green" />
-            END OF README.md // READY TO COLLABORATE?
-          </div>
-          <p className="font-mono text-xs text-muted-foreground max-w-md">
-            Have an open software engineering role, contract project, or
-            technical idea? Let's build something practical and reliable.
+      <div className="relative">
+        {/* Desktop: the 3D card hangs in its own full-width layer above the content, so
+            it can be dragged anywhere in this band without clipping. Click-through. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 hidden h-[760px] lg:block">
+          <p className="sr-only">
+            ID card for {profile.name}, full-stack engineer, open to work. Drag
+            it around, or click it to flip it over for contact details.
           </p>
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              to="/contact"
-              data-crosshair-target
-              className="inline-flex items-center gap-2 border-2 border-border bg-foreground text-background px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
-            >
-              GET IN TOUCH <span>→</span>
-            </Link>
-            <Link
-              to="/"
-              data-crosshair-target
-              className="inline-flex items-center gap-2 border-2 border-border bg-card text-foreground px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:bg-surface-secondary transition-all"
-            >
-              RETURN HOME
-            </Link>
-          </div>
+          <AboutLanyard
+            portraitSrc={portrait?.src ?? null}
+            fallback={
+              <div className="pointer-events-auto absolute left-[73%] top-24 -translate-x-1/2">
+                <IdCard />
+              </div>
+            }
+          />
+          <HandNote
+            flip
+            rotate={5}
+            className="absolute left-[calc(73%+120px)] top-36 hidden w-36 xl:block"
+          >
+            drag it. click it.
+          </HandNote>
         </div>
-      </main>
+
+        <main className="page-enter relative z-10 mx-auto max-w-4xl px-5 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12">
+          <div className="min-w-0">
+            <p className="label-mono">
+              <DecryptedText
+                text="# README.md // PROFILE"
+                speed={25}
+                sequential
+                animateOn="view"
+                encryptedClassName="text-lime"
+              />
+            </p>
+
+            <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl">
+              Hi, I'm{" "}
+              <em className="italic whitespace-nowrap text-lime font-normal">
+                Aadhith CJ
+              </em>
+              .
+            </h1>
+
+            <p className="mt-5 max-w-xl lg:max-w-lg text-lg sm:text-xl leading-relaxed text-foreground/90 font-sans">
+              Computer Science graduate from Kerala. I build full-stack
+              applications, experiment with AI, and enjoy making the complicated
+              stuff work.
+            </p>
+
+            <div className="mt-5 flex max-w-xl flex-wrap gap-2 lg:max-w-lg">
+              {tags.map((tag) => (
+                <span
+                  key={tag.label}
+                  className="inline-flex items-center gap-2 px-3 py-1 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] bg-card text-foreground"
+                >
+                  <span className={`size-1.5 ${tag.dot}`} />
+                  {tag.label}
+                </span>
+              ))}
+            </div>
+
+            {/* Below desktop the hanging card is off; a compact ID strip stands in */}
+            <div className="mt-6 lg:hidden">
+              <IdStrip />
+            </div>
+          </div>
+
+          {/* Now: what is true this month */}
+          <section aria-labelledby="now-heading" className="mt-12 sm:mt-14">
+            <div className="mb-4 flex items-baseline justify-between gap-4">
+              <h2 id="now-heading" className="label-mono">
+                <DecryptedText
+                  text="## now"
+                  speed={25}
+                  sequential
+                  animateOn="view"
+                  encryptedClassName="text-lime"
+                />
+              </h2>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                updated {nowUpdated}
+              </span>
+            </div>
+
+            <dl className="border-2 border-border bg-card shadow-[5px_5px_0px_0px_var(--shadow-color)]">
+              {now.map((row) => (
+                <div
+                  key={row.key}
+                  className="grid gap-2 border-b-2 border-border/30 px-4 py-3.5 last:border-b-0 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:items-baseline sm:gap-5 sm:px-5"
+                >
+                  <dt>
+                    <span
+                      className={`inline-block border-2 border-border px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-wider ${row.color}`}
+                    >
+                      {row.key}
+                    </span>
+                  </dt>
+                  <dd className="font-sans text-base leading-relaxed text-foreground">
+                    {row.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          {/* Beyond code: a contact sheet, with the real work on Instagram */}
+          <section aria-labelledby="beyond-heading" className="mt-12 sm:mt-14">
+            <h2 id="beyond-heading" className="label-mono mb-4">
+              <DecryptedText
+                text="## beyond code // contact sheet"
+                speed={25}
+                sequential
+                animateOn="view"
+                encryptedClassName="text-lime"
+              />
+            </h2>
+
+            <div
+              className="border-2 border-border bg-[#2E2D34] px-3 py-5 shadow-[5px_5px_0px_0px_var(--shadow-color)] sm:px-4"
+              style={{
+                // Sprocket holes along the top and bottom edges of the strip
+                backgroundImage:
+                  "repeating-linear-gradient(90deg, #F7F0D9 0 8px, transparent 8px 22px), repeating-linear-gradient(90deg, #F7F0D9 0 8px, transparent 8px 22px)",
+                backgroundSize: "100% 6px, 100% 6px",
+                backgroundPosition: "11px 6px, 11px calc(100% - 6px)",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {contactSheet.map((shot, i) => (
+                  <li key={shot.src} className="group">
+                    <div className="relative aspect-square overflow-hidden border-2 border-[#F7F0D9] bg-black transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:rotate-1">
+                      <img
+                        src={shot.src}
+                        alt={shot.alt}
+                        loading="lazy"
+                        decoding="async"
+                        width={400}
+                        height={400}
+                        draggable={false}
+                        className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        style={{ objectPosition: shot.focus ?? "50% 50%" }}
+                      />
+                    </div>
+                    {/* Film edge print: frame number and a made-up stock name */}
+                    <p className="mt-1.5 flex justify-between font-mono text-[9px] font-bold uppercase tracking-wider text-[#F1BE05]">
+                      <span>▸ {String(i + 1).padStart(2, "0")}A</span>
+                      <span>ACJ 400</span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <ul className="mt-6 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+              {interests.map((item) => (
+                <li
+                  key={item.tag}
+                  className="flex gap-3"
+                  onMouseEnter={() => setAccent(item.accent)}
+                >
+                  <span
+                    className={`grid size-8 shrink-0 place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] ${item.ink}`}
+                    style={{ background: item.accent }}
+                    aria-hidden="true"
+                  >
+                    <item.icon className="size-4" strokeWidth={2.25} />
+                  </span>
+                  <div>
+                    <h3 className="font-display text-xl leading-tight text-foreground">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 font-mono text-xs leading-relaxed text-muted-foreground">
+                      {item.note}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="relative mt-7 flex flex-wrap items-center gap-4">
+              <a
+                href={profile.instagram}
+                target="_blank"
+                rel="noreferrer"
+                data-crosshair-target
+                className="inline-flex items-center gap-2.5 border-2 border-border bg-[#CE4760] px-4 py-2.5 font-mono text-xs font-black uppercase tracking-wider text-white shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2"
+              >
+                <Instagram className="size-4" aria-hidden="true" />
+                {profile.instagramHandle}
+                <ArrowUpRight className="size-4" aria-hidden="true" />
+              </a>
+              <p className="font-hand text-xl text-muted-foreground">
+                the edits and photos live here
+              </p>
+            </div>
+          </section>
+
+          {/* Closing call to action, with the resume and the rest of the site */}
+          <div className="relative mt-12 sm:mt-14 border-2 border-border bg-card p-6 sm:p-8 shadow-[5px_5px_0px_0px_var(--shadow-color)]">
+            <HandNote
+              flip
+              rotate={6}
+              className="hidden sm:block absolute -top-14 right-6 w-40"
+            >
+              your move
+            </HandNote>
+            <h2 className="font-display text-3xl sm:text-4xl text-foreground">
+              Got a role or a project in mind?
+            </h2>
+            <p className="mt-2 max-w-md font-mono text-xs leading-relaxed text-muted-foreground">
+              I'm looking for software engineering and full-stack work. The
+              resume has the short version.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/contact"
+                data-crosshair-target
+                className="inline-flex items-center gap-2 border-2 border-border bg-[#F1BE05] px-5 py-2.5 font-mono text-xs font-black uppercase tracking-wider text-black shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2"
+              >
+                Get in touch <span aria-hidden="true">→</span>
+              </Link>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                data-crosshair-target
+                className="inline-flex items-center gap-2 border-2 border-border bg-card px-5 py-2.5 font-mono text-xs font-black uppercase tracking-wider text-foreground shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2"
+              >
+                Resume (PDF){" "}
+                <ArrowUpRight className="size-4" aria-hidden="true" />
+              </a>
+            </div>
+            <p className="mt-6 border-t-2 border-dashed border-border/50 pt-4 font-mono text-xs text-muted-foreground">
+              Or keep browsing:{" "}
+              {[
+                { to: "/projects", label: "projects" },
+                { to: "/skills", label: "skills" },
+                { to: "/log", label: "the log" },
+              ].map((l, i) => (
+                <span key={l.to}>
+                  {i > 0 && ", "}
+                  <Link
+                    to={l.to}
+                    data-crosshair-target
+                    className="font-bold text-foreground underline decoration-2 underline-offset-4 decoration-[#F1BE05] hover:bg-[#F1BE05] hover:text-black"
+                  >
+                    {l.label}
+                  </Link>
+                </span>
+              ))}
+              .
+            </p>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

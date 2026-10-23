@@ -5,6 +5,8 @@ export const profile = {
   email: "aadhithcj9@gmail.com",
   github: "https://github.com/aadhithcj",
   linkedin: "https://linkedin.com/in/aadhithcj",
+  instagram: "https://instagram.com/aaaaadhith",
+  instagramHandle: "@aaaaadhith",
 };
 
 export type Project = {

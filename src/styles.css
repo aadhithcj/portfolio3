@@ -20,6 +20,9 @@
   --font-sans: "Space Grotesk", "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-hand: "Caveat Brush", cursive;
+  /* ID card faces (About page) */
+  --font-badge: "Archivo Black", "Arial Black", sans-serif;
+  --font-sora: Sora, ui-sans-serif, system-ui, sans-serif;
   --color-lime: var(--lime);
   --color-surface: var(--surface);
   --color-surface-secondary: var(--surface-secondary);
@@ -331,6 +334,16 @@
 
 @utility animate-nb-marquee {
   animation: nb-marquee 25s linear infinite;
+}
+
+@keyframes nb-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@utility nb-blink {
+  animation: nb-blink 1s steps(1) infinite;
 }
 
 @keyframes page-in {

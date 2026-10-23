@@ -2,10 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useRef } from "react";
 import DotGrid from "@/components/fx/DotGrid";
 import TechText from "@/components/fx/TechText";
-import TextType from "@/components/fx/TextType";
 import DecryptedText from "@/components/fx/DecryptedText";
 import { useTheme } from "@/hooks/use-theme";
-import { profile } from "@/lib/portfolio";
+import { profile, projects } from "@/lib/portfolio";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
@@ -22,13 +21,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Portfolio of Aadhith C Joseph: full-stack, DevOps and applied AI projects.",
+          "Portfolio of Aadhith C Joseph: full-stack and web development projects.",
       },
       { property: "og:title", content: "Aadhith C J - Software Engineer" },
       {
         property: "og:description",
-        content:
-          "Full-stack, DevOps and applied AI projects by Aadhith C Joseph.",
+        content: "Full-stack and web projects by Aadhith C Joseph.",
       },
       { property: "og:image", content: "/og-image.png" },
       { name: "twitter:image", content: "/og-image.png" },
@@ -43,7 +41,7 @@ const nav = [
     to: "/about",
     n: "01",
     label: "About",
-    note: "Bio",
+    note: "Bio & resume",
     color: "#FF7700",
     badgeClass: "bg-[#FF7700] text-black border-foreground",
     activeCardClass: "bg-[#FF7700] text-black",
@@ -54,7 +52,7 @@ const nav = [
     to: "/projects",
     n: "02",
     label: "Projects",
-    note: "Selected work",
+    note: `${projects.length} case studies`,
     color: "#F1BE05",
     badgeClass: "bg-[#F1BE05] text-black border-foreground",
     activeCardClass: "bg-[#F1BE05] text-black",
@@ -65,7 +63,7 @@ const nav = [
     to: "/skills",
     n: "03",
     label: "Skills",
-    note: "Tech & tools",
+    note: "Python → Docker",
     color: "#42BFDD",
     badgeClass: "bg-[#42BFDD] text-black border-foreground",
     activeCardClass: "bg-[#42BFDD] text-black",
@@ -76,7 +74,7 @@ const nav = [
     to: "/log",
     n: "04",
     label: "Log",
-    note: "Timeline",
+    note: "2021 → now",
     color: "#9649CB",
     badgeClass: "bg-[#9649CB] text-white border-foreground",
     activeCardClass: "bg-[#9649CB] text-white",
@@ -87,7 +85,7 @@ const nav = [
     to: "/contact",
     n: "05",
     label: "Contact",
-    note: "Say hello",
+    note: "Form or email",
     color: "#FF3C38",
     badgeClass: "bg-[#FF3C38] text-white border-foreground",
     activeCardClass: "bg-[#FF3C38] text-white",
@@ -179,9 +177,6 @@ function Index() {
           {/* New Shape 1: Hover-Only Reactive Prism ("one only react on hover") */}
           <HoverReactiveShape />
 
-          {/* New Shape 2: Draggable Tactile Sticker ("draggable across the whole homescreen") */}
-          <DraggableSticker containerRef={mainRef} />
-
           <div className="w-full max-w-4xl flex flex-col items-center text-center">
             {/* Mobile Pulse Trigger Button (only visible on mobile where desktop left square is hidden) */}
             <div className="lg:hidden -mt-2 mb-3 flex items-center justify-center">
@@ -199,6 +194,8 @@ function Index() {
 
             {/* Centered Aadhith CJ. TechText - shifted upwards */}
             <div className="relative -mt-1 sm:-mt-2 md:-mt-3 h-24 sm:h-28 md:h-32 lg:h-36 w-full max-w-3xl mx-auto">
+              {/* Open-to-work tag overlaps the tail of the name, hinting it can be moved */}
+              <DraggableSticker containerRef={mainRef} />
               <TechText
                 key={isDark ? "dark" : "light"}
                 text="Aadhith CJ."
@@ -235,30 +232,25 @@ function Index() {
                 <div className="absolute -top-2.5 left-3.5 bg-foreground text-background px-2 py-0.5 font-mono text-[9px] font-black uppercase tracking-widest border border-border">
                   SYS // BIO
                 </div>
-                <div className="grid grid-cols-1">
-                  {/* Invisible phantom text that reserves the full multi-line dimensions immediately */}
+                {/* Shown instantly: this is the line a recruiter needs first */}
+                <p className="font-mono text-sm leading-relaxed text-foreground/90 sm:text-base text-center">
+                  Full-stack engineer and web developer. Computer Science
+                  graduate from Kerala.
                   <span
                     aria-hidden="true"
-                    className="col-start-1 row-start-1 invisible font-mono text-sm leading-relaxed sm:text-base select-none pointer-events-none text-center"
+                    className="nb-blink ml-0.5 font-bold text-lime"
                   >
-                    Full-stack, DevOps and applied AI. Computer Science graduate
-                    from Kerala.
+                    |
                   </span>
-                  {/* Animated typing text aligned to the exact same cell */}
-                  <div className="col-start-1 row-start-1">
-                    <TextType
-                      text="Full-stack, DevOps and applied AI. Computer Science graduate from Kerala."
-                      typingSpeed={10}
-                      initialDelay={80}
-                      pauseDuration={4000}
-                      loop={false}
-                      showCursor={true}
-                      cursorCharacter="|"
-                      cursorClassName="text-lime font-bold"
-                      className="block w-full font-mono text-sm leading-relaxed text-foreground/90 sm:text-base text-center"
-                    />
-                  </div>
-                </div>
+                </p>
+                {/* Availability lives on the draggable tag on desktop; phones get it here */}
+                <p className="md:hidden mt-2 pt-2 border-t border-dashed border-border/60 flex items-center justify-center gap-2 font-mono text-xs font-bold text-foreground">
+                  <span
+                    className="size-2 bg-[#22C55E] border border-border"
+                    aria-hidden="true"
+                  />
+                  Open to SWE &amp; full-stack roles
+                </p>
               </div>
             </div>
 
@@ -340,7 +332,7 @@ function Index() {
                 </div>
                 <div className="flex items-center justify-end gap-1.5 ml-auto text-right shrink-0">
                   <span
-                    className={`hidden sm:inline label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase transition-colors whitespace-nowrap ${
+                    className={`hidden xl:inline label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase transition-colors whitespace-nowrap ${
                       isCardActive
                         ? "text-inherit"
                         : "text-muted-foreground group-hover:text-inherit group-active:text-inherit group-focus-visible:text-inherit"

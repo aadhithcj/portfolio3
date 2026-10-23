@@ -141,7 +141,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           name: "description",
           content:
-            "Portfolio of software engineer Aadhith C J: full-stack, DevOps and applied AI.",
+            "Portfolio of software engineer Aadhith C J: full-stack and web development.",
         },
         { name: "author", content: "Aadhith C J" },
         { property: "og:site_name", content: "Aadhith C J" },
@@ -152,7 +152,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           property: "og:description",
           content:
-            "Portfolio of software engineer Aadhith C Joseph: full-stack, DevOps and applied AI.",
+            "Portfolio of software engineer Aadhith C Joseph: full-stack and web development.",
         },
         { property: "og:type", content: "website" },
         { property: "og:image", content: "/og-image.png" },
@@ -169,7 +169,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           name: "twitter:description",
           content:
-            "Portfolio of software engineer Aadhith C Joseph: full-stack, DevOps and applied AI.",
+            "Portfolio of software engineer Aadhith C Joseph: full-stack and web development.",
         },
         { name: "twitter:image", content: "/og-image.png" },
       ],
@@ -182,7 +182,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Geist:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
         },
         {
           rel: "stylesheet",
