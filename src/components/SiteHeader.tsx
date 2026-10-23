@@ -215,12 +215,20 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
             setAcjActive(true);
             setTimeout(() => setAcjActive(false), 250);
           }}
-          className={`border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-150 flex items-center shrink-0 cursor-pointer hover:bg-[#F1BE05] hover:text-black active:bg-[#F1BE05] active:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${acjActive
-              ? "bg-[#F1BE05] text-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]"
+          className={`group border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-150 flex items-center shrink-0 cursor-pointer hover:bg-[#22C55E] hover:text-black active:bg-[#22C55E] active:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${acjActive
+              ? "bg-[#22C55E] text-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]"
               : "text-foreground"
             }`}
         >
-          ACJ<span className="text-[#FF3C38]">_</span>
+          ACJ
+          {/* Red cursor turns ink on the green fill, where red would vanish */}
+          <span
+            className={`group-hover:text-black group-active:text-black ${
+              acjActive ? "text-black" : "text-[#FF3C38]"
+            }`}
+          >
+            _
+          </span>
         </Link>
 
         {/* Left Spacer */}
@@ -258,7 +266,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="border-l border-border/40 px-3 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center"
+            className="border-l border-border/40 px-3 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-[#9649CB] hover:text-white transition-colors flex items-center"
           >
             GITHUB
           </a>
@@ -267,7 +275,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="border-l border-border/40 px-3 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-surface-secondary transition-colors flex items-center"
+            className="border-l border-border/40 px-3 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground hover:bg-[#42BFDD] hover:text-black transition-colors flex items-center"
           >
             LINKEDIN
           </a>

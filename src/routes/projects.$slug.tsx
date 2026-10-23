@@ -1,12 +1,15 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useEffect } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
-import TextType from "@/components/fx/TextType";
-import DecryptedText from "@/components/fx/DecryptedText";
+import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { projects, setLastActiveProjectSlug } from "@/lib/portfolio";
 import { CaseStudy } from "@/components/projects/CaseStudy";
 import { caseData } from "@/lib/case-data";
-import { ProjectArchiveNav } from "@/components/projects/ProjectArchiveNav";
 
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => {
@@ -46,6 +49,11 @@ export const Route = createFileRoute("/projects/$slug")({
 
 function ProjectPage() {
   const { project, index } = Route.useLoaderData();
+  const navigate = useNavigate();
+
+  const total = projects.length;
+  const previous = projects[(index - 1 + total) % total];
+  const next = projects[(index + 1) % total];
 
   useEffect(() => {
     if (project?.slug) {
@@ -53,194 +61,69 @@ function ProjectPage() {
     }
   }, [project?.slug]);
 
-  if (!project) return null;
+  // Arrow keys step through case studies, unless the visitor is typing or using a modifier
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+      const el = e.target instanceof Element ? e.target : null;
+      if (
+        el?.closest(
+          "input, textarea, select, [contenteditable=true], [role=dialog]"
+        )
+      )
+        return;
+      const target =
+        e.key === "ArrowLeft" ? previous : e.key === "ArrowRight" ? next : null;
+      if (!target) return;
+      e.preventDefault();
+      navigate({ to: "/projects/$slug", params: { slug: target.slug } });
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [previous, next, navigate]);
 
-  const p = project;
-  const total = projects.length;
-  const previous = projects[(index - 1 + total) % total];
-  const next = projects[(index + 1) % total];
-
-  if (!previous || !next) return null;
-
-  const data = caseData[p.slug];
+  const data = project ? caseData[project.slug] : undefined;
+  if (!project || !data || !previous || !next) return null;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background overflow-x-clip relative">
+      <PageBackdrop accent={data.accent} />
       <SiteHeader />
 
-      <main className="page-enter mx-auto max-w-5xl px-5 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12">
-        <div className="mb-6">
+      <main
+        key={project.slug}
+        className="page-enter relative z-10 mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12"
+      >
+        <div className="mb-8 flex items-center justify-between gap-4">
           <Link
             to="/projects"
             data-crosshair-target
-            className="cursor-target label-mono inline-flex min-h-9 items-center gap-2 transition-colors hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-4"
+            className="label-mono inline-flex min-h-9 items-center gap-2 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
           >
             <span aria-hidden="true">←</span>
             all projects
           </Link>
+          <p className="hidden sm:flex items-center gap-1.5 label-mono">
+            <kbd className="border-2 border-border bg-card px-1.5 py-0.5 font-mono text-[10px] font-bold text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)]">
+              ←
+            </kbd>
+            <kbd className="border-2 border-border bg-card px-1.5 py-0.5 font-mono text-[10px] font-bold text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)]">
+              →
+            </kbd>
+            <span className="ml-1">
+              {String(index + 1).padStart(2, "0")} /{" "}
+              {String(total).padStart(2, "0")}
+            </span>
+          </p>
         </div>
 
-        {data ? (
-          <CaseStudy data={data} project={p} previous={previous} next={next} />
-        ) : (
-          <>
-            {/* Project introduction */}
-            <header className="mt-10 border-b border-line pb-10 sm:mt-12 sm:pb-14">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <p className="label-mono text-lime">
-                  <DecryptedText
-                    text={`project / ${String(index + 1).padStart(2, "0")}`}
-                    speed={25}
-                    sequential
-                    animateOn="view"
-                    encryptedClassName="text-lime"
-                  />
-                </p>
-
-                <span className="text-muted-foreground/60" aria-hidden="true">
-                  /
-                </span>
-
-                <p className="label-mono">{p.year}</p>
-
-                <span className="text-muted-foreground/60" aria-hidden="true">
-                  /
-                </span>
-
-                <p className="label-mono text-muted-foreground">{p.category}</p>
-              </div>
-
-              <h1 className="mt-5 break-words font-display text-6xl leading-[0.95] sm:text-7xl md:text-9xl">
-                {p.name}
-              </h1>
-
-              <div className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-                <TextType
-                  key={p.slug}
-                  text={p.tagline}
-                  typingSpeed={14}
-                  loop={false}
-                  showCursor={true}
-                  cursorCharacter="|"
-                />
-              </div>
-
-              {(p.repoUrl || p.demoUrl) && (
-                <div className="mt-7 flex flex-wrap gap-3">
-                  {p.repoUrl && (
-                    <a
-                      href={p.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-crosshair-target
-                      className="inline-flex min-h-11 items-center justify-center border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-lime hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-4"
-                    >
-                      source code <span aria-hidden="true">↗</span>
-                    </a>
-                  )}
-
-                  {p.demoUrl && (
-                    <a
-                      href={p.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-crosshair-target
-                      className="inline-flex min-h-11 items-center justify-center border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-lime hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-4"
-                    >
-                      live demo <span aria-hidden="true">↗</span>
-                    </a>
-                  )}
-                </div>
-              )}
-            </header>
-
-            {/* Technologies and contributions */}
-            <section
-              aria-label="Project details"
-              className="grid gap-10 border-b border-line py-9 sm:py-10 md:grid-cols-[14rem_minmax(0,1fr)] md:gap-12"
-            >
-              <div>
-                <h2 className="label-mono mb-4">technologies</h2>
-
-                <ul
-                  className="flex flex-wrap gap-2"
-                  aria-label="Technology stack"
-                >
-                  {p.stack.map((technology) => (
-                    <li
-                      key={technology}
-                      className="rounded-full border border-line bg-surface/60 px-3 py-2 font-mono text-xs text-foreground/90"
-                    >
-                      {technology}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h2 className="label-mono mb-5">what I built</h2>
-
-                <ol className="space-y-6">
-                  {p.points.map((point, i) => (
-                    <li
-                      key={point}
-                      className="grid grid-cols-[1.75rem_minmax(0,1fr)] gap-2 text-base leading-relaxed sm:grid-cols-[2rem_minmax(0,1fr)] sm:text-lg"
-                    >
-                      <span className="pt-1 font-mono text-xs text-lime">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <p>{point}</p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </section>
-
-            {/* Research publication, when available */}
-            {p.researchPaper && (
-              <section
-                aria-labelledby="research-heading"
-                className="mt-12 border-b border-line pb-10 sm:mt-14 sm:pb-12"
-              >
-                <p className="label-mono mb-4 text-lime">
-                  # research paper // international conference publication
-                </p>
-
-                <div className="rounded-xl border border-line bg-surface/60 p-4 backdrop-blur-md sm:p-6">
-                  <div className="flex flex-col gap-2 border-b border-line/60 pb-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-                    <p className="font-mono text-xs leading-relaxed text-lime">
-                      {p.researchPaper.dates}
-                    </p>
-
-                    <p className="font-mono text-xs leading-relaxed text-foreground">
-                      {p.researchPaper.conference}
-                    </p>
-                  </div>
-
-                  <h2
-                    id="research-heading"
-                    className="mt-5 font-display text-2xl leading-tight text-foreground sm:text-3xl"
-                  >
-                    {p.researchPaper.title}
-                  </h2>
-
-                  <p className="mt-3 font-mono text-xs leading-relaxed text-muted-foreground">
-                    {p.researchPaper.location}
-                  </p>
-
-                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                    {p.researchPaper.description}
-                  </p>
-                </div>
-              </section>
-            )}
-
-            {/* Previous and next navigation */}
-            <div className="mt-12">
-              <ProjectArchiveNav previous={previous} next={next} />
-            </div>
-          </>
-        )}
+        <CaseStudy
+          data={data}
+          project={project}
+          index={index}
+          previous={previous}
+          next={next}
+        />
       </main>
     </div>
   );

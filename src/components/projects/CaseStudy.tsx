@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/lib/portfolio";
+import { ProjectSchematic } from "./ProjectSchematic";
+import { schematicCaptions } from "@/lib/schematic-captions";
 
 export type CaseData = {
   accent: string;
@@ -19,11 +21,13 @@ export type CaseData = {
 export function CaseStudy({
   data,
   project,
+  index,
   previous,
   next,
 }: {
   data: CaseData;
   project: Project;
+  index: number;
   previous: Project;
   next: Project;
 }) {
@@ -37,61 +41,83 @@ export function CaseStudy({
 
   return (
     <article className="space-y-14 sm:space-y-16">
-      <header className="space-y-5">
-        <div className="flex flex-wrap items-center gap-3 font-mono text-xs font-bold uppercase">
-          <span
-            className="size-2.5"
-            style={{ background: data.accent }}
-            aria-hidden="true"
-          />
-          <span>{data.eyebrow}</span>
-          {data.status && (
-            <span className="border-2 border-border bg-[#F1BE05] px-2 py-0.5 text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
-              {data.status}
-            </span>
+      <header className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
+        <div className="space-y-5 min-w-0">
+          <div className="flex flex-wrap items-center gap-3 font-mono text-xs font-bold uppercase">
+            <span
+              className="size-2.5"
+              style={{ background: data.accent }}
+              aria-hidden="true"
+            />
+            <span>{data.eyebrow}</span>
+            {data.status && (
+              <span className="border-2 border-border bg-[#F1BE05] px-2 py-0.5 text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
+                {data.status}
+              </span>
+            )}
+          </div>
+
+          <h1 className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.94] tracking-tight">
+            {data.title}
+            <span style={{ color: data.accent }}>.</span>
+          </h1>
+
+          <p className="font-display text-2xl sm:text-3xl leading-tight">
+            {data.tagline}
+          </p>
+          <p className="max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
+            {data.summary}
+          </p>
+
+          <ul className="flex flex-wrap gap-2 font-mono text-xs font-bold">
+            {data.stack.map((s) => (
+              <li key={s} className="border border-border bg-card px-2.5 py-1">
+                {s}
+              </li>
+            ))}
+          </ul>
+
+          {links.length > 0 && (
+            <div className="flex flex-wrap gap-3">
+              {links.map((l, i) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-crosshair-target
+                  className={`inline-flex min-h-11 items-center gap-2 border-2 border-border px-5 py-2.5 font-mono text-xs font-bold shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${
+                    i === 0
+                      ? "bg-[#F1BE05] text-black"
+                      : "bg-card text-foreground"
+                  }`}
+                >
+                  {l.label}{" "}
+                  <ArrowUpRight className="size-4" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
           )}
         </div>
 
-        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl leading-[0.94] tracking-tight">
-          {data.title}
-          <span style={{ color: data.accent }}>.</span>
-        </h1>
-
-        <p className="font-display text-2xl sm:text-3xl leading-tight">
-          {data.tagline}
-        </p>
-        <p className="max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
-          {data.summary}
-        </p>
-
-        <ul className="flex flex-wrap gap-2 font-mono text-xs font-bold">
-          {data.stack.map((s) => (
-            <li key={s} className="border border-border bg-card px-2.5 py-1">
-              {s}
-            </li>
-          ))}
-        </ul>
-
-        {links.length > 0 && (
-          <div className="flex flex-wrap gap-3">
-            {links.map((l, i) => (
-              <a
-                key={l.href}
-                href={l.href}
-                target="_blank"
-                rel="noreferrer"
-                data-crosshair-target
-                className={`inline-flex min-h-11 items-center gap-2 border-2 border-border px-5 py-2.5 font-mono text-xs font-bold shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${
-                  i === 0
-                    ? "bg-[#F1BE05] text-black"
-                    : "bg-card text-foreground"
-                }`}
-              >
-                {l.label} <ArrowUpRight className="size-4" aria-hidden="true" />
-              </a>
-            ))}
+        <figure className="border-2 sm:border-[2.5px] border-border bg-card shadow-[6px_6px_0px_0px_var(--shadow-color)] sm:shadow-[8px_8px_0px_0px_var(--shadow-color)] lg:sticky lg:top-20">
+          <div className="flex items-center justify-between border-b-2 border-border px-4 py-2.5 font-mono text-[10px] font-black uppercase tracking-wider">
+            <span>fig. {String(index + 1).padStart(2, "0")}</span>
+            <span
+              className="size-2.5 border border-border"
+              style={{ background: data.accent }}
+              aria-hidden="true"
+            />
           </div>
-        )}
+          <ProjectSchematic
+            slug={project.slug}
+            accent={data.accent}
+            className="h-65 sm:h-75 bg-surface-secondary/70 px-4 py-6 sm:px-6"
+          />
+          <figcaption className="border-t-2 border-border px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
+            {schematicCaptions[project.slug]}
+          </figcaption>
+        </figure>
       </header>
 
       <section className="space-y-4">
@@ -126,23 +152,27 @@ export function CaseStudy({
               <h3 className="font-sans font-bold text-base sm:text-lg text-foreground leading-snug">
                 {p.title}
               </h3>
-              <dl className="mt-3.5 space-y-2 font-mono text-xs leading-relaxed text-muted-foreground">
-                <div>
-                  <dt className="inline font-bold text-foreground">
-                    Problem:{" "}
+              <dl className="mt-4 space-y-3 font-mono text-xs leading-relaxed">
+                <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3">
+                  <dt className="h-fit border-2 border-border bg-[#FF3C38] px-1.5 py-0.5 text-center text-[9px] font-black uppercase text-white">
+                    Problem
                   </dt>
-                  <dd className="inline">{p.problem}</dd>
+                  <dd className="text-muted-foreground">{p.problem}</dd>
                 </div>
-                <div>
-                  <dt className="inline font-bold text-foreground">Fix: </dt>
-                  <dd className="inline">{p.fix}</dd>
+                <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3">
+                  <dt className="h-fit border-2 border-border bg-[#22C55E] px-1.5 py-0.5 text-center text-[9px] font-black uppercase text-black">
+                    Fix
+                  </dt>
+                  <dd className="text-foreground">{p.fix}</dd>
                 </div>
                 {p.learned && (
-                  <div>
-                    <dt className="inline font-bold text-foreground">
-                      Learned:{" "}
+                  <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3">
+                    <dt className="h-fit border-2 border-border bg-[#F1BE05] px-1.5 py-0.5 text-center text-[9px] font-black uppercase text-black">
+                      Learned
                     </dt>
-                    <dd className="inline">{p.learned}</dd>
+                    <dd className="font-hand text-lg leading-snug text-foreground">
+                      {p.learned}
+                    </dd>
                   </div>
                 )}
               </dl>
@@ -177,7 +207,7 @@ export function CaseStudy({
             to="/projects/$slug"
             params={{ slug: p.slug }}
             data-crosshair-target
-            className={`group flex min-h-[110px] flex-col justify-between border-2 border-border bg-card p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${
+            className={`group flex min-h-27.5 flex-col justify-between border-2 border-border bg-card p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] ${
               right ? "sm:items-end sm:text-right" : ""
             }`}
           >

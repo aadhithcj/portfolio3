@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
@@ -12,6 +12,8 @@ import {
   setLastActiveProjectSlug,
 } from "@/lib/portfolio";
 import { ArrowUpRight } from "lucide-react";
+import { ProjectSchematic } from "@/components/projects/ProjectSchematic";
+import { schematicCaptions } from "@/lib/schematic-captions";
 
 export const Route = createFileRoute("/projects/")({
   head: () => ({
@@ -36,85 +38,25 @@ export const Route = createFileRoute("/projects/")({
   component: Projects,
 });
 
-const defaultProjectMeta = {
-  pill: "RETINA / ASSISTIVE AI",
-  quip: "check me out",
-  features: [
-    "+ CAMERA",
-    "+ AI ANALYSIS",
-    "+ VOICE FEEDBACK",
-    "+ ACCESSIBLE UX",
-  ],
-  accentColor: "#CE4760",
-};
+const defaultProjectMeta = { quip: "check me out", accentColor: "#FF3C38" };
 
-const projectMeta: Record<
-  string,
-  {
-    pill: string;
-    quip: string;
-    features: string[];
-    accentColor: string;
-  }
-> = {
+// Retina takes the default; accents match each case study page
+const projectMeta: Record<string, { quip: string; accentColor: string }> = {
   retina: defaultProjectMeta,
-  devopshub: {
-    pill: "DEVOPSHUB / CI-CD AUTOMATION",
-    quip: "ship it. again.",
-    features: [
-      "+ DOCKER COMPOSE",
-      "+ GITHUB ACTIONS",
-      "+ POSTGRESQL",
-      "+ ZERO-DOWNTIME",
-    ],
-    accentColor: "#42BFDD",
-  },
-  inventory: {
-    pill: "MOTO-INV / DESKTOP SUITE",
-    quip: "boring? never.",
-    features: [
-      "+ SQLITE ATOMIC",
-      "+ PDF INVOICES",
-      "+ REAL-TIME STOCK",
-      "+ PRODUCTION USE",
-    ],
-    accentColor: "#FF7700",
-  },
-  "crop-recommendation": {
-    pill: "ROOTS / AGRITECH AI",
-    quip: "grows on you",
-    features: [
-      "+ RANDOM FOREST",
-      "+ OPEN-METEO API",
-      "+ 7 PARAMETERS",
-      "+ REACT FRONTEND",
-    ],
-    accentColor: "#22C55E",
-  },
-  "cv-sorting": {
-    pill: "CV-SYS / TALENT PIPELINES",
-    quip: "hired. probably.",
-    features: [
-      "+ DUAL PORTALS",
-      "+ SUPABASE PG",
-      "+ TANSTACK QUERY",
-      "+ WORKFLOW ENGINE",
-    ],
-    accentColor: "#9649CB",
-  },
+  devopshub: { quip: "ship it. again.", accentColor: "#42BFDD" },
+  inventory: { quip: "boring? never.", accentColor: "#FF7700" },
+  "crop-recommendation": { quip: "grows on you", accentColor: "#22C55E" },
+  "cv-sorting": { quip: "hired. probably.", accentColor: "#9649CB" },
 };
 
 function Projects() {
-  const [active, setActive] = useState(() => {
-    const slug = getLastActiveProjectSlug();
-    const idx = projects.findIndex((p) => p.slug === slug);
-    return idx >= 0 ? idx : 0;
-  });
+  // Starts at 0 so server and client markup match; the layout effect restores the last pick before paint
+  const [active, setActive] = useState(0);
   const [hasHovered, setHasHovered] = useState(false);
   const [showPsst, setShowPsst] = useState(false);
 
-  // Sync with previously clicked project on mount
-  useEffect(() => {
+  // Restore the previously viewed project on mount
+  useLayoutEffect(() => {
     const slug = getLastActiveProjectSlug();
     const idx = projects.findIndex((p) => p.slug === slug);
     if (idx >= 0) {
@@ -147,7 +89,7 @@ function Projects() {
 
       <SiteHeader />
 
-      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
+      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
         {/* Left Column: Heading and Editorial Project Index */}
         <div className="flex flex-col relative w-full min-w-0">
           {/* Section Marker */}
@@ -268,7 +210,7 @@ function Projects() {
 
         {/* Right Column: Substantial Neo-Brutalist Preview Panel */}
         <aside
-          className="sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-5 sm:p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
+          className="min-w-0 sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-5 sm:p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
           aria-live="polite"
         >
           {/* Panel Top Header Bar */}
@@ -279,61 +221,52 @@ function Projects() {
             <span className="size-2.5 rounded-full bg-[#FF3C38]" />
           </div>
 
-          {/* Visual Mockup Frame */}
-          <div className="group/frame border-2 border-border bg-surface-secondary/70 p-5 sm:p-6 relative overflow-hidden flex flex-col justify-between min-h-[300px] sm:min-h-[340px] transition-colors duration-200 hover:border-foreground/80">
-            {/* Per-project handwritten quip with self-drawing arrow pointing at device card */}
+          {/* Project schematic: an animated diagram of how the selected project works */}
+          <Link
+            to="/projects/$slug"
+            params={{ slug: p.slug }}
+            data-crosshair-target
+            title={`Explore ${p.name} case study`}
+            className="group/frame block border-2 border-border bg-surface-secondary/70 relative overflow-hidden transition-colors duration-200 hover:bg-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+          >
+            {/* Per-project handwritten quip */}
             <HandNote
               key={p.slug}
-              rotate={3}
-              className="absolute left-5 top-4 w-44 text-left z-10"
+              rotate={-3}
+              arrow={false}
+              className="absolute right-4 top-3 z-10 text-right"
             >
               {meta.quip}
             </HandNote>
 
-            {/* Central Graphic Mockup Frame: Clickable Device Card with Tactile Hover & Color Change */}
-            <div className="my-auto mx-auto relative flex flex-col items-center pt-8 sm:pt-4">
-              <Link
-                to="/projects/$slug"
-                params={{ slug: p.slug }}
-                data-crosshair-target
-                className="group/card block w-44 sm:w-52 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] p-4 text-center relative transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[7px_7px_0px_0px_var(--shadow-color)] hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer"
-                title={`Explore ${p.name} case study`}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={p.slug}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18, ease: [0.2, 0.8, 0.2, 1] }}
               >
-                {/* Phone Top Notch / Header Bar */}
-                <div className="w-full flex items-center justify-between border-b border-border/40 pb-2 mb-3">
-                  <span className="font-mono text-[9px] font-bold text-muted-foreground group-hover/card:text-foreground transition-colors">
-                    {p.name}
-                  </span>
-                  <div className="flex gap-1">
-                    <span className="size-1.5 rounded-full bg-border" />
-                    <span className="size-1.5 rounded-full bg-border" />
-                  </div>
-                </div>
+                <ProjectSchematic
+                  slug={p.slug}
+                  accent={meta.accentColor}
+                  className="h-[260px] sm:h-[290px] px-4 pt-10 pb-4 sm:px-6"
+                />
+              </motion.div>
+            </AnimatePresence>
 
-                {/* Big Two-Letter Placeholder Display with Color Reaction on Hover */}
-                <div className="size-20 sm:size-24 mx-auto rounded-none border-2 border-border bg-surface-secondary flex items-center justify-center font-display text-5xl sm:text-6xl font-black text-foreground shadow-[inset_0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-200 group-hover/card:bg-[#F1BE05] group-hover/card:text-black group-hover/card:scale-105 group-hover/card:shadow-[3px_3px_0px_0px_var(--shadow-color)]">
-                  {p.name.slice(0, 2).toUpperCase()}
-                </div>
-
-                {/* Pill under device with Color Reaction */}
-                <span className="mt-3 inline-block border border-border bg-foreground text-background px-2.5 py-0.5 font-mono text-[9px] font-black uppercase tracking-wider transition-colors duration-200 group-hover/card:bg-[#F1BE05] group-hover/card:text-black group-hover/card:border-black">
-                  {meta.pill}
-                </span>
-              </Link>
+            <div className="flex items-center justify-between gap-3 border-t-2 border-border bg-card px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-wider">
+              <span className="truncate text-muted-foreground group-hover/frame:text-foreground transition-colors">
+                fig. {String(active + 1).padStart(2, "0")} ·{" "}
+                {schematicCaptions[p.slug]}
+              </span>
+              <span
+                className="size-2.5 shrink-0 border border-border"
+                style={{ background: meta.accentColor }}
+                aria-hidden="true"
+              />
             </div>
-
-            {/* Feature Badges Stack on the Bottom-Right */}
-            <div className="absolute right-4 bottom-4 flex flex-col gap-1 items-end select-none">
-              {meta.features.map((feat) => (
-                <span
-                  key={feat}
-                  className="border border-border/80 bg-card px-2 py-0.5 font-mono text-[9px] font-bold text-foreground/90 shadow-2xs uppercase transition-colors hover:bg-surface-secondary"
-                >
-                  {feat}
-                </span>
-              ))}
-            </div>
-          </div>
+          </Link>
 
           {/* Project Details Below Mockup */}
           <div className="mt-6 flex flex-col">

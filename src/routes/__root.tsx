@@ -13,30 +13,90 @@ import { ThemeProvider, useTheme } from "@/hooks/use-theme";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
 import Crosshair from "@/components/fx/Crosshair";
+import { MotionConfig } from "motion/react";
 
 import appCss from "../styles.css?url";
 
-function NotFoundComponent() {
+const brutalButton =
+  "inline-flex min-h-11 items-center justify-center gap-2 border-2 border-border px-5 py-2.5 font-mono text-xs font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 cursor-pointer";
+
+function StatusScreen({
+  code,
+  stamp,
+  title,
+  body,
+  actions,
+}: {
+  code: string;
+  stamp: string;
+  title: string;
+  body: string;
+  actions: ReactNode;
+}) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">
-          Page not found
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
+    <main
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-16"
+      style={{
+        backgroundImage:
+          "radial-gradient(color-mix(in srgb, var(--foreground) 16%, transparent) 1.5px, transparent 1.5px)",
+        backgroundSize: "20px 20px",
+      }}
+    >
+      <div className="relative w-full max-w-lg border-[3px] border-border bg-card shadow-[10px_10px_0px_0px_var(--shadow-color)]">
+        <div className="flex items-center justify-between border-b-2 border-border bg-foreground px-4 py-2 font-mono text-[10px] font-black uppercase tracking-wider text-background">
+          <span>err // {code}</span>
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="hover:text-primary focus-visible:outline-none focus-visible:underline"
           >
-            Go home
+            ACJ<span className="text-[#FF3C38]">_</span>
           </Link>
         </div>
+
+        <div className="relative px-6 pb-7 pt-8 sm:px-8">
+          <span
+            aria-hidden="true"
+            className="absolute -right-3 top-5 rotate-6 border-2 border-border bg-[#FF3C38] px-2.5 py-1 font-hand text-xl text-white shadow-[3px_3px_0px_0px_var(--shadow-color)]"
+          >
+            {stamp}
+          </span>
+          <p className="font-sans text-8xl font-black leading-none tracking-tighter text-foreground sm:text-9xl">
+            {code}
+          </p>
+          <h1 className="mt-5 font-display text-3xl sm:text-4xl text-foreground">
+            {title}
+          </h1>
+          <p className="mt-3 max-w-sm font-mono text-xs leading-relaxed text-muted-foreground sm:text-sm">
+            {body}
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">{actions}</div>
+        </div>
       </div>
-    </div>
+    </main>
+  );
+}
+
+function NotFoundComponent() {
+  return (
+    <StatusScreen
+      code="404"
+      stamp="wrong turn"
+      title="This page doesn't exist."
+      body="The link may be old or mistyped. Everything I've built is one click away."
+      actions={
+        <>
+          <Link
+            to="/projects"
+            className={`${brutalButton} bg-[#F1BE05] text-black`}
+          >
+            See projects <span aria-hidden="true">→</span>
+          </Link>
+          <Link to="/" className={`${brutalButton} bg-card text-foreground`}>
+            Go home
+          </Link>
+        </>
+      }
+    />
   );
 }
 
@@ -45,34 +105,29 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back
-          home.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+    <StatusScreen
+      code="500"
+      stamp="my bad"
+      title="This page didn't load."
+      body="Something broke while rendering it. Trying again usually fixes it; if not, the home page still works."
+      actions={
+        <>
           <button
+            type="button"
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className={`${brutalButton} bg-[#F1BE05] text-black`}
           >
             Try again
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
+          <a href="/" className={`${brutalButton} bg-card text-foreground`}>
             Go home
           </a>
-        </div>
-      </div>
-    </div>
+        </>
+      }
+    />
   );
 }
 
@@ -219,11 +274,13 @@ function RootComponent() {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <Toaster position="top-right" />
-        <ThemeToggle fixed />
-        <RootCrosshair />
+        <MotionConfig reducedMotion="user">
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <Toaster position="top-right" />
+          <ThemeToggle fixed />
+          <RootCrosshair />
+        </MotionConfig>
       </QueryClientProvider>
     </ThemeProvider>
   );
