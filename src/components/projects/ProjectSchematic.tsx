@@ -1,17 +1,27 @@
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from "motion/react";
 import { schematicCaptions } from "@/lib/schematic-captions";
 
 /**
  * Small animated diagrams of how each project works, drawn in the site's
- * ink-border / hard-shadow language. They loop slowly, pause when the tab is
- * hidden, and hold on one still frame under prefers-reduced-motion.
+ * ink-border / hard-shadow language. They loop slowly, pause when off-screen
+ * (including display:none) or the tab is hidden, and hold on one still frame
+ * under prefers-reduced-motion.
  */
+
+// False while the schematic is out of view: timers stop and looping animations idle
+const LiveContext = createContext(true);
 
 // Steps 0..length-1 on a timer; reduced motion holds on `still`, the most informative frame.
 // The still frame is applied after mount so the first client render matches the server.
 function useCycle(length: number, ms: number, still = 0) {
   const reduce = useReducedMotion();
+  const live = useContext(LiveContext);
   const [idx, setIdx] = useState(0);
 
   useEffect(() => {
@@ -19,14 +29,14 @@ function useCycle(length: number, ms: number, still = 0) {
       setIdx(still);
       return;
     }
-    if (length < 2) return;
+    if (length < 2 || !live) return;
     const timer = window.setInterval(() => {
       if (document.visibilityState === "visible") {
         setIdx((i) => (i + 1) % length);
       }
     }, ms);
     return () => window.clearInterval(timer);
-  }, [length, ms, reduce, still]);
+  }, [length, ms, reduce, still, live]);
 
   return idx;
 }
@@ -66,6 +76,7 @@ const retinaModes = [
 ] as const;
 
 function RetinaSchematic({ accent }: { accent: string }) {
+  const live = useContext(LiveContext);
   const idx = useCycle(retinaModes.length, 2200);
   const mode = retinaModes[idx]!;
 
@@ -108,13 +119,15 @@ function RetinaSchematic({ accent }: { accent: string }) {
             </motion.div>
           </AnimatePresence>
 
-          {/* Scan line */}
+          {/* Scan line: a full-height track moved with transforms, so no layout per frame */}
           <motion.div
             aria-hidden="true"
-            className="absolute inset-x-0 h-0.5 bg-[#F7F0D9]/50"
-            animate={{ top: ["4%", "94%", "4%"] }}
+            className="absolute inset-x-0 top-0 h-[90%]"
+            animate={live ? { y: ["4%", "100%", "4%"] } : { y: "4%" }}
             transition={{ duration: 3.2, repeat: Infinity, ease: "linear" }}
-          />
+          >
+            <div className="h-0.5 bg-[#F7F0D9]/50" />
+          </motion.div>
         </div>
 
         {/* Spoken output */}
@@ -123,8 +136,10 @@ function RetinaSchematic({ accent }: { accent: string }) {
             {[0, 1, 2, 3].map((b) => (
               <motion.span
                 key={b}
-                className="w-0.75 bg-[#F7F0D9]"
-                animate={{ height: ["30%", "100%", "45%", "80%", "30%"] }}
+                className="h-full w-0.75 origin-bottom bg-[#F7F0D9]"
+                animate={
+                  live ? { scaleY: [0.3, 1, 0.45, 0.8, 0.3] } : { scaleY: 0.6 }
+                }
                 transition={{
                   duration: 0.9,
                   repeat: Infinity,
@@ -427,7 +442,7 @@ function RootsSchematic({ accent }: { accent: string }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* CV Flow: weights change, ranking reorders                           */
+/* CV Management System: weights change, ranking reorders              */
 /* ------------------------------------------------------------------ */
 
 const cvCandidates = [
@@ -528,16 +543,21 @@ export function ProjectSchematic({
   accent: string;
   className?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const live = useInView(ref, { amount: 0.2 });
   const Schematic = schematics[slug];
   if (!Schematic) return null;
 
   return (
     <div
+      ref={ref}
       role="img"
       aria-label={schematicCaptions[slug]}
       className={`select-none ${className}`}
     >
-      <Schematic accent={accent} />
+      <LiveContext.Provider value={live}>
+        <Schematic accent={accent} />
+      </LiveContext.Provider>
     </div>
   );
 }

@@ -73,7 +73,8 @@ export function AboutLanyard({
         strapLength={0.15}
         strapWidth={0.95}
         metal="graphite"
-        breeze={0.35}
+        // No idle breeze: the simulation settles and stops drawing until someone touches the card
+        breeze={0}
         damping={0.55}
       />
     </Suspense>

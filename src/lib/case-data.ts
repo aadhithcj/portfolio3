@@ -155,7 +155,7 @@ export const caseData: Record<string, CaseData> = {
   "cv-sorting": {
     accent: "#9649CB",
     eyebrow: "Full-stack · BTech mini project",
-    title: "CV Flow",
+    title: "CV Management System",
     tagline:
       "A recruitment app where candidates apply and recruiters rank them.",
     summary:

@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
@@ -11,7 +11,7 @@ import {
   getLastActiveProjectSlug,
   setLastActiveProjectSlug,
 } from "@/lib/portfolio";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Github, Globe } from "lucide-react";
 import { ProjectSchematic } from "@/components/projects/ProjectSchematic";
 import { schematicCaptions } from "@/lib/schematic-captions";
 
@@ -38,22 +38,88 @@ export const Route = createFileRoute("/projects/")({
   component: Projects,
 });
 
-const defaultProjectMeta = { quip: "check me out", accentColor: "#FF3C38" };
-
-// Retina takes the default; accents match each case study page
-const projectMeta: Record<string, { quip: string; accentColor: string }> = {
-  retina: defaultProjectMeta,
-  devopshub: { quip: "ship it. again.", accentColor: "#42BFDD" },
-  inventory: { quip: "boring? never.", accentColor: "#FF7700" },
-  "crop-recommendation": { quip: "grows on you", accentColor: "#22C55E" },
-  "cv-sorting": { quip: "hired. probably.", accentColor: "#9649CB" },
+type ProjectMeta = {
+  quip: string;
+  accentColor: string;
+  /** Short proof stamp shown on the row; facts only */
+  badge: string;
+  /** Ink color for text on the accent fill */
+  badgeInk: string;
 };
 
+const defaultProjectMeta: ProjectMeta = {
+  quip: "check me out",
+  accentColor: "#FF3C38",
+  badge: "ICFISN 2026 paper",
+  badgeInk: "#FFFFFF",
+};
+
+// Retina takes the default; accents match each case study page
+const projectMeta: Record<string, ProjectMeta> = {
+  retina: defaultProjectMeta,
+  devopshub: {
+    quip: "ship it. again.",
+    accentColor: "#42BFDD",
+    badge: "In progress",
+    badgeInk: "#000000",
+  },
+  inventory: {
+    quip: "boring? never.",
+    accentColor: "#FF7700",
+    badge: "In daily use",
+    badgeInk: "#000000",
+  },
+  "crop-recommendation": {
+    quip: "grows on you",
+    accentColor: "#22C55E",
+    badge: "Live demo",
+    badgeInk: "#000000",
+  },
+  "cv-sorting": {
+    quip: "hired. probably.",
+    accentColor: "#9649CB",
+    badge: "Team of 3",
+    badgeInk: "#FFFFFF",
+  },
+};
+
+// Callers set the display class (e.g. "inline-block lg:hidden") so responsive hiding works
+function ProofBadge({
+  meta,
+  className = "",
+}: {
+  meta: ProjectMeta;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`-rotate-2 whitespace-nowrap border-2 border-border px-1.5 py-0.5 font-mono text-[10px] font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--shadow-color)] ${className}`}
+      style={{ background: meta.accentColor, color: meta.badgeInk }}
+    >
+      {meta.badge}
+    </span>
+  );
+}
+
+const kbd =
+  "border-2 border-border bg-card px-1.5 py-0.5 font-mono text-[10px] font-bold text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)]";
+
+const linkButton =
+  "inline-flex items-center gap-1.5 border-2 border-border bg-card px-3 py-1.5 font-mono text-[11px] font-black uppercase tracking-wider text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)] transition-all hover:translate-x-px hover:translate-y-px hover:bg-surface-secondary hover:shadow-[1px_1px_0px_0px_var(--shadow-color)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground";
+
+function isTyping(target: EventTarget | null) {
+  return (
+    target instanceof Element &&
+    Boolean(target.closest("input, textarea, select, [contenteditable=true]"))
+  );
+}
+
 function Projects() {
+  const navigate = useNavigate();
   // Starts at 0 so server and client markup match; the layout effect restores the last pick before paint
   const [active, setActive] = useState(0);
   const [hasHovered, setHasHovered] = useState(false);
-  const [showPsst, setShowPsst] = useState(false);
+  const rowRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   // Restore the previously viewed project on mount
   useLayoutEffect(() => {
@@ -72,27 +138,41 @@ function Projects() {
     }
   };
 
+  // Up/down move through the list (focusing the row, so Enter opens it natively);
+  // Enter anywhere else on the page opens the selected project
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || isTyping(e.target)) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        const step = e.key === "ArrowDown" ? 1 : -1;
+        const next = (active + step + projects.length) % projects.length;
+        rowRefs.current[next]?.focus();
+        handleSelect(next);
+        setHasHovered(true);
+      } else if (e.key === "Enter") {
+        const el = e.target instanceof Element ? e.target : null;
+        if (el?.closest("a, button")) return;
+        const slug = projects[active]?.slug;
+        if (slug) navigate({ to: "/projects/$slug", params: { slug } });
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active, navigate]);
+
   const p = (projects[active] ?? projects[0])!;
   const meta = projectMeta[p.slug] ?? defaultProjectMeta;
 
-  // After 4s of idle time on a selected project, show a subtle playful "psst" nudge on the explore button
-  useEffect(() => {
-    setShowPsst(false);
-    const timer = setTimeout(() => setShowPsst(true), 4000);
-    return () => clearTimeout(timer);
-  }, [active]);
-
   return (
     <div className="min-h-screen bg-background overflow-x-clip relative">
-      {/* Interactive WebGL2 DotGrid Background synced to project accent color */}
       <PageBackdrop accent={meta.accentColor} />
 
       <SiteHeader />
 
-      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
-        {/* Left Column: Heading and Editorial Project Index */}
+      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-20 sm:pb-24 grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
+        {/* Left column: heading and project index */}
         <div className="flex flex-col relative w-full min-w-0">
-          {/* Section Marker */}
           <p className="label-mono">
             <DecryptedText
               text="# PROJECTS / SELECTED WORK"
@@ -103,7 +183,6 @@ function Projects() {
             />
           </p>
 
-          {/* Page Heading */}
           <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl tracking-tight text-foreground">
             Things I’ve{" "}
             <em className="italic text-lime not-italic font-normal">built</em>.
@@ -113,7 +192,7 @@ function Projects() {
             Software, systems, and experiments — made to solve real problems.
           </p>
 
-          {/* Handwritten self-drawing note pointing to the project list, vanishes on first hover */}
+          {/* Handwritten note pointing at the list; vanishes on first hover or key press */}
           <AnimatePresence>
             {!hasHovered && (
               <motion.div
@@ -126,16 +205,27 @@ function Projects() {
             )}
           </AnimatePresence>
 
-          {/* Numbered Editorial Project List */}
+          <div className="mt-10 sm:mt-12 hidden lg:flex items-center justify-end gap-1.5 pb-2 label-mono">
+            <kbd className={kbd}>↑</kbd>
+            <kbd className={kbd}>↓</kbd>
+            <span className="mr-2">browse</span>
+            <kbd className={kbd}>↵</kbd>
+            <span>open</span>
+          </div>
+
           <div
-            className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border"
+            className="mt-8 sm:mt-10 lg:mt-0 flex flex-col border-t-2 border-border"
             role="list"
           >
             {projects.map((x, i) => {
               const isSelected = active === i;
+              const rowMeta = projectMeta[x.slug] ?? defaultProjectMeta;
               return (
                 <div key={x.slug} role="listitem" className="relative">
                   <Link
+                    ref={(el) => {
+                      rowRefs.current[i] = el;
+                    }}
                     to="/projects/$slug"
                     params={{ slug: x.slug }}
                     onPointerDown={() => handleSelect(i)}
@@ -149,46 +239,53 @@ function Projects() {
                       setHasHovered(true);
                     }}
                     data-crosshair-target
-                    className={`w-full text-left transition-all duration-150 flex items-center justify-between py-4 sm:py-5 px-3 sm:px-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
+                    className={`w-full text-left transition-all duration-150 flex items-center justify-between gap-4 py-4 sm:py-5 px-3 sm:px-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground border-b border-border/40 ${
                       isSelected
-                        ? "bg-[#F1BE05] text-black border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] my-1 -translate-y-0.5 z-10"
-                        : "border-b border-border/40 hover:bg-[#F1BE05]/10 dark:hover:bg-[#F1BE05]/15 hover:border-border/60 hover:-translate-y-0.5 text-foreground"
+                        ? "lg:bg-[#F1BE05] lg:text-black lg:border-2 lg:border-border lg:shadow-[4px_4px_0px_0px_var(--shadow-color)] lg:my-1 lg:-translate-y-0.5 z-10"
+                        : "hover:bg-[#F1BE05]/10 dark:hover:bg-[#F1BE05]/15 hover:border-border/60 hover:-translate-y-0.5 text-foreground"
                     }`}
                   >
-                    <div className="flex items-baseline gap-4 sm:gap-6">
+                    <div className="flex min-w-0 items-baseline gap-4 sm:gap-6">
                       <span
-                        className={`font-mono text-xs sm:text-sm font-bold transition-colors ${
-                          isSelected ? "text-black" : "text-lime"
+                        className={`font-mono text-xs sm:text-sm font-bold transition-colors text-lime ${
+                          isSelected ? "lg:text-black" : ""
                         }`}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span
-                        className={`font-display text-3xl sm:text-4xl md:text-[42px] leading-tight transition-all font-normal ${
-                          isSelected
-                            ? "text-black"
-                            : "hover:translate-x-1 hover:text-foreground"
-                        }`}
-                      >
-                        {x.name}
-                      </span>
+                      <div className="min-w-0">
+                        <span className="block font-display text-3xl sm:text-4xl md:text-[42px] leading-tight font-normal">
+                          {x.name}
+                        </span>
+                        {/* Below desktop the preview panel is hidden, so the row carries the essentials */}
+                        <span className="mt-1 block font-mono text-xs leading-relaxed text-muted-foreground lg:hidden">
+                          {x.tagline}
+                        </span>
+                        <ProofBadge
+                          meta={rowMeta}
+                          className="mt-2.5 inline-block lg:hidden"
+                        />
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex shrink-0 items-center gap-3">
+                      <ProofBadge
+                        meta={rowMeta}
+                        className="hidden lg:inline-block"
+                      />
                       <span
-                        className={`font-mono text-xs sm:text-sm transition-colors ${
-                          isSelected
-                            ? "text-black font-bold"
-                            : "text-muted-foreground"
+                        className={`font-mono text-xs sm:text-sm transition-colors text-muted-foreground ${
+                          isSelected ? "lg:text-black font-bold" : ""
                         }`}
                       >
                         {x.year}
                       </span>
-                      {isSelected && (
-                        <span className="hidden sm:inline font-mono text-xs font-bold">
-                          ●
-                        </span>
-                      )}
+                      <span
+                        className="font-mono text-base lg:hidden"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
                     </div>
                   </Link>
                 </div>
@@ -196,24 +293,22 @@ function Projects() {
             })}
           </div>
 
-          {/* Functional handwritten link to GitHub ending the list */}
           <a
             href={profile.github}
             target="_blank"
             rel="noreferrer"
             data-crosshair-target
-            className="mt-10 hidden sm:inline-block font-hand text-xl text-muted-foreground hover:text-foreground hover:-rotate-2 transition-all w-fit"
+            className="mt-8 sm:mt-10 inline-block font-hand text-xl text-muted-foreground hover:text-foreground hover:-rotate-2 transition-all w-fit"
           >
             more cooking on github ↗
           </a>
         </div>
 
-        {/* Right Column: Substantial Neo-Brutalist Preview Panel */}
+        {/* Right column: preview panel (desktop only; smaller screens read the rows) */}
         <aside
-          className="min-w-0 sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-5 sm:p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
+          className="hidden lg:block min-w-0 sticky top-20 border-[2.5px] border-border bg-card p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
           aria-live="polite"
         >
-          {/* Panel Top Header Bar */}
           <div className="flex items-center justify-between border-b-2 border-border/80 pb-3 mb-5">
             <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
               SELECTED PROJECT / {String(active + 1).padStart(2, "0")}
@@ -226,10 +321,10 @@ function Projects() {
             to="/projects/$slug"
             params={{ slug: p.slug }}
             data-crosshair-target
+            tabIndex={-1}
             title={`Explore ${p.name} case study`}
-            className="group/frame block border-2 border-border bg-surface-secondary/70 relative overflow-hidden transition-colors duration-200 hover:bg-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+            className="group/frame block border-2 border-border bg-surface-secondary/70 relative overflow-hidden transition-colors duration-200 hover:bg-surface-secondary"
           >
-            {/* Per-project handwritten quip */}
             <HandNote
               key={p.slug}
               rotate={-3}
@@ -250,7 +345,7 @@ function Projects() {
                 <ProjectSchematic
                   slug={p.slug}
                   accent={meta.accentColor}
-                  className="h-[260px] sm:h-[290px] px-4 pt-10 pb-4 sm:px-6"
+                  className="h-[290px] px-6 pt-10 pb-4"
                 />
               </motion.div>
             </AnimatePresence>
@@ -268,17 +363,18 @@ function Projects() {
             </div>
           </Link>
 
-          {/* Project Details Below Mockup */}
           <div className="mt-6 flex flex-col">
-            <h2 className="font-display text-3xl sm:text-4xl font-normal tracking-normal text-foreground">
-              {p.name}
-            </h2>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="font-display text-4xl font-normal tracking-normal text-foreground">
+                {p.name}
+              </h2>
+              <ProofBadge meta={meta} className="inline-block" />
+            </div>
 
-            <p className="mt-2 font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-2 font-mono text-sm text-muted-foreground leading-relaxed">
               {p.tagline}
             </p>
 
-            {/* Stack Tags */}
             <div className="mt-4 flex flex-wrap gap-2">
               {p.stack.map((tech) => (
                 <span
@@ -290,30 +386,47 @@ function Projects() {
               ))}
             </div>
 
-            {/* High-Contrast Bold Yellow Action Button with Idle Psst Nudge */}
-            <div className="relative mt-6">
-              <AnimatePresence>
-                {showPsst && (
-                  <motion.span
-                    initial={{ opacity: 0, scale: 0.8, y: 4 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute -top-3.5 right-4 font-hand text-sm font-bold bg-foreground text-background px-2 py-0.5 -rotate-6 z-20 pointer-events-none shadow-[2px_2px_0px_0px_var(--shadow-color)]"
+            {/* Straight to the code or the running thing, without opening the case study */}
+            {(p.repoUrl || p.demoUrl) && (
+              <div className="mt-5 flex flex-wrap gap-2.5 border-t-2 border-dashed border-border/50 pt-4">
+                {p.repoUrl && (
+                  <a
+                    href={p.repoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-crosshair-target
+                    className={linkButton}
                   >
-                    psst, click here!
-                  </motion.span>
+                    <Github className="size-3.5" aria-hidden="true" />
+                    Source
+                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                  </a>
                 )}
-              </AnimatePresence>
-              <Link
-                to="/projects/$slug"
-                params={{ slug: p.slug }}
-                data-crosshair-target
-                className="w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3 sm:py-3.5 font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-              >
-                <span>EXPLORE CASE STUDY</span>
-                <ArrowUpRight className="size-4" strokeWidth={2.5} />
-              </Link>
-            </div>
+                {p.demoUrl && (
+                  <a
+                    href={p.demoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-crosshair-target
+                    className={linkButton}
+                  >
+                    <Globe className="size-3.5" aria-hidden="true" />
+                    Live demo
+                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            )}
+
+            <Link
+              to="/projects/$slug"
+              params={{ slug: p.slug }}
+              data-crosshair-target
+              className="mt-5 w-full flex items-center justify-center gap-2 border-2 border-border bg-[#F1BE05] text-black py-3.5 font-mono text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+            >
+              <span>EXPLORE CASE STUDY</span>
+              <ArrowUpRight className="size-4" strokeWidth={2.5} />
+            </Link>
           </div>
         </aside>
       </main>
