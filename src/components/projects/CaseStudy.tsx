@@ -115,13 +115,18 @@ export function CaseStudy({
           Hard parts
         </h2>
         <div className="grid gap-6 md:grid-cols-2">
-          {data.problems.map((p) => (
+          {data.problems.map((p, pIdx) => (
             <div
               key={p.title}
-              className="border-2 border-border bg-card p-5 shadow-[4px_4px_0px_0px_var(--shadow-color)]"
+              className="border-2 border-border bg-card p-5 sm:p-6 shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] transition-all"
             >
-              <h3 className="font-display text-xl font-bold">{p.title}</h3>
-              <dl className="mt-3 space-y-2 font-mono text-xs leading-relaxed text-muted-foreground">
+              <div className="font-mono text-[10px] font-black uppercase text-lime mb-1.5 tracking-wider">
+                CHALLENGE // {String(pIdx + 1).padStart(2, "0")}
+              </div>
+              <h3 className="font-sans font-bold text-base sm:text-lg text-foreground leading-snug">
+                {p.title}
+              </h3>
+              <dl className="mt-3.5 space-y-2 font-mono text-xs leading-relaxed text-muted-foreground">
                 <div>
                   <dt className="inline font-bold text-foreground">
                     Problem:{" "}
@@ -179,7 +184,7 @@ export function CaseStudy({
             <span className="font-mono text-[10px] font-black uppercase text-muted-foreground">
               {label}
             </span>
-            <span className="font-display text-2xl sm:text-3xl transition-all group-hover:translate-x-1 group-hover:italic">
+            <span className="font-display font-normal text-2xl sm:text-3xl transition-all group-hover:translate-x-1 group-hover:italic">
               {p.name}
             </span>
           </Link>

@@ -119,7 +119,10 @@ export function DraggableSticker({
       whileHover={{ scale: 1.05 }}
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => setIsDragging(false)}
-      className="hidden md:flex absolute top-4 sm:top-6 right-6 xl:right-24 z-30 select-none cursor-grab active:cursor-grabbing"
+      role="button"
+      tabIndex={0}
+      aria-label="Interactive sticker. Drag me anywhere across the screen."
+      className="hidden md:flex absolute top-4 sm:top-6 right-6 xl:right-24 z-30 select-none cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
       initial={{ rotate: -5 }}
     >
       <div className="flex items-center gap-1.5 border-2 border-border bg-[#F1BE05] text-black px-3 py-1 font-mono text-xs font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] active:shadow-[2px_2px_0px_0px_var(--shadow-color)] transition-shadow">
@@ -144,6 +147,8 @@ export function HoverReactiveShape() {
 
   return (
     <div
+      role="region"
+      aria-label="Interactive decorative prism. Hover to peek."
       className="hidden md:flex absolute top-4 sm:top-6 left-6 xl:left-24 z-20 items-center gap-2 select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

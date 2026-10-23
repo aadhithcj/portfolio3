@@ -121,11 +121,7 @@ function About() {
         </p>
 
         <h1 className="mt-4 break-words font-display text-5xl sm:text-6xl md:text-7xl">
-          Hi, I'm{" "}
-          <em className="italic text-lime not-italic font-normal">
-            Aadhith CJ
-          </em>
-          .
+          Hi, I'm <em className="italic text-lime font-normal">Aadhith CJ</em>.
         </h1>
 
         <p className="mt-6 text-lg sm:text-xl leading-relaxed text-foreground/90 font-sans">
@@ -171,7 +167,7 @@ function About() {
             {!picked && (
               <motion.div
                 exit={{ opacity: 0 }}
-                className="hidden xl:block absolute -right-48 -top-6 w-40"
+                className="hidden sm:block absolute right-4 sm:right-36 -top-9 w-36 pointer-events-none z-20"
               >
                 <HandNote flip rotate={4}>
                   pick a door

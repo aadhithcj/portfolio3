@@ -102,7 +102,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
           to="/"
           data-crosshair-target
           onClick={() => setMobileMenuOpen(false)}
-          className="inline-flex items-center border-2 border-border bg-[#c4f000] dark:bg-[#F1BE05] px-3 py-1 font-mono text-sm font-black text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-transform"
+          className="inline-flex items-center border-2 border-border bg-[#F1BE05] px-3 py-1 font-mono text-sm font-black text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-transform"
         >
           ACJ<span className="text-[#FF3C38]">_</span>
         </Link>
@@ -126,18 +126,18 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
         </button>
       </div>
 
-      {/* Mobile Dropdown Panel directly beneath top bar, matching Screenshot 1 */}
+      {/* Mobile Dropdown Panel directly beneath top bar */}
       {mobileMenuOpen && (
         <>
           {/* Dimmed backdrop to close on outside tap */}
           <div
-            className="md:hidden fixed inset-0 top-14 z-40 bg-black/35 backdrop-blur-[1px]"
+            className="md:hidden fixed inset-0 top-14 z-40 bg-black/40 backdrop-blur-[1px]"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
 
           {/* Opaque Dropdown Menu Panel */}
-          <div className="md:hidden relative z-50 w-full bg-white dark:bg-[#141414] border-t-2 border-border p-3.5 sm:p-4 flex flex-col gap-2.5 shadow-2xl animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="md:hidden relative z-50 w-full bg-card border-t-2 border-b-2 border-border p-3.5 sm:p-4 flex flex-col gap-2.5 shadow-[6px_6px_0px_0px_var(--shadow-color)] animate-in fade-in slide-in-from-top-1 duration-150">
             {mobileNavItems.map((item) => {
               const isActive = pathname.startsWith(item.to);
               return (
@@ -146,11 +146,10 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                   to={item.to}
                   onClick={() => setMobileMenuOpen(false)}
                   data-crosshair-target
-                  className={`w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border block text-left transition-all ${
-                    isActive
-                      ? "bg-black text-white dark:bg-white dark:text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]"
-                      : "bg-white dark:bg-card text-foreground shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)]"
-                  }`}
+                  className={`w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border block text-left transition-all ${isActive
+                      ? "bg-foreground text-background shadow-[2px_2px_0px_0px_var(--shadow-color)]"
+                      : "bg-surface text-foreground shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none"
+                    }`}
                 >
                   {item.label}
                 </Link>
@@ -163,7 +162,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
               target="_blank"
               rel="noreferrer"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)] transition-all flex items-center justify-between"
+              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-surface text-foreground hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-between"
             >
               <span>RESUME</span>
               <span className="font-mono text-xs">↗</span>
@@ -174,7 +173,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                 href="https://github.com/aadhithcj"
                 target="_blank"
                 rel="noreferrer"
-                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black text-center transition-all"
+                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-surface text-foreground hover:bg-[#F1BE05] hover:text-black active:translate-x-0.5 active:translate-y-0.5 active:shadow-none text-center transition-all"
               >
                 GITHUB ↗
               </a>
@@ -182,7 +181,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                 href="https://linkedin.com/in/aadhithcj"
                 target="_blank"
                 rel="noreferrer"
-                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground hover:bg-[#F1BE05] hover:text-black text-center transition-all"
+                className="py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-surface text-foreground hover:bg-[#F1BE05] hover:text-black active:translate-x-0.5 active:translate-y-0.5 active:shadow-none text-center transition-all"
               >
                 LINKEDIN ↗
               </a>
@@ -194,7 +193,7 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
               onClick={() => {
                 toggleTheme();
               }}
-              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-white dark:bg-card text-foreground flex items-center justify-between hover:bg-[#F1BE05] hover:text-black transition-all"
+              className="w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] bg-surface text-foreground flex items-center justify-between hover:bg-[#F1BE05] hover:text-black active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
             >
               <span>THEME // {isDark ? "LIGHT MODE" : "DARK MODE"}</span>
               <span className="font-bold">{isDark ? "☀" : "☾"}</span>
@@ -216,13 +215,12 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
             setAcjActive(true);
             setTimeout(() => setAcjActive(false), 250);
           }}
-          className={`border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-150 flex items-center shrink-0 cursor-pointer hover:bg-[#C8FF00] hover:text-black hover:shadow-[0_0_20px_rgba(200,255,0,0.55)] active:bg-[#C8FF00] active:text-black active:shadow-[0_0_20px_rgba(200,255,0,0.55)] focus-visible:bg-[#C8FF00] focus-visible:text-black focus-visible:shadow-[0_0_20px_rgba(200,255,0,0.55)] ${
-            acjActive
-              ? "bg-[#C8FF00] text-black shadow-[0_0_20px_rgba(200,255,0,0.55)]"
+          className={`border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-150 flex items-center shrink-0 cursor-pointer hover:bg-[#F1BE05] hover:text-black active:bg-[#F1BE05] active:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${acjActive
+              ? "bg-[#F1BE05] text-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]"
               : "text-foreground"
-          }`}
+            }`}
         >
-          ACJ_
+          ACJ<span className="text-[#FF3C38]">_</span>
         </Link>
 
         {/* Left Spacer */}

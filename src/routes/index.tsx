@@ -228,9 +228,13 @@ function Index() {
               .
             </h1>
 
-            {/* Animated Bio wrapped in subtle backdrop box with constant size throughout typing */}
-            <div className="mt-3.5 sm:mt-4 max-w-xl sm:max-w-2xl mx-auto w-full">
-              <div className="w-full border border-border/40 bg-card/85 backdrop-blur-sm px-4 sm:px-5 py-2.5 sm:py-3 shadow-xs">
+            {/* Animated Bio wrapped in Neo-Brutalist console box with immediate text presence */}
+            <div className="mt-4 sm:mt-5 max-w-xl sm:max-w-2xl mx-auto w-full">
+              <div className="relative w-full border-2 border-border bg-card px-4 sm:px-6 py-3 sm:py-3.5 shadow-[3px_3px_0px_0px_var(--shadow-color)]">
+                {/* Console Status Tag */}
+                <div className="absolute -top-2.5 left-3.5 bg-foreground text-background px-2 py-0.5 font-mono text-[9px] font-black uppercase tracking-widest border border-border">
+                  SYS // BIO
+                </div>
                 <div className="grid grid-cols-1">
                   {/* Invisible phantom text that reserves the full multi-line dimensions immediately */}
                   <span
@@ -244,11 +248,13 @@ function Index() {
                   <div className="col-start-1 row-start-1">
                     <TextType
                       text="Full-stack, DevOps and applied AI. Computer Science graduate from Kerala."
-                      typingSpeed={14}
-                      pauseDuration={3500}
+                      typingSpeed={10}
+                      initialDelay={80}
+                      pauseDuration={4000}
                       loop={false}
                       showCursor={true}
                       cursorCharacter="|"
+                      cursorClassName="text-lime font-bold"
                       className="block w-full font-mono text-sm leading-relaxed text-foreground/90 sm:text-base text-center"
                     />
                   </div>
@@ -261,7 +267,7 @@ function Index() {
               <Link
                 to="/projects"
                 data-crosshair-target
-                className="border-2 border-border bg-[#F1BE05] text-black px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color,var(--shadow-color))] hover:bg-[#ffd738] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color,var(--shadow-color))] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
+                className="border-2 border-border bg-[#F1BE05] text-black px-6 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05]/90 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
               >
                 VIEW PROJECTS <span>→</span>
               </Link>
@@ -270,7 +276,7 @@ function Index() {
                 target="_blank"
                 rel="noreferrer"
                 data-crosshair-target
-                className="border-2 border-border bg-card text-foreground px-5 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-surface-secondary hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
+                className="border-2 border-border bg-card text-foreground px-6 sm:px-7 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-surface-secondary hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
               >
                 ↓ DOWNLOAD CV
               </a>
@@ -323,9 +329,9 @@ function Index() {
                     {i.n}
                   </span>
                   <span
-                    className={`font-display text-lg sm:text-xl xl:text-[22px] transition-colors truncate ${
+                    className={`font-display font-normal text-lg sm:text-xl xl:text-[22px] transition-colors truncate ${
                       isCardActive
-                        ? "text-inherit font-bold"
+                        ? "text-inherit"
                         : "text-foreground group-hover:text-inherit group-active:text-inherit group-focus-visible:text-inherit"
                     }`}
                   >
@@ -334,7 +340,7 @@ function Index() {
                 </div>
                 <div className="flex items-center justify-end gap-1.5 ml-auto text-right shrink-0">
                   <span
-                    className={`hidden xl:inline label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase transition-colors whitespace-nowrap ${
+                    className={`hidden sm:inline label-mono text-[9.5px] sm:text-[10px] tracking-wide uppercase transition-colors whitespace-nowrap ${
                       isCardActive
                         ? "text-inherit"
                         : "text-muted-foreground group-hover:text-inherit group-active:text-inherit group-focus-visible:text-inherit"

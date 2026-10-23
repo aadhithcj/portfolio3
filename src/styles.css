@@ -233,6 +233,11 @@
     overflow-x: clip;
     max-width: 100vw;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--border);
+    outline-offset: 2px;
+  }
 }
 
 /* Neo-Brutalist core utility classes */

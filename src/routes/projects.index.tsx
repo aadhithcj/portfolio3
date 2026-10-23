@@ -222,10 +222,10 @@ function Projects() {
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <span
-                        className={`font-display text-3xl sm:text-4xl md:text-[42px] leading-tight transition-all ${
+                        className={`font-display text-3xl sm:text-4xl md:text-[42px] leading-tight transition-all font-normal ${
                           isSelected
-                            ? "font-bold"
-                            : "font-normal hover:translate-x-1 hover:text-foreground"
+                            ? "text-black"
+                            : "hover:translate-x-1 hover:text-foreground"
                         }`}
                       >
                         {x.name}
@@ -337,7 +337,7 @@ function Projects() {
 
           {/* Project Details Below Mockup */}
           <div className="mt-6 flex flex-col">
-            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground uppercase">
+            <h2 className="font-display text-3xl sm:text-4xl font-normal tracking-normal text-foreground">
               {p.name}
             </h2>
 

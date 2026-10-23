@@ -417,10 +417,10 @@ function SkillsPage() {
                       {/* Title & Subtitle */}
                       <div className="min-w-0 flex-1 overflow-hidden">
                         <span
-                          className={`block font-display text-xl sm:text-3xl md:text-[34px] leading-tight transition-all truncate ${
+                          className={`block font-display text-xl sm:text-3xl md:text-[34px] leading-tight transition-all truncate font-normal ${
                             isSelected
-                              ? "font-bold text-black"
-                              : "font-normal hover:translate-x-1 hover:text-foreground"
+                              ? "text-black"
+                              : "hover:translate-x-1 hover:text-foreground"
                           }`}
                         >
                           {cat.name}
@@ -528,7 +528,7 @@ function SkillsPage() {
 
           {/* Category Details Below Mockup */}
           <div className="mt-6 flex flex-col">
-            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground">
+            <h2 className="font-display text-3xl sm:text-4xl font-normal tracking-normal text-foreground">
               {activeCat.name}
             </h2>
             <p className="mt-2 font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
@@ -644,10 +644,10 @@ function SkillsPage() {
                       </div>
                       <div className="min-w-0">
                         <h3
-                          className={`font-display text-xs sm:text-sm leading-tight truncate transition-colors ${
+                          className={`font-sans font-bold text-xs sm:text-sm leading-tight truncate transition-colors ${
                             isMatching
-                              ? "font-black text-foreground underline decoration-[#F1BE05] decoration-2"
-                              : "font-bold text-foreground group-hover/proj:text-lime"
+                              ? "text-foreground underline decoration-[#F1BE05] decoration-2"
+                              : "text-foreground group-hover/proj:text-lime"
                           }`}
                         >
                           {proj.name}

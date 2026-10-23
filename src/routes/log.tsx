@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
@@ -207,57 +207,20 @@ function TimelineEntryItem({
   idx: number;
   onHover: () => void;
 }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
   const theme = categoryThemes[item.category];
 
-  useEffect(() => {
-    // If the user prefers reduced motion, make entries immediately visible without animation
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setIsVisible(true);
-      return;
-    }
-
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      (observerEntries) => {
-        observerEntries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px",
-      }
-    );
-
-    observer.observe(element);
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
   return (
-    <div
-      ref={ref}
+    <motion.div
       onMouseEnter={onHover}
-      className={`group relative mb-10 sm:mb-12 last:mb-0 transition-all duration-500 ease-out ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-      }`}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "80px", amount: 0.05 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="group relative mb-12 sm:mb-14 last:mb-0"
     >
       {/* Stable, Outlined Timeline Node with Category Accent Center */}
       <div
-        className={`absolute -left-[35px] sm:-left-[43px] top-1 size-5 sm:size-5.5 border-2 border-border bg-background shadow-[2px_2px_0px_0px_var(--shadow-color)] grid place-items-center transition-transform duration-200 group-hover:scale-110 ${
-          isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"
-        }`}
+        className="absolute -left-[35px] sm:-left-[43px] top-1 size-5 sm:size-5.5 border-2 border-border bg-background shadow-[2px_2px_0px_0px_var(--shadow-color)] grid place-items-center transition-transform duration-200 group-hover:scale-110"
         aria-hidden="true"
       >
         <span className={`size-1.5 border border-border/80 ${theme.node}`} />
@@ -339,7 +302,7 @@ function TimelineEntryItem({
           ))}
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
