@@ -14,6 +14,10 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
 import Crosshair from "@/components/fx/Crosshair";
 import { MotionConfig } from "motion/react";
+import {
+  PHOTOGRAPHY_IMAGE_SRCS,
+  preloadPhotographyImages,
+} from "@/lib/about-media";
 
 import appCss from "../styles.css?url";
 
@@ -191,6 +195,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { rel: "icon", href: "/favicon.png?v=2", type: "image/png" },
         { rel: "shortcut icon", href: "/favicon.png?v=2", type: "image/png" },
         { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        ...PHOTOGRAPHY_IMAGE_SRCS.map((href) => ({
+          rel: "prefetch" as const,
+          href,
+          as: "image",
+          type: "image/webp",
+        })),
       ],
     }),
     shellComponent: RootShell,
@@ -270,6 +280,10 @@ function RootCrosshair() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    preloadPhotographyImages();
+  }, []);
 
   return (
     <ThemeProvider>

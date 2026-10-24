@@ -8,6 +8,7 @@ import { profile, projects } from "@/lib/portfolio";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SiteHeader } from "@/components/SiteHeader";
 import { preloadLanyard } from "@/components/fx/lanyard-preload";
+import { preloadPhotographyImages } from "@/lib/about-media";
 import {
   InteractivePinkPlanet,
   DraggableSticker,
@@ -299,8 +300,11 @@ function Index() {
                 }}
                 onMouseEnter={() => {
                   setNavAccentColor(i.color);
-                  // Heading to About? Start fetching its 3D card now
-                  if (i.to === "/about") preloadLanyard();
+                  // Heading to About? Start fetching its 3D card and photography images now
+                  if (i.to === "/about") {
+                    preloadLanyard();
+                    preloadPhotographyImages();
+                  }
                 }}
                 onMouseLeave={() => setNavAccentColor(null)}
                 onClick={() => {

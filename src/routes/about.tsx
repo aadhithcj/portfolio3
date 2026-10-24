@@ -7,7 +7,14 @@ import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
 import { AboutLanyard } from "@/components/fx/AboutLanyard";
 import { profile } from "@/lib/portfolio";
-import { portrait, contactSheet } from "@/lib/about-media";
+import {
+  portrait,
+  contactSheet,
+  preloadPhotographyImages,
+} from "@/lib/about-media";
+
+// Preload photography WebP images early as soon as the About chunk loads
+preloadPhotographyImages();
 import {
   ArrowUpRight,
   Film,
@@ -339,7 +346,7 @@ function About() {
                       <img
                         src={shot.src}
                         alt={shot.alt}
-                        loading="lazy"
+                        loading="eager"
                         decoding="async"
                         width={400}
                         height={400}

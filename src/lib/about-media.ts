@@ -58,3 +58,39 @@ export const contactSheet: AboutImage[] = [
     focus: "66% 55%",
   },
 ];
+
+/** All WebP photography images and portrait loaded across the site */
+export const PHOTOGRAPHY_IMAGE_SRCS: string[] = [
+  ...contactSheet.map((item) => item.src),
+  ...(portrait ? [portrait.src] : []),
+];
+
+let hasPreloaded = false;
+
+/**
+ * Preload and decode all photography WebP images into the browser cache and memory.
+ * Safe to call on the server (no-op) and idempotent on the client.
+ */
+export function preloadPhotographyImages() {
+  if (typeof window === "undefined" || hasPreloaded) return;
+  hasPreloaded = true;
+
+  const runPreload = () => {
+    for (const src of PHOTOGRAPHY_IMAGE_SRCS) {
+      const img = new Image();
+      img.src = src;
+      if (typeof img.decode === "function") {
+        img.decode().catch(() => {});
+      }
+    }
+  };
+
+  // Schedule after initial frame so initial page render remains snappy
+  if (typeof requestAnimationFrame === "function") {
+    requestAnimationFrame(() => {
+      setTimeout(runPreload, 0);
+    });
+  } else {
+    setTimeout(runPreload, 0);
+  }
+}
