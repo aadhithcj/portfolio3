@@ -185,7 +185,7 @@ function Projects() {
 
           <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl tracking-tight text-foreground">
             Things I’ve{" "}
-            <em className="italic text-lime not-italic font-normal">built</em>.
+            <em className="text-lime not-italic font-normal">built</em>.
           </h1>
 
           <p className="mt-4 text-base sm:text-lg text-muted-foreground font-mono max-w-xl">
@@ -306,7 +306,7 @@ function Projects() {
 
         {/* Right column: preview panel (desktop only; smaller screens read the rows) */}
         <aside
-          className="hidden lg:block min-w-0 sticky top-20 border-[2.5px] border-border bg-card p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
+          className="hidden lg:block min-w-0 sticky top-20 border-[2.5px] border-border bg-card p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)]"
           aria-live="polite"
         >
           <div className="flex items-center justify-between border-b-2 border-border/80 pb-3 mb-5">

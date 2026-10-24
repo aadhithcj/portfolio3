@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
+import { useKeralaTime } from "@/hooks/use-kerala-time";
 
 export const PLANET_COLORS = [
   "#CE4760", // Crimson pink (original)
@@ -93,26 +94,6 @@ export function InteractivePinkPlanet({
       </div>
     </div>
   );
-}
-
-/** Current time in Kerala as HH:MM. Empty until mount so SSR markup stays stable. */
-function useKeralaTime() {
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Asia/Kolkata",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-    const tick = () => setTime(fmt.format(new Date()));
-    tick();
-    const timer = window.setInterval(tick, 15_000);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  return time;
 }
 
 /**

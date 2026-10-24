@@ -219,7 +219,7 @@ function Index() {
             {/* Prominent Headline - with natural breathing room below Aadhith CJ. */}
             <h1 className="mt-3 sm:mt-4 md:mt-5 font-display text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[52px] text-center leading-[1.1] tracking-tight max-w-3xl mx-auto">
               i build digital products that{" "}
-              <em className="italic text-lime not-italic font-normal">
+              <em className="text-lime not-italic font-normal">
                 refuse to be boring
               </em>
               .

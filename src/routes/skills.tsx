@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
 import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
-import { Layers, Cloud, Cpu, ArrowUpRight } from "lucide-react";
+import { Layers, Cloud, Cpu, ArrowUpRight, ChevronDown } from "lucide-react";
+import { projects } from "@/lib/portfolio";
+import { caseData } from "@/lib/case-data";
 
 export const Route = createFileRoute("/skills")({
   head: () => ({
@@ -14,7 +16,7 @@ export const Route = createFileRoute("/skills")({
       {
         name: "description",
         content:
-          "Full-stack development, DevOps infrastructure, AI/ML models, and system architecture skills of Aadhith C Joseph.",
+          "Full-stack web development, programming foundations, DevOps learning, and mobile/ML project experience of Aadhith C Joseph.",
       },
       {
         property: "og:title",
@@ -23,7 +25,7 @@ export const Route = createFileRoute("/skills")({
       {
         property: "og:description",
         content:
-          "Interactive breakdown of core engineering tools, frameworks, and proficiencies.",
+          "Interactive breakdown of core engineering tools, frameworks, and where each one was used.",
       },
       { property: "og:image", content: "/og-image.png" },
       { name: "twitter:image", content: "/og-image.png" },
@@ -33,21 +35,109 @@ export const Route = createFileRoute("/skills")({
   component: SkillsPage,
 });
 
-interface AppliedProject {
-  initials: string;
+/* ------------------------------------------------------------------ */
+/* Evidence: which projects actually used which skills                 */
+/* ------------------------------------------------------------------ */
+
+const norm = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
+
+// Different spellings of the same tool across project stacks and skill chips
+const ALIASES: Record<string, string> = {
+  postgres: "postgresql",
+  "docker compose": "docker",
+  "aws ec2 + ssm": "aws ec2",
+  yolov8n: "yolo",
+  tailwind: "tailwind css",
+};
+
+// A stack entry that also proves a broader chip
+const IMPLIES: Record<string, string[]> = {
+  sqlite: ["sql"],
+  postgresql: ["sql"],
+  "github actions": ["ci/cd"],
+};
+
+// Skills a project uses that its stack list doesn't name, each stated in its case study
+const ALSO_USES: Record<string, string[]> = {
+  // pytest in the workflow, a deploy script on the EC2 server, /api/health endpoints, Git workflows
+  devopshub: ["pytest", "Linux", "REST APIs", "Git"],
+  // "Flask API that fetches weather from Open-Meteo"
+  "crop-recommendation": ["REST APIs"],
+};
+
+type Evidence = {
+  id: string;
   name: string;
-  slug: string;
-  stack: string;
-  badgeBg: string;
-  skills: string[];
+  initials: string;
+  accent: string;
+  ink: string;
+  /** Internal case study, or an external link (this site's repo) */
+  to: { slug: string } | { href: string };
+  skills: Set<string>;
+};
+
+function skillSet(list: string[]) {
+  const out = new Set<string>();
+  for (const raw of list) {
+    const s = ALIASES[norm(raw)] ?? norm(raw);
+    out.add(s);
+    for (const extra of IMPLIES[s] ?? []) out.add(extra);
+  }
+  return out;
 }
+
+const darkAccents = new Set(["#9649CB", "#FF3C38"]);
+
+const evidence: Evidence[] = [
+  ...projects.map((p) => {
+    const accent = caseData[p.slug]?.accent ?? "#F1BE05";
+    return {
+      id: p.slug,
+      name: p.name,
+      initials: p.name.slice(0, 2).toUpperCase(),
+      accent,
+      ink: darkAccents.has(accent) ? "#FFFFFF" : "#000000",
+      to: { slug: p.slug },
+      skills: skillSet([
+        ...p.stack,
+        ...(caseData[p.slug]?.stack ?? []),
+        ...(ALSO_USES[p.slug] ?? []),
+      ]),
+    };
+  }),
+  {
+    // The portfolio itself is the clearest proof of the web stack
+    id: "this-site",
+    name: "This site",
+    initials: "</>",
+    accent: "#F1BE05",
+    ink: "#000000",
+    to: { href: "https://github.com/aadhithcj/portfolio3" },
+    skills: skillSet([
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "TanStack Start",
+      "three.js",
+      "Vite",
+      "Git",
+    ]),
+  },
+];
+
+const usesSkill = (e: Evidence, chip: string) =>
+  e.skills.has(ALIASES[norm(chip)] ?? norm(chip));
+
+/* ------------------------------------------------------------------ */
+/* Categories                                                          */
+/* ------------------------------------------------------------------ */
 
 interface SkillCategory {
   id: string;
-  number: string;
   name: string;
   subtitle: string;
-  count: string;
+  /** Shown as a stamp when the category is still being learned */
+  status?: string;
   markerColor: string;
   accentBg: string;
   accentColor: string;
@@ -56,86 +146,27 @@ interface SkillCategory {
   description: string;
   chips: string[];
   codeSnippet: React.ReactNode;
-  projects: AppliedProject[];
 }
 
 const categories: SkillCategory[] = [
   {
-    id: "languages",
-    number: "01",
-    name: "Languages & Foundations",
-    subtitle: "PROGRAMMING FUNDAMENTALS, DATA STRUCTURES & MORE ↗",
-    count: "12+",
-    markerColor: "bg-[#FF7700] text-black",
-    accentBg: "bg-[#FF7700]",
-    accentColor: "#FF7700",
-    quip: "always curious",
-    iconType: "prompt",
-    description:
-      "Programming fundamentals, problem-solving, data structures, algorithms, and low-level concepts that form the base of everything I build.",
-    chips: ["Python", "Java", "C", "SQL", "DSA", "OOP"],
-    codeSnippet: (
-      <div>
-        <span className="text-[#9649CB] dark:text-[#C084FC]">def </span>
-        <span className="text-[#42BFDD] dark:text-[#38BDF8]">build</span>():
-        {"\n"} ideas = [
-        <span className="text-[#FF7700] dark:text-[#FB923C]">"solve"</span>,{" "}
-        <span className="text-[#FF7700] dark:text-[#FB923C]">"build"</span>,{" "}
-        <span className="text-[#FF7700] dark:text-[#FB923C]">"learn"</span>]
-        {"\n"}{" "}
-        <span className="text-[#CE4760] dark:text-[#F87171]">return </span>
-        <span className="text-[#22C55E] dark:text-[#4ADE80]">
-          "always curious"
-        </span>
-      </div>
-    ),
-    projects: [
-      {
-        initials: "IN",
-        name: "Inventory System",
-        slug: "inventory",
-        stack: "PYTHON, SQL, DSA",
-        badgeBg: "bg-[#F1BE05]",
-        skills: ["Python", "SQL", "DSA", "OOP", "C"],
-      },
-      {
-        initials: "DE",
-        name: "DevOpsHub",
-        slug: "devopshub",
-        stack: "PYTHON, SQL",
-        badgeBg: "bg-[#FF7700]",
-        skills: ["Python", "SQL", "OOP", "DSA"],
-      },
-      {
-        initials: "RE",
-        name: "RETINA",
-        slug: "retina",
-        stack: "PYTHON, OOP",
-        badgeBg: "bg-[#9649CB] text-white",
-        skills: ["Python", "Java", "OOP", "DSA", "C"],
-      },
-    ],
-  },
-  {
     id: "web",
-    number: "02",
     name: "Web & Full-Stack",
-    subtitle: "FRONTEND, BACKEND, APIS & DATABASES ↗",
-    count: "10+",
+    subtitle: "FRONTEND, BACKEND, APIS & DATABASES",
     markerColor: "bg-[#F1BE05] text-black",
     accentBg: "bg-[#F1BE05]",
     accentColor: "#F1BE05",
     quip: "ships on friday",
     iconType: "layers",
     description:
-      "Component hierarchy, reactive state management, asynchronous workflows, and robust relational schemas engineered for scale.",
+      "React and TypeScript front ends, Flask and Supabase back ends, and the PostgreSQL schemas underneath. This is the stack behind most of what I build, including this site.",
     chips: [
       "React",
       "TypeScript",
-      "Flask",
-      "PostgreSQL",
-      "REST APIs",
       "Tailwind CSS",
+      "Flask",
+      "REST APIs",
+      "PostgreSQL",
       "Supabase",
     ],
     codeSnippet: (
@@ -158,61 +189,55 @@ const categories: SkillCategory[] = [
         {"\n"}&#125;;
       </div>
     ),
-    projects: [
-      {
-        initials: "CV",
-        name: "CV Management",
-        slug: "cv-sorting",
-        stack: "REACT, SUPABASE",
-        badgeBg: "bg-[#F1BE05]",
-        skills: [
-          "React",
-          "TypeScript",
-          "PostgreSQL",
-          "Supabase",
-          "REST APIs",
-          "Tailwind CSS",
-        ],
-      },
-      {
-        initials: "DE",
-        name: "DevOpsHub",
-        slug: "devopshub",
-        stack: "FLASK, POSTGRES",
-        badgeBg: "bg-[#FF7700]",
-        skills: ["React", "Flask", "PostgreSQL", "REST APIs", "Tailwind CSS"],
-      },
-      {
-        initials: "RO",
-        name: "Roots",
-        slug: "crop-recommendation",
-        stack: "REACT, TS, FLASK",
-        badgeBg: "bg-[#22C55E] text-white",
-        skills: ["React", "TypeScript", "Flask", "REST APIs", "Tailwind CSS"],
-      },
-    ],
+  },
+  {
+    id: "languages",
+    name: "Languages & Foundations",
+    subtitle: "PROGRAMMING FUNDAMENTALS & DATA STRUCTURES",
+    markerColor: "bg-[#FF7700] text-black",
+    accentBg: "bg-[#FF7700]",
+    accentColor: "#FF7700",
+    quip: "always curious",
+    iconType: "prompt",
+    description:
+      "Programming fundamentals, problem-solving, data structures, algorithms, and low-level concepts that form the base of everything I build.",
+    chips: ["Python", "SQL", "Java", "C", "DSA", "OOP"],
+    codeSnippet: (
+      <div>
+        <span className="text-[#9649CB] dark:text-[#C084FC]">def </span>
+        <span className="text-[#42BFDD] dark:text-[#38BDF8]">build</span>():
+        {"\n"} ideas = [
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"solve"</span>,{" "}
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"build"</span>,{" "}
+        <span className="text-[#FF7700] dark:text-[#FB923C]">"learn"</span>]
+        {"\n"}{" "}
+        <span className="text-[#CE4760] dark:text-[#F87171]">return </span>
+        <span className="text-[#22C55E] dark:text-[#4ADE80]">
+          "always curious"
+        </span>
+      </div>
+    ),
   },
   {
     id: "devops",
-    number: "03",
     name: "DevOps & Infrastructure",
-    subtitle: "DEPLOYMENT, CI/CD, CLOUD & SYSTEMS ↗",
-    count: "8+",
+    subtitle: "CI/CD, CONTAINERS & CLOUD DEPLOYS",
+    status: "Learning",
     markerColor: "bg-[#42BFDD] text-black",
     accentBg: "bg-[#42BFDD]",
     accentColor: "#42BFDD",
     quip: "works on my machine ✓",
     iconType: "cloud",
     description:
-      "Automated CI/CD pipelines, multi-container orchestration, Linux process supervision, and reliable cloud compute instances.",
+      "What I'm learning by building DevOpsHub: a GitHub Actions pipeline, Docker images, and health-checked deploys to AWS EC2 with automatic rollback.",
     chips: [
-      "Docker",
+      "Git",
       "GitHub Actions",
+      "CI/CD",
+      "Docker",
+      "pytest",
       "Linux",
       "AWS EC2",
-      "pytest",
-      "CI/CD",
-      "Git",
     ],
     codeSnippet: (
       <div>
@@ -230,46 +255,26 @@ const categories: SkillCategory[] = [
         errors)
       </div>
     ),
-    projects: [
-      {
-        initials: "DE",
-        name: "DevOpsHub",
-        slug: "devopshub",
-        stack: "DOCKER, AWS EC2",
-        badgeBg: "bg-[#42BFDD]",
-        skills: [
-          "Docker",
-          "GitHub Actions",
-          "Linux",
-          "AWS EC2",
-          "pytest",
-          "CI/CD",
-          "Git",
-        ],
-      },
-    ],
   },
   {
     id: "mobile-ai",
-    number: "04",
     name: "Mobile, AI & Computer Vision",
-    subtitle: "ANDROID, MACHINE LEARNING & VISION ↗",
-    count: "10+",
+    subtitle: "PROJECT EXPERIENCE: ANDROID & ML",
     markerColor: "bg-[#9649CB] text-white",
     accentBg: "bg-[#9649CB]",
     accentColor: "#9649CB",
     quip: "check me out",
     iconType: "cpu",
     description:
-      "Native Android applications, real-time computer vision frame pipelines, edge inference models, and scikit-learn predictive classifiers.",
+      "Project experience rather than a specialty: a Kotlin Android app running on-device vision models (Retina), and a scikit-learn classifier behind a web app (Roots).",
     chips: [
       "Kotlin",
-      "Jetpack Compose",
-      "OpenCV",
+      "ML Kit",
       "TensorFlow Lite",
       "YOLO",
-      "ML Kit",
       "Scikit-learn",
+      "Jetpack Compose",
+      "OpenCV",
     ],
     codeSnippet: (
       <div>
@@ -287,40 +292,196 @@ const categories: SkillCategory[] = [
         {"\n"}&#125;
       </div>
     ),
-    projects: [
-      {
-        initials: "RE",
-        name: "RETINA",
-        slug: "retina",
-        stack: "KOTLIN, OPENCV, TF",
-        badgeBg: "bg-[#9649CB] text-white",
-        skills: [
-          "Kotlin",
-          "Jetpack Compose",
-          "OpenCV",
-          "TensorFlow Lite",
-          "YOLO",
-          "ML Kit",
-        ],
-      },
-      {
-        initials: "RO",
-        name: "Roots",
-        slug: "crop-recommendation",
-        stack: "SCIKIT-LEARN, RANDOM FOREST",
-        badgeBg: "bg-[#22C55E] text-white",
-        skills: ["Scikit-learn", "AI/ML"],
-      },
-    ],
   },
 ];
+
+/** Projects that used at least one of the category's skills, most matches first. */
+function appliedIn(cat: SkillCategory) {
+  return evidence
+    .map((e) => ({ e, used: cat.chips.filter((c) => usesSkill(e, c)) }))
+    .filter((x) => x.used.length > 0)
+    .sort((a, b) => b.used.length - a.used.length);
+}
+
+function CategoryIcon({ type }: { type: SkillCategory["iconType"] }) {
+  if (type === "prompt")
+    return (
+      <span className="font-mono font-black text-xs sm:text-sm tracking-tighter">
+        &gt;_
+      </span>
+    );
+  if (type === "layers") return <Layers className="size-4 sm:size-5" />;
+  if (type === "cloud") return <Cloud className="size-4 sm:size-5" />;
+  return <Cpu className="size-4 sm:size-5" />;
+}
+
+function StatusStamp({ label }: { label: string }) {
+  return (
+    <span className="inline-block -rotate-2 border-2 border-border bg-[#42BFDD] px-1.5 py-0.5 font-mono text-[10px] font-black uppercase tracking-wider text-black shadow-[2px_2px_0px_0px_var(--shadow-color)]">
+      {label}
+    </span>
+  );
+}
+
+/** Skill chips plus the projects that prove them. Shared by the desktop panel and the phone accordion. */
+function SkillEvidence({
+  cat,
+  hoveredSkill,
+  setHoveredSkill,
+  onFirstHover,
+}: {
+  cat: SkillCategory;
+  hoveredSkill: string | null;
+  setHoveredSkill: (s: string | null) => void;
+  onFirstHover: () => void;
+}) {
+  const applied = appliedIn(cat);
+  const hoveredMatches = hoveredSkill
+    ? applied.filter(({ e }) => usesSkill(e, hoveredSkill)).length
+    : 0;
+
+  return (
+    <>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {cat.chips.map((chip) => {
+          const isHovered = hoveredSkill === chip;
+          return (
+            <button
+              key={chip}
+              type="button"
+              aria-pressed={isHovered}
+              onMouseEnter={() => {
+                setHoveredSkill(chip);
+                onFirstHover();
+              }}
+              onFocus={() => {
+                setHoveredSkill(chip);
+                onFirstHover();
+              }}
+              onMouseLeave={() => setHoveredSkill(null)}
+              onClick={() => {
+                setHoveredSkill(isHovered ? null : chip);
+                onFirstHover();
+              }}
+              className={`border-2 border-border px-3 py-1 font-mono text-xs font-bold transition-all duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
+                isHovered
+                  ? "bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] -translate-y-0.5"
+                  : "bg-card text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--shadow-color)]"
+              }`}
+            >
+              {chip}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-6 pt-4 border-t-2 border-border">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5">
+          <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground flex items-center gap-2">
+            <span>Applied in</span>
+            {hoveredSkill && (
+              <span className="text-[10px] font-bold text-black bg-[#F1BE05] px-1.5 py-0.5 border border-border shadow-[1px_1px_0px_0px_var(--shadow-color)]">
+                {hoveredSkill.toUpperCase()}
+              </span>
+            )}
+          </span>
+          <Link
+            to="/projects"
+            data-crosshair-target
+            className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors"
+          >
+            <span>All projects</span>
+            <ArrowUpRight className="size-3.5" />
+          </Link>
+        </div>
+
+        {hoveredSkill && hoveredMatches === 0 && (
+          <p className="mb-2.5 font-mono text-[11px] text-muted-foreground">
+            Not in a showcased project yet: {hoveredSkill} comes from coursework
+            and practice.
+          </p>
+        )}
+
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+          {applied.map(({ e, used }) => {
+            const isMatching = hoveredSkill
+              ? usesSkill(e, hoveredSkill)
+              : false;
+            const cardClass = `border-2 border-border p-2.5 transition-all duration-150 flex items-center gap-2.5 group/proj relative ${
+              hoveredSkill
+                ? isMatching
+                  ? "bg-[#F1BE05]/20 shadow-[4px_4px_0px_0px_var(--shadow-color)] -translate-y-1"
+                  : "bg-card opacity-35"
+                : "bg-card hover:bg-surface-secondary/90 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--shadow-color)]"
+            }`;
+            const body = (
+              <>
+                <div
+                  className="size-9 sm:size-10 grid place-items-center border-2 border-border font-mono text-[11px] sm:text-xs font-black shrink-0 shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)]"
+                  style={{ background: e.accent, color: e.ink }}
+                >
+                  {e.initials}
+                </div>
+                <div className="min-w-0">
+                  <h3
+                    className={`font-sans font-bold text-xs sm:text-sm leading-tight truncate ${
+                      isMatching
+                        ? "underline decoration-[#F1BE05] decoration-2"
+                        : ""
+                    }`}
+                  >
+                    {e.name}
+                  </h3>
+                  <p className="font-mono text-[9.5px] text-muted-foreground uppercase truncate mt-0.5">
+                    {used.join(", ")}
+                  </p>
+                </div>
+              </>
+            );
+            return "slug" in e.to ? (
+              <Link
+                key={e.id}
+                to="/projects/$slug"
+                params={{ slug: e.to.slug }}
+                data-crosshair-target
+                className={cardClass}
+              >
+                {body}
+              </Link>
+            ) : (
+              <a
+                key={e.id}
+                href={e.to.href}
+                target="_blank"
+                rel="noreferrer"
+                data-crosshair-target
+                className={cardClass}
+              >
+                {body}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+}
 
 function SkillsPage() {
   const [active, setActive] = useState<number>(0);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const [hasHoveredChip, setHasHoveredChip] = useState(false);
+  // Phones only: whether the selected category is expanded (tapping it again closes it)
+  const [open, setOpen] = useState(true);
+  // A tap fires hover and focus (which select the row) before click, so remember
+  // whether the row was already the open one when the press started
+  const wasOpenOnPress = useRef<boolean | null>(null);
 
   const activeCat = (categories[active] ?? categories[0])!;
+  const select = (i: number) => {
+    if (i !== active) setHoveredSkill(null);
+    setActive(i);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-clip relative">
@@ -328,11 +489,9 @@ function SkillsPage() {
 
       <SiteHeader />
 
-      {/* Main Container matching projects page dimensions, padding & split grid */}
-      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
-        {/* Left Column: Heading and Editorial Skill Index */}
+      <main className="page-enter mx-auto max-w-7xl px-4 sm:px-8 pt-8 sm:pt-12 pb-20 sm:pb-24 grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 xl:gap-14 items-start relative z-10 w-full min-w-0">
+        {/* Left column: heading and category index */}
         <div className="flex flex-col relative w-full min-w-0">
-          {/* Eyebrow Label */}
           <p className="label-mono">
             <DecryptedText
               text="# TOOLBOX // TECH STACK"
@@ -343,26 +502,22 @@ function SkillsPage() {
             />
           </p>
 
-          {/* Heading - exact matching scale as Projects */}
           <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl tracking-tight text-foreground">
             Systems, Stack &{" "}
-            <em className="italic text-lime not-italic font-normal">Tools</em>.
+            <em className="text-lime not-italic font-normal">Tools</em>.
           </h1>
 
-          {/* Subtitle - matching text size and mono styling as Projects */}
           <p className="mt-4 text-base sm:text-lg text-muted-foreground font-mono max-w-xl">
-            A focused breakdown of the languages, frameworks, infrastructure
-            platforms, and computer vision tools I use in my work.
+            The languages, frameworks and tools I use, each linked to the
+            projects where I actually used it.
           </p>
 
-          {/* Numbered Editorial Skill List - matching padding & height of Projects */}
           <div
             className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0"
             role="list"
           >
             {categories.map((cat, i) => {
               const isSelected = active === i;
-
               return (
                 <div
                   key={cat.id}
@@ -371,12 +526,21 @@ function SkillsPage() {
                 >
                   <button
                     type="button"
-                    onClick={() => {
-                      setActive(i);
-                      setHoveredSkill(null);
+                    onPointerDown={() => {
+                      wasOpenOnPress.current = isSelected && open;
                     }}
-                    onMouseEnter={() => setActive(i)}
-                    onFocus={() => setActive(i)}
+                    onClick={() => {
+                      // Pointer presses use the state from press time; keyboard uses the current state
+                      const wasOpen =
+                        wasOpenOnPress.current ?? (isSelected && open);
+                      wasOpenOnPress.current = null;
+                      setOpen(!wasOpen);
+                      select(i);
+                    }}
+                    onMouseEnter={() => select(i)}
+                    onFocus={() => select(i)}
+                    aria-expanded={isSelected && open}
+                    aria-controls={`skills-${cat.id}`}
                     data-crosshair-target
                     className={`w-full min-w-0 overflow-hidden text-left transition-all duration-150 flex items-center justify-between py-3.5 sm:py-5 px-3 sm:px-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
                       isSelected
@@ -385,45 +549,22 @@ function SkillsPage() {
                     }`}
                   >
                     <div className="flex items-center gap-3 sm:gap-5 min-w-0 flex-1 overflow-hidden">
-                      {/* Category Number */}
-                      <span
-                        className={`font-mono text-xs sm:text-sm font-bold transition-colors shrink-0 ${
-                          isSelected ? "text-black" : "text-lime"
-                        }`}
-                      >
-                        {cat.number}
-                      </span>
-
-                      {/* Square Icon Badge */}
                       <div
-                        className={`size-9 sm:size-11 grid place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] shrink-0 transition-transform ${cat.markerColor}`}
+                        className={`size-9 sm:size-11 grid place-items-center border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)] shrink-0 ${cat.markerColor}`}
                       >
-                        {cat.iconType === "prompt" && (
-                          <span className="font-mono font-black text-xs sm:text-sm tracking-tighter">
-                            &gt;_
-                          </span>
-                        )}
-                        {cat.iconType === "layers" && (
-                          <Layers className="size-4 sm:size-5" />
-                        )}
-                        {cat.iconType === "cloud" && (
-                          <Cloud className="size-4 sm:size-5" />
-                        )}
-                        {cat.iconType === "cpu" && (
-                          <Cpu className="size-4 sm:size-5" />
-                        )}
+                        <CategoryIcon type={cat.iconType} />
                       </div>
 
-                      {/* Title & Subtitle */}
                       <div className="min-w-0 flex-1 overflow-hidden">
-                        <span
-                          className={`block font-display text-xl sm:text-3xl md:text-[34px] leading-tight transition-all truncate font-normal ${
-                            isSelected
-                              ? "text-black"
-                              : "hover:translate-x-1 hover:text-foreground"
-                          }`}
-                        >
-                          {cat.name}
+                        <span className="flex items-center gap-2.5">
+                          <span className="block font-display text-xl sm:text-3xl md:text-[34px] leading-tight truncate font-normal">
+                            {cat.name}
+                          </span>
+                          {cat.status && (
+                            <span className="hidden sm:inline-block">
+                              <StatusStamp label={cat.status} />
+                            </span>
+                          )}
                         </span>
                         <p
                           className={`font-mono text-[9px] sm:text-[10.5px] font-bold uppercase tracking-wider mt-0.5 sm:mt-1 truncate block ${
@@ -437,30 +578,48 @@ function SkillsPage() {
                       </div>
                     </div>
 
-                    {/* Right Count */}
                     <div className="flex items-center gap-2 sm:gap-3 shrink-0 pl-2">
                       <span
-                        className={`font-mono text-xs sm:text-base font-black transition-colors ${
-                          isSelected
-                            ? "text-black font-bold"
-                            : "text-muted-foreground"
+                        className={`font-mono text-xs sm:text-sm font-bold tabular-nums ${
+                          isSelected ? "text-black" : "text-muted-foreground"
                         }`}
                       >
-                        {cat.count}
+                        {cat.chips.length} skills
                       </span>
-                      {isSelected && (
-                        <span className="hidden sm:inline font-mono text-xs font-bold text-black">
-                          ●
-                        </span>
-                      )}
+                      <ChevronDown
+                        className={`size-4 transition-transform lg:hidden ${
+                          isSelected && open ? "rotate-180" : ""
+                        }`}
+                        aria-hidden="true"
+                      />
                     </div>
                   </button>
+
+                  {/* Phones and tablets: the category opens in place instead of a side panel */}
+                  {isSelected && open && (
+                    <div
+                      id={`skills-${cat.id}`}
+                      className="lg:hidden border-x-2 border-b-2 border-border bg-card px-3 pt-3 pb-4 mb-2 -mt-1"
+                    >
+                      {cat.status && <StatusStamp label={cat.status} />}
+                      <p
+                        className={`font-mono text-xs leading-relaxed text-muted-foreground ${cat.status ? "mt-3" : ""}`}
+                      >
+                        {cat.description}
+                      </p>
+                      <SkillEvidence
+                        cat={cat}
+                        hoveredSkill={hoveredSkill}
+                        setHoveredSkill={setHoveredSkill}
+                        onFirstHover={() => setHasHoveredChip(true)}
+                      />
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
 
-          {/* Real proof link at bottom-left */}
           <Link
             to="/projects"
             data-crosshair-target
@@ -470,22 +629,19 @@ function SkillsPage() {
           </Link>
         </div>
 
-        {/* Right Column: Substantial Neo-Brutalist Inspector Card matching Projects Preview */}
+        {/* Right column: inspector panel (desktop only) */}
         <aside
-          className="w-full min-w-0 max-w-full overflow-hidden sticky top-20 border-2 sm:border-[2.5px] border-border bg-card p-4 sm:p-7 shadow-[5px_5px_0px_0px_var(--shadow-color)] sm:shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)] relative"
+          className="hidden lg:block w-full min-w-0 max-w-full overflow-hidden sticky top-20 border-[2.5px] border-border bg-card p-7 shadow-[8px_8px_0px_0px_var(--shadow-color)] transition-shadow duration-200 hover:shadow-[10px_10px_0px_0px_var(--shadow-color)]"
           aria-live="polite"
         >
-          {/* Panel Top Header Bar */}
           <div className="flex items-center justify-between border-b-2 border-border/80 pb-3 mb-5">
             <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
-              SKILL GROUP / {activeCat.number}
+              SKILL GROUP / {String(active + 1).padStart(2, "0")}
             </span>
             <span className="size-2.5 rounded-full bg-[#FF3C38]" />
           </div>
 
-          {/* Visual Mockup Frame - full height matching Projects Preview */}
-          <div className="group/frame border-2 border-border bg-surface-secondary/70 p-3 sm:p-6 relative overflow-hidden flex items-center justify-center min-h-[220px] sm:min-h-[290px] select-none transition-colors duration-200 hover:border-foreground/80 w-full min-w-0 max-w-full">
-            {/* Subtle dot matrix background */}
+          <div className="group/frame border-2 border-border bg-surface-secondary/70 p-6 relative overflow-hidden flex items-center justify-center min-h-72.5 select-none transition-colors duration-200 hover:border-foreground/80 w-full min-w-0 max-w-full">
             <div
               className="absolute inset-0 opacity-15 pointer-events-none"
               style={{
@@ -495,47 +651,42 @@ function SkillsPage() {
               }}
             />
 
-            {/* Tilted Back Accent Card */}
             <div
-              className={`absolute w-[220px] sm:w-[330px] h-[110px] sm:h-[160px] border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] -rotate-3 -translate-x-2 sm:-translate-x-4 -translate-y-2 transition-colors duration-200 ${activeCat.accentBg}`}
+              className={`absolute w-82.5 h-40 border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] -rotate-3 -translate-x-4 -translate-y-2 transition-colors duration-200 ${activeCat.accentBg}`}
             />
 
-            {/* Front Editor Window */}
-            <div className="relative z-10 w-full max-w-[240px] sm:max-w-[340px] border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] p-3 sm:p-4">
-              {/* Window Controls */}
+            <div className="relative z-10 w-full max-w-85 border-2 border-border bg-card shadow-[4px_4px_0px_0px_var(--shadow-color)] p-4">
               <div className="flex items-center gap-1.5 pb-2 border-b border-border/50">
                 <span className="size-2.5 rounded-full bg-[#FF3C38] border border-border/40" />
                 <span className="size-2.5 rounded-full bg-[#F1BE05] border border-border/40" />
                 <span className="size-2.5 rounded-full bg-[#22C55E] border border-border/40" />
               </div>
-
-              {/* Code snippet with syntax colors */}
-              <pre className="mt-2.5 font-mono text-[11px] sm:text-[13px] leading-relaxed text-foreground overflow-x-auto">
+              <pre className="mt-2.5 font-mono text-[13px] leading-relaxed text-foreground overflow-x-auto">
                 <code>{activeCat.codeSnippet}</code>
               </pre>
             </div>
 
-            {/* Per-category handwritten quip with arrow */}
             <HandNote
               key={activeCat.id}
               flip
               rotate={3}
-              className="hidden sm:block absolute right-5 top-4 z-20 w-40"
+              className="absolute right-5 top-4 z-20 w-40"
             >
               {activeCat.quip}
             </HandNote>
           </div>
 
-          {/* Category Details Below Mockup */}
           <div className="mt-6 flex flex-col">
-            <h2 className="font-display text-3xl sm:text-4xl font-normal tracking-normal text-foreground">
-              {activeCat.name}
-            </h2>
-            <p className="mt-2 font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="font-display text-4xl font-normal tracking-normal text-foreground">
+                {activeCat.name}
+              </h2>
+              {activeCat.status && <StatusStamp label={activeCat.status} />}
+            </div>
+            <p className="mt-2 font-mono text-sm text-muted-foreground leading-relaxed">
               {activeCat.description}
             </p>
 
-            {/* Hand-written caption directly above chips, vanishes after first hover */}
             <AnimatePresence>
               {!hasHoveredChip && (
                 <motion.p
@@ -547,120 +698,12 @@ function SkillsPage() {
               )}
             </AnimatePresence>
 
-            {/* Tech Chips with Interactive Project Highlight on Hover */}
-            <div className="mt-4 flex flex-wrap gap-2">
-              {activeCat.chips.map((chip) => {
-                const isHovered =
-                  hoveredSkill?.toLowerCase() === chip.toLowerCase();
-
-                return (
-                  <button
-                    key={chip}
-                    type="button"
-                    onMouseEnter={() => {
-                      setHoveredSkill(chip);
-                      setHasHoveredChip(true);
-                    }}
-                    onFocus={() => {
-                      setHoveredSkill(chip);
-                      setHasHoveredChip(true);
-                    }}
-                    onMouseLeave={() => setHoveredSkill(null)}
-                    onClick={() => {
-                      setHoveredSkill(hoveredSkill === chip ? null : chip);
-                      setHasHoveredChip(true);
-                    }}
-                    className={`border-2 border-border px-3 py-1 font-mono text-xs font-bold transition-all duration-150 cursor-pointer select-none ${
-                      isHovered
-                        ? "bg-[#F1BE05] text-black shadow-[3px_3px_0px_0px_var(--shadow-color)] -translate-y-0.5 scale-105 z-10"
-                        : "bg-card text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--shadow-color)]"
-                    }`}
-                    title={`Hover to highlight projects using ${chip}`}
-                  >
-                    {chip}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Bottom Evidence Strip: APPLIED IN PROJECTS */}
-            <div className="mt-6 pt-4 border-t-2 border-border">
-              <div className="flex items-center justify-between pb-2.5">
-                <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground flex items-center gap-2">
-                  <span>APPLIED IN PROJECTS</span>
-                  {hoveredSkill && (
-                    <span className="text-[10px] font-bold text-black bg-[#F1BE05] px-1.5 py-0.5 border border-border shadow-[1px_1px_0px_0px_var(--shadow-color)]">
-                      USING: {hoveredSkill.toUpperCase()}
-                    </span>
-                  )}
-                </span>
-                <Link
-                  to="/projects"
-                  data-crosshair-target
-                  className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors"
-                >
-                  <span>VIEW ALL</span>
-                  <ArrowUpRight className="size-3.5" />
-                </Link>
-              </div>
-
-              {/* Project Cards Row - Illuminating matching projects on skill hover */}
-              <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {activeCat.projects.map((proj) => {
-                  const isMatching = hoveredSkill
-                    ? proj.skills.some(
-                        (s) =>
-                          s.toLowerCase() === hoveredSkill.toLowerCase() ||
-                          hoveredSkill
-                            .toLowerCase()
-                            .includes(s.toLowerCase()) ||
-                          s.toLowerCase().includes(hoveredSkill.toLowerCase())
-                      )
-                    : false;
-
-                  return (
-                    <Link
-                      key={proj.slug}
-                      to="/projects/$slug"
-                      params={{ slug: proj.slug }}
-                      data-crosshair-target
-                      className={`border-2 border-border p-2.5 transition-all duration-150 flex items-center gap-2.5 group/proj relative ${
-                        hoveredSkill
-                          ? isMatching
-                            ? "bg-[#F1BE05]/20 shadow-[4px_4px_0px_0px_var(--shadow-color)] -translate-y-1 border-foreground ring-1 ring-[#F1BE05]"
-                            : "bg-card opacity-35 grayscale-[50%] scale-[0.98]"
-                          : "bg-card hover:bg-surface-secondary/90 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_var(--shadow-color)]"
-                      }`}
-                    >
-                      {/* Two-letter badge */}
-                      <div
-                        className={`size-9 sm:size-10 grid place-items-center border-2 border-border font-mono text-xs sm:text-sm font-black text-black shrink-0 shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)] transition-transform ${
-                          isMatching
-                            ? "scale-105 shadow-[2.5px_2.5px_0px_0px_var(--shadow-color)]"
-                            : ""
-                        } group-hover/proj:scale-105 ${proj.badgeBg}`}
-                      >
-                        {proj.initials}
-                      </div>
-                      <div className="min-w-0">
-                        <h3
-                          className={`font-sans font-bold text-xs sm:text-sm leading-tight truncate transition-colors ${
-                            isMatching
-                              ? "text-foreground underline decoration-[#F1BE05] decoration-2"
-                              : "text-foreground group-hover/proj:text-lime"
-                          }`}
-                        >
-                          {proj.name}
-                        </h3>
-                        <p className="font-mono text-[9.5px] text-muted-foreground uppercase truncate mt-0.5">
-                          {proj.stack}
-                        </p>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+            <SkillEvidence
+              cat={activeCat}
+              hoveredSkill={hoveredSkill}
+              setHoveredSkill={setHoveredSkill}
+              onFirstHover={() => setHasHoveredChip(true)}
+            />
           </div>
         </aside>
       </main>

@@ -5,7 +5,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
 import { PageBackdrop } from "@/components/fx/PageBackdrop";
 import { HandNote } from "@/components/fx/HandNote";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { projects } from "@/lib/portfolio";
 
 export const Route = createFileRoute("/log")({
   head: () => ({
@@ -30,150 +31,115 @@ export const Route = createFileRoute("/log")({
   component: LogPage,
 });
 
-interface EvidenceOutput {
-  stat?: string;
-  label: string;
-}
+type Category =
+  "Experience" | "Education" | "Award" | "Leadership" | "Research";
 
 interface LogEntry {
+  id: string;
   period: string;
-  year: string;
   title: string;
   role: string;
   description: string;
-  category: "Experience" | "Education" | "Award" | "Leadership";
-  highlights: string[];
-  featuredEvidence?: {
-    header: string;
-    items: EvidenceOutput[];
-  };
+  category: Category;
+  /** The numbers worth stating, each said once */
+  stats: { stat: string; label: string }[];
+  /** One extra fact that isn't a number */
+  note?: string;
+  link?: { slug: string; label: string };
 }
+
+const retinaPaper = projects.find((p) => p.slug === "retina")?.researchPaper;
 
 const entries: LogEntry[] = [
   {
+    id: "btech",
     period: "2022 — 2026",
-    year: "2026",
     title: "B.Tech in Computer Science and Engineering",
     role: "Carmel College of Engineering and Technology (CCET / KTU)",
     description:
       "Undergraduate curriculum emphasizing algorithms, database design, operating systems, networking, and applied intelligence.",
     category: "Education",
-    highlights: ["CGPA 8.12", "Coursework in Distributed Systems & AI"],
-    featuredEvidence: {
-      header: "ACADEMIC BENCHMARK",
-      items: [
-        { stat: "8.12", label: "Cumulative CGPA across coursework" },
-        { label: "Core: Distributed Systems, OS & Relational Databases" },
-      ],
-    },
+    stats: [{ stat: "8.12", label: "CGPA" }],
+    note: "Core: distributed systems, operating systems and relational databases",
+    link: { slug: "retina", label: "Final-year project: Retina" },
   },
   {
+    id: "icfisn",
+    period: retinaPaper?.dates ?? "March 2026",
+    title: "Presented Retina at ICFISN 2026",
+    role: retinaPaper
+      ? `${retinaPaper.conference}, ${retinaPaper.location}`
+      : "International Conference on Frontiers in Intelligent Systems & Networks",
+    description:
+      retinaPaper?.description ??
+      "Co-authored and presented research on on-device ML models for accessibility.",
+    category: "Research",
+    stats: [],
+    link: { slug: "retina", label: "Read the Retina case study" },
+  },
+  {
+    id: "arts-secretary",
     period: "2025 — 2026",
-    year: "2026",
     title: "College Arts Secretary",
     role: "Carmel College of Engineering and Technology",
     description:
       "Spearheaded cultural operations and coordinated large-scale logistical workflows across campus departments.",
     category: "Leadership",
-    highlights: [
-      "Organised 3+ major multi-day college events",
-      "Managed cross-functional student teams of 30+",
+    stats: [
+      { stat: "03+", label: "multi-day festivals" },
+      { stat: "30+", label: "person student teams" },
     ],
-    featuredEvidence: {
-      header: "CAMPUS SCALE",
-      items: [
-        { stat: "03+", label: "Multi-day campus festivals organized" },
-        { label: "Cross-functional student operations leadership" },
-      ],
-    },
   },
   {
+    id: "ictak-intern",
     period: "Jan — Feb 2025",
-    year: "2025",
     title: "AI/ML Intern",
-    role: "ICT Academy of Kerala · Trivandrum",
+    role: "ICT Academy of Kerala, Trivandrum",
     description:
       "Developed and evaluated computer vision and machine-learning models for edge inference and tabular predictive analytics.",
     category: "Experience",
-    highlights: [
-      "Evaluated prototypes across 5+ real-world datasets",
-      "Trained classification & regression models",
-    ],
-    featuredEvidence: {
-      header: "RECORDED OUTPUTS",
-      items: [
-        { stat: "05+", label: "Real-world datasets evaluated" },
-        { label: "Classification & regression model tuning" },
-      ],
-    },
+    stats: [{ stat: "05+", label: "real-world datasets evaluated" }],
+    note: "Classification and regression model tuning",
+    link: { slug: "crop-recommendation", label: "Built during it: Roots" },
   },
   {
+    id: "ieeextreme",
     period: "2023",
-    year: "2023",
     title: "IEEEXtreme 17.0",
-    role: "College Rank 1 · Global Algorithmic Competition",
+    role: "Global algorithmic competition",
     description:
-      "Competed globally in IEEE's premier 24-hour algorithmic problem solving and optimization marathon.",
+      "Competed in IEEE's 24-hour global algorithmic problem-solving marathon, working through graph and dynamic programming problems.",
     category: "Award",
-    highlights: [
-      "College Rank 1 across all participating batches",
-      "Solved complex graphs & DP challenges",
-    ],
-    featuredEvidence: {
-      header: "HONOR & RANKING",
-      items: [
-        { stat: "#01", label: "College Rank across all student batches" },
-        { label: "24-hour global competitive programming marathon" },
-      ],
-    },
+    stats: [{ stat: "#01", label: "college rank, all batches" }],
   },
   {
+    id: "freelance-dev",
     period: "2022 — Present",
-    year: "2026",
     title: "Freelance Web & Software Developer",
     role: "Full-Stack Developer",
     description:
       "Architected and deployed responsive web apps, automated data ingestion pipelines, and RESTful API backends for diverse client needs.",
     category: "Experience",
-    highlights: [
-      "4+ production deployments",
-      "PostgreSQL & Supabase schemas",
-      "CI/CD container delivery",
-    ],
-    featuredEvidence: {
-      header: "CLIENT PRODUCTION",
-      items: [
-        { stat: "04+", label: "Production web applications deployed" },
-        { label: "PostgreSQL, Supabase & automated CI/CD pipelines" },
-      ],
-    },
+    stats: [{ stat: "04+", label: "production deployments" }],
+    note: "PostgreSQL and Supabase schemas, CI/CD container delivery",
   },
   {
+    id: "freelance-design",
     period: "2021 — Present",
-    year: "2026",
     title: "Freelance Designer & Video Editor",
     role: "UI/UX & Motion Design",
-    description:
-      "Delivered 5+ UI/UX projects and edited 50+ social media videos contributing to campaigns generating 100K+ interactions.",
+    description: "UI/UX projects and social media video edits for campaigns.",
     category: "Experience",
-    highlights: [
-      "Delivered 5+ UI/UX projects",
-      "Edited 50+ social media videos",
-      "Campaigns generating 100K+ interactions",
+    stats: [
+      { stat: "100K+", label: "campaign interactions" },
+      { stat: "50+", label: "videos edited" },
+      { stat: "5+", label: "UI/UX projects" },
     ],
-    featuredEvidence: {
-      header: "CREATIVE REACH",
-      items: [
-        { stat: "100K+", label: "Social campaign interactions generated" },
-        { label: "50+ videos edited & 5+ UI/UX projects delivered" },
-      ],
-    },
   },
 ];
 
-// Color mapping: Yellow for education, cyan for technical experience, orange for leadership, purple for awards
 const categoryThemes: Record<
-  LogEntry["category"],
+  Category,
   { badge: string; node: string; color: string }
 > = {
   Education: {
@@ -196,29 +162,32 @@ const categoryThemes: Record<
     node: "bg-[#9649CB]",
     color: "#9649CB",
   },
+  Research: {
+    badge: "bg-[#CE4760] text-white",
+    node: "bg-[#CE4760]",
+    color: "#CE4760",
+  },
 };
 
 function TimelineEntryItem({
   item,
-  idx,
   onHover,
 }: {
-  item: (typeof entries)[number];
-  idx: number;
+  item: LogEntry;
   onHover: () => void;
 }) {
   const theme = categoryThemes[item.category];
 
   return (
-    <motion.div
+    <motion.article
+      id={item.id}
       onMouseEnter={onHover}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "80px", amount: 0.05 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="group relative mb-12 sm:mb-14 last:mb-0"
+      className="group relative mb-10 last:mb-0 sm:mb-12"
     >
-      {/* Stable, Outlined Timeline Node with Category Accent Center */}
       <div
         className="absolute -left-[35px] sm:-left-[43px] top-1 size-5 sm:size-5.5 border-2 border-border bg-background shadow-[2px_2px_0px_0px_var(--shadow-color)] grid place-items-center transition-transform duration-200 group-hover:scale-110"
         aria-hidden="true"
@@ -226,24 +195,17 @@ function TimelineEntryItem({
         <span className={`size-1.5 border border-border/80 ${theme.node}`} />
       </div>
 
-      {/* Header Row: Period, Category Badge, and Archive Identifier */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-border/70 pb-2">
-        <div className="flex items-center gap-2.5">
-          <span className="font-mono text-xs sm:text-[13px] font-black text-lime uppercase tracking-wider">
-            {item.period}
-          </span>
-          <span
-            className={`border border-border px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-wider shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)] ${theme.badge}`}
-          >
-            {item.category}
-          </span>
-        </div>
-        <span className="font-mono text-[10px] sm:text-xs font-bold text-muted-foreground uppercase">
-          ENTRY // {String(idx + 1).padStart(2, "0")}
+      <div className="flex flex-wrap items-center gap-2.5 border-b-2 border-border/70 pb-2">
+        <span className="font-mono text-xs sm:text-[13px] font-black text-lime uppercase tracking-wider">
+          {item.period}
+        </span>
+        <span
+          className={`border border-border px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-wider shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)] ${theme.badge}`}
+        >
+          {item.category}
         </span>
       </div>
 
-      {/* Main Content */}
       <div className="mt-3">
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
           {item.title}
@@ -256,53 +218,42 @@ function TimelineEntryItem({
           {item.description}
         </p>
 
-        {/* Compact Featured Evidence Callout Block */}
-        {item.featuredEvidence && (
-          <div className="mt-3.5 border-2 border-border bg-card p-3 sm:p-4 shadow-[4px_4px_0px_0px_var(--shadow-color)] max-w-xl transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_var(--shadow-color)]">
-            <div className="flex items-center justify-between border-b border-border/60 pb-1.5 mb-2.5">
-              <span className="font-mono text-[10px] font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                <span
-                  className={`size-1.5 border border-border ${theme.node}`}
-                />
-                {item.featuredEvidence.header}
-              </span>
-              <span className="font-mono text-[9px] font-bold text-muted-foreground uppercase">
-                VERIFIED RECORD
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {item.featuredEvidence.items.map((ev, i) => (
-                <div key={i} className="flex items-baseline gap-2">
-                  {ev.stat && (
-                    <span className="font-display text-xl sm:text-2xl font-black text-foreground shrink-0">
-                      {ev.stat}
-                    </span>
-                  )}
-                  <span className="font-mono text-[11px] leading-snug text-foreground/90 font-medium">
-                    {ev.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+        {(item.stats.length > 0 || item.note) && (
+          <div className="mt-3.5 flex max-w-2xl flex-wrap items-stretch gap-2">
+            {item.stats.map((s) => (
+              <div
+                key={s.label}
+                className="flex items-baseline gap-2 border-2 border-border bg-card px-3 py-1.5 shadow-[3px_3px_0px_0px_var(--shadow-color)]"
+              >
+                <span className="font-display text-xl font-black text-foreground tabular-nums">
+                  {s.stat}
+                </span>
+                <span className="font-mono text-[11px] text-foreground/80">
+                  {s.label}
+                </span>
+              </div>
+            ))}
+            {item.note && (
+              <p className="flex items-center border-2 border-dashed border-border/50 px-3 py-1.5 font-mono text-[11px] text-muted-foreground">
+                {item.note}
+              </p>
+            )}
           </div>
         )}
 
-        {/* Rectangular Evidence Labels with Red Accent Marker */}
-        <ul className="mt-3.5 flex flex-wrap gap-1.5 sm:gap-2">
-          {item.highlights.map((hl) => (
-            <li
-              key={hl}
-              className="flex items-center gap-1.5 border border-border bg-card px-2.5 py-1 font-mono text-[11px] sm:text-xs font-semibold text-foreground/90 shadow-[1.5px_1.5px_0px_0px_var(--shadow-color)] transition-colors hover:bg-surface-secondary"
-            >
-              <span className="text-lime font-bold" aria-hidden="true">
-                ▸
-              </span>
-              <span>{hl}</span>
-            </li>
-          ))}
-        </ul>
+        {item.link && (
+          <Link
+            to="/projects/$slug"
+            params={{ slug: item.link.slug }}
+            data-crosshair-target
+            className="mt-3.5 inline-flex items-center gap-1.5 font-mono text-xs font-bold text-foreground underline decoration-2 underline-offset-4 decoration-[#F1BE05] hover:bg-[#F1BE05] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+          >
+            {item.link.label}
+            <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Link>
+        )}
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
 
@@ -333,7 +284,7 @@ function LogPage() {
 
           <h1 className="mt-4 font-display text-5xl sm:text-6xl md:text-7xl tracking-tight text-foreground">
             The Engineering{" "}
-            <em className="italic text-lime not-italic font-normal">Log</em>.
+            <em className="text-lime not-italic font-normal">Log</em>.
           </h1>
 
           <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground sm:text-base">
@@ -342,7 +293,6 @@ function LogPage() {
           </p>
         </header>
 
-        {/* Timeline list with Bolder 2px Spine and dynamic scroll fill */}
         <div
           ref={timelineRef}
           className="relative mt-12 sm:mt-16 border-l-2 border-border pl-6 sm:pl-9"
@@ -352,22 +302,19 @@ function LogPage() {
             style={{ scaleY: fill }}
             className="absolute -left-[2px] top-0 h-full w-[2px] origin-top bg-lime"
           />
-          {entries.map((item, idx) => (
+          {entries.map((item) => (
             <TimelineEntryItem
-              key={item.title}
+              key={item.id}
               item={item}
-              idx={idx}
               onHover={() => setAccent(categoryThemes[item.category].color)}
             />
           ))}
         </div>
 
-        {/* CTA nudge */}
         <HandNote className="hidden sm:block mt-10 ml-auto mr-12 w-fit">
           next chapter: you?
         </HandNote>
 
-        {/* Bottom CTA with Neo-Brutalist Square Border and Hard Offset Shadow */}
         <div className="mt-6 flex flex-col justify-between gap-4 border-2 border-border bg-card p-6 sm:p-7 shadow-[5px_5px_0px_0px_var(--shadow-color)] sm:flex-row sm:items-center">
           <div>
             <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground">
