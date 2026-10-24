@@ -4,12 +4,6 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useTheme } from "@/hooks/use-theme";
 import { preloadLanyard } from "@/components/fx/lanyard-preload";
-import { preloadPhotographyImages } from "@/lib/about-media";
-
-const preloadAbout = () => {
-  preloadLanyard();
-  preloadPhotographyImages();
-};
 
 const navLinks = [
   {
@@ -251,9 +245,9 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                 key={link.to}
                 to={link.to}
                 data-crosshair-target
-                // Heading to About? Start fetching its 3D card and photography images now
-                onMouseEnter={link.to === "/about" ? preloadAbout : undefined}
-                onFocus={link.to === "/about" ? preloadAbout : undefined}
+                // Heading to About? Start fetching its 3D card now
+                onMouseEnter={link.to === "/about" ? preloadLanyard : undefined}
+                onFocus={link.to === "/about" ? preloadLanyard : undefined}
                 className="border-r border-border/40 px-3.5 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm uppercase tracking-wider transition-colors flex items-center shrink-0"
                 activeProps={{
                   className: link.activeClass,

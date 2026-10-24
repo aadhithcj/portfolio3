@@ -59,11 +59,10 @@ export const contactSheet: AboutImage[] = [
   },
 ];
 
-/** All WebP photography images and portrait loaded across the site */
-export const PHOTOGRAPHY_IMAGE_SRCS: string[] = [
-  ...contactSheet.map((item) => item.src),
-  ...(portrait ? [portrait.src] : []),
-];
+/** WebP photography images displayed on the contact sheet */
+export const PHOTOGRAPHY_IMAGE_SRCS: string[] = contactSheet.map(
+  (item) => item.src
+);
 
 let hasPreloaded = false;
 
