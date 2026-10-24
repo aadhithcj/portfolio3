@@ -764,9 +764,9 @@ function Contact() {
                 </div>
 
                 {/* hCaptcha Widget Container */}
-                <div className="flex justify-center items-center min-h-[78px] overflow-x-auto py-1">
+                <div className="flex justify-center items-center min-h-19.5 overflow-x-auto py-1">
                   {!mounted ? (
-                    <div className="h-[78px] w-full flex items-center justify-center font-mono text-[11px] text-muted-foreground/80 border-2 border-dashed border-border/60 bg-background/50">
+                    <div className="h-19.5 w-full flex items-center justify-center font-mono text-[11px] text-muted-foreground/80 border-2 border-dashed border-border/60 bg-background/50">
                       [ INITIALIZING SECURITY VERIFICATION... ]
                     </div>
                   ) : (
@@ -861,7 +861,7 @@ function Contact() {
                             x: [-12, -4, 6],
                           }}
                           transition={{ duration: 0.65, ease: "easeOut" }}
-                          className="absolute top-2 -left-3 h-[2px] w-4 bg-black/70 origin-left"
+                          className="absolute top-2 -left-3 h-0.5 w-4 bg-black/70 origin-left"
                         />
                         <motion.span
                           initial={{ opacity: 0, scaleX: 0, x: 0 }}

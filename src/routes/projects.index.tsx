@@ -345,7 +345,7 @@ function Projects() {
                 <ProjectSchematic
                   slug={p.slug}
                   accent={meta.accentColor}
-                  className="h-[290px] px-6 pt-10 pb-4"
+                  className="h-72.5 px-6 pt-10 pb-4"
                 />
               </motion.div>
             </AnimatePresence>
