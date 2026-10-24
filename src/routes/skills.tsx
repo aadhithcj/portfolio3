@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/SiteHeader";
 import DecryptedText from "@/components/fx/DecryptedText";
@@ -467,6 +467,16 @@ function SkillEvidence({
   );
 }
 
+const kbd =
+  "border-2 border-border bg-card px-1.5 py-0.5 font-mono text-[10px] font-bold text-foreground shadow-[2px_2px_0px_0px_var(--shadow-color)]";
+
+function isTyping(target: EventTarget | null) {
+  return (
+    target instanceof Element &&
+    Boolean(target.closest("input, textarea, select, [contenteditable=true]"))
+  );
+}
+
 function SkillsPage() {
   const [active, setActive] = useState<number>(0);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
@@ -476,12 +486,29 @@ function SkillsPage() {
   // A tap fires hover and focus (which select the row) before click, so remember
   // whether the row was already the open one when the press started
   const wasOpenOnPress = useRef<boolean | null>(null);
+  const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const activeCat = (categories[active] ?? categories[0])!;
   const select = (i: number) => {
     if (i !== active) setHoveredSkill(null);
     setActive(i);
   };
+
+  // Up/down move through the categories, like the Projects list; focusing a row selects it
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || isTyping(e.target)) return;
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      e.preventDefault();
+      const step = e.key === "ArrowDown" ? 1 : -1;
+      const next = (active + step + categories.length) % categories.length;
+      rowRefs.current[next]?.focus();
+      if (next !== active) setHoveredSkill(null);
+      setActive(next);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active]);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-clip relative">
@@ -512,8 +539,14 @@ function SkillsPage() {
             projects where I actually used it.
           </p>
 
+          <div className="mt-10 sm:mt-12 hidden lg:flex items-center justify-end gap-1.5 pb-2 label-mono">
+            <kbd className={kbd}>↑</kbd>
+            <kbd className={kbd}>↓</kbd>
+            <span>browse</span>
+          </div>
+
           <div
-            className="mt-10 sm:mt-12 flex flex-col border-t-2 border-border w-full min-w-0"
+            className="mt-10 sm:mt-12 lg:mt-0 flex flex-col border-t-2 border-border w-full min-w-0"
             role="list"
           >
             {categories.map((cat, i) => {
@@ -525,6 +558,9 @@ function SkillsPage() {
                   className="relative w-full min-w-0"
                 >
                   <button
+                    ref={(el) => {
+                      rowRefs.current[i] = el;
+                    }}
                     type="button"
                     onPointerDown={() => {
                       wasOpenOnPress.current = isSelected && open;

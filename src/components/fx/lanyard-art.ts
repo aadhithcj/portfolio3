@@ -33,18 +33,21 @@ function loadImage(src: string) {
   });
 }
 
-async function fontsReady() {
-  const loads = [
-    `72px ${DISPLAY}`,
-    `400 30px ${SANS}`,
-    `600 30px ${SANS}`,
-    `64px ${HAND}`,
-  ].map((f) => document.fonts.load(f).catch(() => []));
-  // Never block the card on a slow font; fall back after a second
-  await Promise.race([
-    Promise.all(loads),
-    new Promise((r) => setTimeout(r, 1000)),
+/** Starts loading the card fonts; resolves true if they arrived within `waitMs`. */
+function loadFonts(waitMs: number) {
+  const all = Promise.all(
+    [
+      `72px ${DISPLAY}`,
+      `400 30px ${SANS}`,
+      `600 30px ${SANS}`,
+      `64px ${HAND}`,
+    ].map((f) => document.fonts.load(f).catch(() => []))
+  ).then(() => true);
+  const inTime = Promise.race([
+    all,
+    new Promise<boolean>((r) => setTimeout(() => r(false), waitMs)),
   ]);
+  return { all, inTime };
 }
 
 function canvas(width: number, height: number) {
@@ -252,12 +255,26 @@ function drawStrap() {
   return c.toDataURL("image/png");
 }
 
+/**
+ * Draws the card as soon as the portrait is in, waiting only briefly for fonts.
+ * If the fonts land after that, `onRedraw` receives a second, correctly typeset set.
+ */
 export async function drawLanyardArt(
-  portraitSrc: string | null
+  portraitSrc: string | null,
+  onRedraw?: (art: LanyardArt) => void
 ): Promise<LanyardArt> {
-  const [portrait] = await Promise.all([
+  const fonts = loadFonts(300);
+  const [portrait, fontsInTime] = await Promise.all([
     portraitSrc ? loadImage(portraitSrc) : Promise.resolve(null),
-    fontsReady(),
+    fonts.inTime,
   ]);
-  return { front: drawFront(portrait), back: drawBack(), strap: drawStrap() };
+  const draw = () => ({
+    front: drawFront(portrait),
+    back: drawBack(),
+    strap: drawStrap(),
+  });
+  if (!fontsInTime && onRedraw) {
+    void fonts.all.then(() => onRedraw(draw()));
+  }
+  return draw();
 }

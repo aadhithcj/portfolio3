@@ -3,6 +3,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useTheme } from "@/hooks/use-theme";
+import { preloadLanyard } from "@/components/fx/lanyard-preload";
 
 const navLinks = [
   {
@@ -146,10 +147,11 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                   to={item.to}
                   onClick={() => setMobileMenuOpen(false)}
                   data-crosshair-target
-                  className={`w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border block text-left transition-all ${isActive
+                  className={`w-full py-2.5 px-4 font-mono text-sm font-bold uppercase tracking-wider border-2 border-border block text-left transition-all ${
+                    isActive
                       ? "bg-foreground text-background shadow-[2px_2px_0px_0px_var(--shadow-color)]"
                       : "bg-surface text-foreground shadow-[3px_3px_0px_0px_var(--shadow-color)] hover:bg-[#F1BE05] hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_0px_var(--shadow-color)] active:translate-x-1 active:translate-y-1 active:shadow-none"
-                    }`}
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -215,10 +217,11 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
             setAcjActive(true);
             setTimeout(() => setAcjActive(false), 250);
           }}
-          className={`group border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-150 flex items-center shrink-0 cursor-pointer hover:bg-[#22C55E] hover:text-black active:bg-[#22C55E] active:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${acjActive
+          className={`group border-r border-border/40 px-4 sm:px-6 py-2 sm:py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-150 flex items-center shrink-0 cursor-pointer hover:bg-[#22C55E] hover:text-black active:bg-[#22C55E] active:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground ${
+            acjActive
               ? "bg-[#22C55E] text-black shadow-[inset_0_-3px_0_0_var(--shadow-color)]"
               : "text-foreground"
-            }`}
+          }`}
         >
           ACJ
           {/* Red cursor turns ink on the green fill, where red would vanish */}
@@ -242,6 +245,9 @@ export function SiteHeader({ isHome = false }: { isHome?: boolean }) {
                 key={link.to}
                 to={link.to}
                 data-crosshair-target
+                // Heading to About? Start fetching its 3D card now
+                onMouseEnter={link.to === "/about" ? preloadLanyard : undefined}
+                onFocus={link.to === "/about" ? preloadLanyard : undefined}
                 className="border-r border-border/40 px-3.5 sm:px-5 py-2 sm:py-2.5 font-mono text-xs sm:text-sm uppercase tracking-wider transition-colors flex items-center shrink-0"
                 activeProps={{
                   className: link.activeClass,

@@ -1,8 +1,14 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { drawLanyardArt, type LanyardArt } from "./lanyard-art";
+import { LANYARD_MEDIA, loadLanyard, preloadLanyard } from "./lanyard-preload";
 
-// three.js only downloads once the About page decides to show the 3D card
-const Lanyard = lazy(() => import("./Lanyard"));
+// Lazy on purpose: a regular import makes the page parse all of three.js before it
+// can hydrate, which shows as a stall on arrival. This way the page settles first.
+const Lanyard = lazy(loadLanyard);
+
+// This module is only imported by the About page's own chunk, so this starts the
+// download as soon as that chunk runs, without touching other pages or phones
+preloadLanyard();
 
 function hasWebGL() {
   try {
@@ -12,9 +18,6 @@ function hasWebGL() {
     return false;
   }
 }
-
-// Desktop with a fine pointer only: on phones the card is hard to grab and three.js is dead weight
-const DESKTOP = "(min-width: 1024px) and (any-pointer: fine)";
 
 /**
  * The About page's hanging ID card. Draws the card art on the client, then
@@ -33,7 +36,7 @@ export function AboutLanyard({
   const [desktop, setDesktop] = useState(false);
 
   useEffect(() => {
-    const mql = window.matchMedia(DESKTOP);
+    const mql = window.matchMedia(LANYARD_MEDIA);
     const update = () => setDesktop(mql.matches);
     update();
     mql.addEventListener("change", update);
@@ -41,19 +44,21 @@ export function AboutLanyard({
   }, []);
 
   useEffect(() => {
-    if (!desktop || art) return;
+    if (!desktop) return;
     if (!hasWebGL()) {
       setUnsupported(true);
       return;
     }
     let alive = true;
-    drawLanyardArt(portraitSrc)
+    // Download three.js in parallel with drawing the card art, not after it
+    void loadLanyard();
+    drawLanyardArt(portraitSrc, (late) => alive && setArt(late))
       .then((a) => alive && setArt(a))
       .catch(() => alive && setUnsupported(true));
     return () => {
       alive = false;
     };
-  }, [desktop, art, portraitSrc]);
+  }, [desktop, portraitSrc]);
 
   if (!desktop) return null;
   if (unsupported) return <>{fallback}</>;
